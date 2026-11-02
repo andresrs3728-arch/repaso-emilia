@@ -1,0 +1,236 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Sociales sin enredos</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Lexend:wght@400;500;600&family=Gochi+Hand&display=swap">
+<style>
+/* Cuaderno de una columna: cada tema es una hoja con su resaltador; todo funciona sin JavaScript */
+:root{
+  --paper:#F5F6FA; --sheet:#FFFFFF; --ink:#1F2A33; --soft:#5E6B73; --line:#E1E6DE;
+  --teal:#2457C5; --coral:#D9622B; --mustard:#E0A526; --hl-teal:#D6E3FF; --hl-coral:#FFDCC4; --hl-yellow:#FFEDB0;
+  --display:"Bricolage Grotesque","Avenir Next",system-ui,sans-serif;
+  --body:"Lexend","Segoe UI",system-ui,sans-serif;
+  --hand:"Gochi Hand","Comic Sans MS",cursive;
+  --on-accent:#FFFFFF;
+}
+@media (prefers-color-scheme: dark){:root{
+  --paper:#12181C; --sheet:#1B2328; --ink:#EEF2F0; --soft:#A9B6BC; --line:#2E3A40;
+  --teal:#86AAFF; --coral:#FFA36E; --mustard:#F2C35A; --hl-teal:#1E3260; --hl-coral:#5A3218; --hl-yellow:#57461A; --on-accent:#12181C; color-scheme:dark}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.6;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:24px 64px}
+.wrap{max-width:780px;margin:0 auto;display:flex;flex-direction:column;gap:26px}
+h1,h2,h3{font-family:var(--display);line-height:1.15;margin:0;text-wrap:balance}
+h1{font-size:clamp(2.2rem,7vw,3.4rem);font-weight:800;letter-spacing:-.02em}
+h2{font-size:clamp(1.45rem,4.5vw,1.9rem);font-weight:800}
+h3{font-size:1.1rem;font-weight:700}
+p{margin:0}
+ul,ol{margin:0;padding-left:1.2em;display:flex;flex-direction:column;gap:4px}
+.eyebrow{font-size:.8rem;text-transform:uppercase;letter-spacing:.12em;color:var(--soft);font-weight:600}
+.lead{font-size:1.08rem;color:var(--soft);max-width:62ch}
+.hand{font-family:var(--hand);font-size:1.25em;color:var(--teal)}
+.hl{background:linear-gradient(transparent 55%,var(--hl-coral) 55%);padding:0 .1em}
+.hl-t{background:linear-gradient(transparent 55%,var(--hl-teal) 55%);padding:0 .1em}
+.hl-y{background:linear-gradient(transparent 55%,var(--hl-yellow) 55%);padding:0 .1em}
+nav.chips{display:flex;flex-wrap:wrap;gap:8px}
+nav.chips a{font-size:.85rem;text-decoration:none;color:var(--ink);border:1.5px solid var(--line);background:var(--sheet);padding:6px 12px;border-radius:999px}
+.sheet{background:var(--sheet);border:1px solid var(--line);border-radius:18px;padding:24px clamp(18px,4vw,32px);display:flex;flex-direction:column;gap:16px}
+.top{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
+.tag{font-family:var(--hand);font-size:1.1rem;color:var(--coral)}
+.box{background:var(--paper);border-radius:12px;padding:14px 16px;display:flex;flex-direction:column;gap:6px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px}
+.grid>*{min-width:0}
+.card{border:1.5px solid var(--line);border-radius:14px;padding:14px 16px;display:flex;flex-direction:column;gap:6px}
+.card .k{font-family:var(--display);font-weight:800;font-size:1.15rem;color:var(--teal)}
+.formula{display:flex;flex-wrap:wrap;gap:8px;align-items:center;font-family:var(--display);font-weight:800;font-size:1.05rem}
+.formula span{background:var(--hl-teal);border-radius:10px;padding:6px 12px}
+.formula i{font-style:normal;color:var(--soft)}
+.trap{border-left:4px solid var(--coral);background:var(--paper);padding:12px 16px;border-radius:0 12px 12px 0}
+.trap b{color:var(--coral)}
+.scroll{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:.95rem}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-family:var(--display);color:var(--soft);font-weight:700}
+.coin{display:grid;grid-template-columns:1fr 1fr;gap:0;border-radius:14px;overflow:hidden;border:1.5px solid var(--line)}
+.coin div{padding:14px 16px;display:flex;flex-direction:column;gap:4px}
+.coin .a{background:var(--hl-teal)} .coin .b{background:var(--hl-yellow)}
+.coin .big{font-family:var(--display);font-weight:800;font-size:1.5rem;letter-spacing:.08em}
+.steps{display:flex;flex-direction:column;gap:0}
+.step{display:grid;grid-template-columns:44px 1fr;gap:12px;align-items:start;padding:10px 0}
+.step .n{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;font-family:var(--display);font-weight:800;background:var(--teal);color:var(--on-accent)}
+.article{border:2px solid var(--ink);border-radius:6px;padding:18px 20px;display:flex;flex-direction:column;gap:10px;font-family:Georgia,"Times New Roman",serif}
+.article .tt{font-family:var(--display);font-size:1.6rem;font-weight:800}
+.article .lab{font-family:var(--body);font-size:.72rem;text-transform:uppercase;letter-spacing:.1em;color:var(--coral);font-weight:600}
+.article .w{background:var(--hl-yellow);padding:0 .15em;border-radius:3px}
+details{border:1.5px dashed var(--teal);border-radius:12px;padding:10px 14px}
+details summary{cursor:pointer;color:var(--teal);font-weight:600}
+details p{margin-top:8px}
+.quiz{display:flex;flex-direction:column;gap:10px}
+footer{text-align:center;color:var(--soft);font-size:.85rem}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header style="display:flex;flex-direction:column;gap:12px">
+  <span class="eyebrow">Sociales · Guía para el parcial · Para Emilia</span>
+  <h1>Sociales <span class="hl">sin enredos</span></h1>
+  <p class="lead">Todo lo de tu cuaderno, del 7 al 28 de septiembre, explicado con ejemplos de la vida diaria. Al final están los errores del cuaderno ya corregidos y preguntas para practicar.</p>
+  <nav class="chips" aria-label="Temas">
+    <a href="#colombia">1 · Colombia y el mundo</a><a href="#estamental">2 · Sociedad estamental</a><a href="#ilustracion">3 · La Ilustración</a><a href="#autores">4 · Autores ilustrados</a><a href="#positivismo">5 · El positivismo</a><a href="#estadios">6 · Los 3 estadios</a><a href="#errores">7 · Errores corregidos</a><a href="#practica">8 · Practicá</a>
+  </nav>
+</header>
+
+<section class="sheet" id="colombia">
+  <div class="top"><h2>1 · Colombia y su relación con el mundo</h2><span class="tag">07-09-26</span></div>
+  <p>Por su <b>ubicación</b>, sus <b>recursos</b> y su <b>diversidad cultural</b>, Colombia se relaciona con muchos países y participa en asuntos de importancia mundial.</p>
+  <div class="grid">
+    <div class="card"><span class="k">📍 Ubicación</span><p>Extremo <b>noroccidental</b> de América del Sur.</p></div>
+    <div class="card"><span class="k">🌊 Dos costas</span><p>Sobre el <b>océano Pacífico</b> y el <b>mar Caribe</b>, que hace parte del Atlántico. Por eso se dice que tiene «dos océanos».</p></div>
+    <div class="card"><span class="k">🌉 Un puente</span><p>Conecta <b>América del Sur, Centroamérica y el Caribe</b>.</p></div>
+  </div>
+  <p class="hand">Pensala como una casa en una esquina con dos puertas: le queda fácil recibir y despachar por los dos lados.</p>
+  <h3>El ciclo del comercio</h3>
+  <div class="formula"><span>Exporta</span><i>→</i><span>Gana ingresos</span><i>→</i><span>Importa</span></div>
+  <div class="grid">
+    <div class="card"><span class="k">Vende (exporta)</span><p>Petróleo, café, flores, carbón, frutas, tabaco, esmeraldas y productos agrícolas.</p></div>
+    <div class="card"><span class="k" style="color:var(--coral)">Compra (importa)</span><p>Tecnología, maquinaria y otros bienes.</p></div>
+  </div>
+  <div class="trap"><b>No te confundás:</b> <i>exportar</i> es <b>vender</b> afuera (sale del país). <i>Importar</i> es <b>comprar</b> afuera (entra al país). Truco: «ex» = salida, como en «exit».</div>
+  <h3>Relaciones diplomáticas</h3>
+  <p><b>Para qué:</b> cooperación, diálogo, paz y solución de conflictos. <b>Cómo:</b> con embajadas y encuentros internacionales.</p>
+  <h3>Las organizaciones</h3>
+  <div class="scroll"><table>
+    <tr><th>Sigla</th><th>Nombre</th><th>Qué es</th></tr>
+    <tr><td><b>ONU</b></td><td>Organización de las Naciones Unidas</td><td>Reúne a casi todos los países del mundo. Colombia es miembro no permanente del Consejo de Seguridad en 2026 y 2027.</td></tr>
+    <tr><td><b>OEA</b></td><td>Organización de los Estados Americanos</td><td>Reúne a los países de América. Trabaja por la paz, la democracia y los derechos humanos.</td></tr>
+    <tr><td><b>CAN</b></td><td>Comunidad Andina</td><td>Países andinos que se unen en lo económico y lo social.</td></tr>
+  </table></div>
+  <p>En ellas Colombia trabaja con otros países en temas <b>económicos, sociales, ambientales y de seguridad</b>.</p>
+  <h3>La migración</h3>
+  <p><b>Por qué se mueve la gente:</b> trabajo, estudio, reunificación familiar o mejores oportunidades. <b>Qué produce:</b> fortalece los vínculos entre las sociedades.</p>
+</section>
+
+<section class="sheet" id="estamental">
+  <div class="top"><h2>2 · La sociedad estamental</h2><span class="tag">15-09-26</span></div>
+  <p>Era la forma de organizar la sociedad en Europa durante el <b>Antiguo Régimen</b>: el orden de antes de las revoluciones. Naciste en un estamento y ahí te quedabas.</p>
+  <div class="steps">
+    <div class="step"><span class="n">👑</span><div><b>El rey</b>, en la cima, con poder absoluto.</div></div>
+    <div class="step"><span class="n">1</span><div><b>Clero</b> (primer estado): la Iglesia. <i>Privilegiado</i>: exento de la mayoría de los impuestos.</div></div>
+    <div class="step"><span class="n">2</span><div><b>Nobleza</b> (segundo estado). <i>Privilegiada</i>: tierras, cargos y exenta de la mayoría de los impuestos.</div></div>
+    <div class="step"><span class="n">3</span><div><b>Tercer estado</b>: todos los demás. <b>Burguesía</b>, campesinos, artesanos, mendigos y siervos. <i>No privilegiado</i>: pagaba casi todos los impuestos.</div></div>
+  </div>
+  <div class="trap"><b>Ojo con la pirámide del cuaderno:</b> pone a la burguesía en una franja aparte, encima del tercer estado. Pero la burguesía <b>pertenecía al tercer estado</b>. Tenía plata, pero no privilegios.</div>
+  <h3>El ascenso de la burguesía</h3>
+  <p>Eran comerciantes, empresarios, profesionales y propietarios de las ciudades. Algunos eran <b>más ricos que muchos nobles</b>, pero tenían <b>menos privilegios políticos y sociales</b>.</p>
+  <p class="hand">Imaginá que pagás la mayor parte de la cuenta del paseo y no te dejan opinar a dónde van. Esa rabia de la burguesía es una de las chispas de las revoluciones.</p>
+</section>
+
+<section class="sheet" id="ilustracion">
+  <div class="top"><h2>3 · La Ilustración</h2><span class="tag">15-09-26</span></div>
+  <div class="box">
+    <h3>La definición para el examen</h3>
+    <p>Movimiento intelectual del <b>siglo XVIII</b> que defendió el <b>uso de la razón</b> para analizar y transformar la sociedad.</p>
+  </div>
+  <p>Los ilustrados se preguntaban: ¿por qué hay que aceptar algo <b>solo porque siempre ha sido así</b>? Cuestionaron las tradiciones, la autoridad absoluta del rey y los privilegios.</p>
+  <p class="hand">«La Ilustración es pensar por sí mismo».</p>
+  <h3>Los 6 principios</h3>
+  <p class="hl-y" style="align-self:flex-start">Libertad · Igualdad jurídica · Tolerancia · Educación · Soberanía popular · Limitación del poder</p>
+  <div class="grid">
+    <div class="card"><span class="k">Igualdad jurídica</span><p>La ley es igual para todos, sin importar si naciste noble o campesino.</p></div>
+    <div class="card"><span class="k">Soberanía popular</span><p>El poder viene del pueblo, no de Dios ni de la sangre del rey.</p></div>
+    <div class="card"><span class="k">Limitación del poder</span><p>Nadie puede mandar sin límites, ni siquiera el rey.</p></div>
+  </div>
+  <p><b>Consecuencia:</b> estas ideas influyeron en las <b>revoluciones de finales del siglo XVIII</b>, como la Revolución Francesa de 1789, y cambiaron la forma de entender los derechos y el Estado.</p>
+</section>
+
+<section class="sheet" id="autores">
+  <div class="top"><h2>4 · Los autores ilustrados</h2><span class="tag">15 al 21-09-26</span></div>
+  <div class="scroll"><table>
+    <tr><th>Autor</th><th>Su gran idea</th><th>Obra y año</th></tr>
+    <tr><td><b>Voltaire</b></td><td>Libertad de pensamiento y <b>tolerancia religiosa</b>. Criticó el fanatismo, la intolerancia, los abusos de poder y la censura.</td><td>—</td></tr>
+    <tr><td><b>Montesquieu</b></td><td><b>Separación de poderes</b>: que nadie concentre todo el poder.</td><td><i>El espíritu de las leyes</i> · 1748</td></tr>
+    <tr><td><b>Rousseau</b></td><td>El poder es legítimo si viene de la <b>voluntad de los ciudadanos</b>. La <b>voluntad general</b> busca el bien común.</td><td><i>El contrato social</i> · 1762<br><i>El Emilio</i> · 1762 (educación)</td></tr>
+    <tr><td><b>John Locke</b></td><td><b>Derechos naturales</b>: vida, libertad y propiedad. Gobierno limitado y basado en el <b>consentimiento de los gobernados</b>.</td><td><i>Dos tratados sobre el gobierno civil</i> · 1689</td></tr>
+  </table></div>
+  <h3>Montesquieu en Colombia hoy</h3>
+  <div class="grid">
+    <div class="card"><span class="k">Legislativo</span><p><b>Crea</b> las leyes. En Colombia: el <b>Congreso</b>.</p></div>
+    <div class="card"><span class="k">Ejecutivo</span><p><b>Administra y aplica</b> las leyes. En Colombia: el <b>Presidente</b> y su gobierno.</p></div>
+    <div class="card"><span class="k">Judicial</span><p><b>Juzga</b> y resuelve conflictos según las leyes. En Colombia: <b>jueces y cortes</b>.</p></div>
+  </div>
+  <h3>Rousseau, más claro</h3>
+  <p><b>El contrato social:</b> la sociedad es un acuerdo. Las personas se unen y aceptan normas comunes, como cuando un grupo hace las reglas del parche y todos las cumplen porque las aceptaron.</p>
+  <p><b>Libertad natural y libertad civil</b> (en tu cuaderno, «L. natural» y «L. civil»). La natural es la que tendríamos sin sociedad ni leyes. La civil es la que nos garantizan las leyes del Estado después del contrato.</p>
+  <p><b>El Emilio (educación):</b> la idea es dejar que el niño sea niño e intervenir solo cuando está en peligro.</p>
+  <h3>Locke, completo</h3>
+  <p>Si un gobierno viola los derechos de las personas y actúa de forma injusta, <b>el pueblo tiene derecho a resistirse y a cambiar ese gobierno</b>. Esa era la frase que quedó sin terminar en el cuaderno.</p>
+  <div class="box">
+    <h3>Para no confundirlos</h3>
+    <p><b>Voltaire</b> → tolerancia · <b>Montesquieu</b> → 3 poderes · <b>Rousseau</b> → contrato y voluntad general · <b>Locke</b> → vida, libertad y propiedad.</p>
+  </div>
+</section>
+
+<section class="sheet" id="positivismo">
+  <div class="top"><h2>5 · El positivismo</h2><span class="tag">28-09-26</span></div>
+  <div class="box">
+    <h3>La definición para el examen</h3>
+    <p>Corriente filosófica del <b>siglo XIX</b>: el conocimiento confiable se apoya en el <b>estudio sistemático de hechos</b>.</p>
+  </div>
+  <p>Para el positivismo, la ciencia no busca causas últimas ni absolutas («¿por qué existe todo?»). Busca <b>relaciones y regularidades</b> entre los fenómenos («cada vez que pasa A, pasa B»).</p>
+  <p class="hand">Como cuando notás que cada vez que llueve fuerte se va la luz: no sabés «el porqué último», pero descubriste una regularidad.</p>
+  <h3>¿Cómo surgió?</h3>
+  <p>En <b>Europa</b>, en la <b>primera mitad del siglo XIX</b>, en medio de grandes cambios. Tiene tres antecedentes:</p>
+  <div class="formula"><span>Revolución Científica</span><span>Ilustración</span><span>Revoluciones Industrial y Francesa</span></div>
+  <h3>Auguste Comte (1798–1857)</h3>
+  <p>Filósofo francés, <b>fundador del positivismo</b> y figura clave en el nacimiento de la <b>sociología</b>. Su gran aporte: la <b>sociedad</b> también se puede estudiar con método científico.</p>
+  <div class="grid">
+    <div class="card"><span class="k">Estática social</span><p>Estudia el <b>orden</b> y la organización de la sociedad. Una foto.</p></div>
+    <div class="card"><span class="k" style="color:var(--coral)">Dinámica social</span><p>Estudia los <b>cambios</b> y el progreso. Una película.</p></div>
+  </div>
+</section>
+
+<section class="sheet" id="estadios">
+  <div class="top"><h2>6 · Los 3 estadios de Comte</h2><span class="tag">28-09-26</span></div>
+  <p>Son tres formas en que la humanidad ha <b>explicado la realidad</b>, de la más antigua a la más moderna.</p>
+  <div class="scroll"><table>
+    <tr><th>Estadio</th><th>Explica con…</th><th>Maremoto</th><th>Una enfermedad</th></tr>
+    <tr><td><b>1 · Teológico</b></td><td>Dioses o fuerzas sobrenaturales</td><td>«Poseidón está furioso»</td><td>«Es un castigo divino»</td></tr>
+    <tr><td><b>2 · Metafísico</b><br><small>(de transición)</small></td><td>Conceptos o fuerzas abstractas</td><td>«Lo causó la fuerza de la naturaleza»</td><td>«Hay un desequilibrio en la energía del cuerpo»</td></tr>
+    <tr><td><b>3 · Positivo</b></td><td>Observación, razonamiento y estudio sistemático</td><td>«Se movieron las placas tectónicas»</td><td>«Un virus lo causa: se puede ver y medir»</td></tr>
+  </table></div>
+  <div class="trap"><b>Corrección del cuaderno:</b> el ejemplo de los maremotos quedó escrito en el estadio metafísico, pero «Poseidón» es una explicación del estadio <b>teológico</b> y «placas tectónicas», del estadio <b>positivo</b>. El metafísico sería «lo causó la fuerza de la naturaleza».</div>
+  <p>Otro ejemplo de tu cuaderno: explicar la creación del mundo con el <b>Génesis</b> es estadio <b>teológico</b>.</p>
+</section>
+
+<section class="sheet" id="errores">
+  <div class="top"><h2>7 · Lo que hay que corregir del cuaderno</h2></div>
+  <div class="trap"><b>Locke:</b> dice «consentimiento de los gobernadores». Es de los <b>gobernados</b>, o sea, del pueblo. Esa palabra cambia toda la idea.</div>
+  <div class="trap"><b>Pirámide:</b> la burguesía era parte del <b>tercer estado</b>, no un piso aparte.</div>
+  <div class="trap"><b>Maremotos:</b> Poseidón es una explicación teológica y las placas tectónicas, una explicación positiva.</div>
+  <div class="trap"><b>Rousseau:</b> «L. natural» y «L. civil» son <b>libertad</b> natural y libertad civil.</div>
+</section>
+
+<section class="sheet" id="practica">
+  <div class="top"><h2>8 · Practicá antes del parcial</h2></div>
+  <p>Respondé en tu cabeza y después tocá la pregunta para ver la respuesta.</p>
+  <div class="quiz">
+    <details><summary>¿Por qué la ubicación de Colombia le ayuda en el comercio?</summary><p>Tiene costas en el Pacífico y en el Caribe y conecta Suramérica, Centroamérica y el Caribe: puede despachar y recibir por dos lados.</p></details>
+    <details><summary>Colombia vende café a Alemania. ¿Exporta o importa?</summary><p>Exporta: el producto sale del país.</p></details>
+    <details><summary>¿Qué estamento pagaba casi todos los impuestos?</summary><p>El tercer estado.</p></details>
+    <details><summary>¿Qué autor diría «nadie debe tener todo el poder»?</summary><p>Montesquieu, con la separación de poderes.</p></details>
+    <details><summary>El Presidente pone en marcha una ley nueva. ¿Qué poder es?</summary><p>El ejecutivo: administra y aplica las leyes.</p></details>
+    <details><summary>¿Qué autor diría «el gobierno existe para proteger mis derechos»?</summary><p>John Locke.</p></details>
+    <details><summary>¿Qué diferencia hay entre la libertad natural y la civil, según Rousseau?</summary><p>La natural es la de antes de la sociedad. La civil es la que garantizan las leyes después del contrato.</p></details>
+    <details><summary>«La cosecha se perdió porque los dioses estaban enojados». ¿Qué estadio es?</summary><p>Teológico: lo explica con seres sobrenaturales.</p></details>
+    <details><summary>¿Qué estudia la dinámica social?</summary><p>Los cambios y el progreso de las sociedades.</p></details>
+    <details><summary>Nombrá los tres antecedentes del positivismo.</summary><p>La Revolución Científica, la Ilustración y las revoluciones Industrial y Francesa.</p></details>
+  </div>
+</section>
+
+<footer>Hecho con los apuntes de tu cuaderno · ¡Mucha suerte en el parcial! 💜</footer>
+</div>
+</body>
+</html>

@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Parcial de Genética</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Lexend:wght@400;500;600&family=Gochi+Hand&display=swap">
+<style>
+/* Hoja de examen: una columna, encabezado tipo parcial, cada sección con su resaltador */
+:root{
+  --t-ok:"✔ Bien. "; --t-bad:"✘ Respuesta: "; --on-accent:#FFFFFF;
+  --paper:#F7F4FB; --sheet:#FFFFFF; --ink:#2A2140; --soft:#6B6283; --line:#E4DDF0;
+  --violet:#7B3FE4; --pink:#E8418A; --hl-pink:#FFC2DD; --hl-violet:#DCCBFF; --hl-mint:#BFF1E3; --hl-bad:#FFD3DA;
+  --ok:#0E8F72; --bad:#D9344A;
+  --display:"Bricolage Grotesque","Avenir Next",system-ui,sans-serif;
+  --body:"Lexend","Segoe UI",system-ui,sans-serif;
+  --hand:"Gochi Hand","Comic Sans MS",cursive;
+}
+@media (prefers-color-scheme: dark){:root{
+  --paper:#16121F; --sheet:#211B2E; --ink:#F1ECFA; --soft:#B3A9C9; --line:#3A3150;
+  --violet:#A98BFF; --pink:#FF6FAE; --hl-pink:#6A2848; --hl-violet:#45306F; --hl-mint:#1F5A4C; --hl-bad:#5E2430;
+  --ok:#3FD4AF; --bad:#FF6B7E; --on-accent:#16121F; color-scheme:dark}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.55;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:20px 64px}
+.wrap{max-width:780px;margin:0 auto;display:flex;flex-direction:column;gap:22px}
+h1,h2{font-family:var(--display);line-height:1.15;margin:0;text-wrap:balance}
+h1{font-size:clamp(2rem,6vw,3rem);font-weight:800}
+h2{font-size:1.4rem;font-weight:800;background:linear-gradient(transparent 58%,var(--hl-violet) 58%);align-self:flex-start;padding:0 .15em}
+p{margin:0}
+.hoja{background:var(--sheet);border:1px solid var(--line);border-radius:18px;padding:20px clamp(16px,4vw,28px);display:flex;flex-direction:column;gap:12px}
+.datos{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px 16px;font-size:.92rem}
+.datos div{border-bottom:1.5px solid var(--line);padding-bottom:4px}
+.datos b{color:var(--soft);font-weight:500;font-size:.8rem;text-transform:uppercase;letter-spacing:.08em;display:block}
+.hand{font-family:var(--hand);font-size:1.2rem;color:var(--pink)}
+.aviso{background:var(--hl-pink);border-radius:12px;padding:10px 14px;font-size:.92rem}
+ul.reglas{margin:0;padding-left:1.2em;display:flex;flex-direction:column;gap:2px;font-size:.95rem}
+.sec{background:var(--sheet);border:1px solid var(--line);border-radius:18px;padding:20px clamp(16px,4vw,28px);display:flex;flex-direction:column;gap:14px}
+.clave{font-size:.9rem;color:var(--soft)}
+fieldset.q{border:0;margin:0;padding:14px 0 0;border-top:1.5px dashed var(--line);display:flex;flex-direction:column;gap:10px;min-width:0}
+.enun{font-weight:500}
+.num{display:inline-grid;place-items:center;min-width:28px;height:28px;padding:0 6px;border-radius:8px;background:var(--violet);color:var(--on-accent);font-family:var(--display);font-weight:800;font-size:.9rem;margin-right:10px}
+.ops{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:8px}
+.op{display:flex;gap:8px;align-items:flex-start;border:1.5px solid var(--line);border-radius:10px;padding:9px 12px;cursor:pointer;min-width:0}
+.op input{margin-top:4px;accent-color:var(--violet)}
+.op:has(input:checked){border-color:var(--violet);background:var(--hl-violet)}
+.let{font-weight:600;color:var(--violet)}
+input.txt{font:inherit;font-size:1.1rem;border:1.5px solid var(--line);border-radius:10px;padding:8px 12px;width:min(220px,100%);background:var(--paper);color:var(--ink)}
+textarea{font:inherit;border:1.5px solid var(--line);border-radius:10px;padding:10px 12px;width:100%;background:var(--paper);color:var(--ink);resize:vertical}
+input.txt:focus,textarea:focus,input.cell:focus{outline:2px solid var(--violet);outline-offset:1px}
+.scroll{overflow-x:auto}
+table.pun{border-collapse:separate;border-spacing:6px}
+table.pun th{font-family:var(--display);color:var(--soft);padding:4px 10px}
+input.cell{font-family:var(--display);font-size:1.2rem;font-weight:700;text-align:center;width:70px;height:48px;border:1.5px solid var(--line);border-radius:10px;background:var(--paper);color:var(--ink)}
+.exp{font-size:.92rem;border-radius:10px;padding:10px 12px;background:var(--paper)}
+fieldset.ok .exp{background:var(--hl-mint)}
+fieldset.bad .exp{background:var(--hl-bad)}
+fieldset.ok .num{background:var(--ok)} fieldset.bad .num{background:var(--bad)}
+fieldset.ok .exp::before{content:var(--t-ok);font-weight:700;color:var(--ok)}
+fieldset.bad .exp::before{content:var(--t-bad);font-weight:700;color:var(--bad)}
+.op.right{border-color:var(--ok)} .op.wrong{border-color:var(--bad);text-decoration:line-through}
+input.cell.good{border-color:var(--ok)} input.cell.mal{border-color:var(--bad);background:var(--hl-bad)}
+.barra{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--sheet);border:1px solid var(--line);border-radius:14px;padding:10px 14px;display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center;justify-content:space-between;font-size:.9rem}
+.prog{flex:1 1 160px;height:8px;border-radius:4px;background:var(--line);overflow:hidden}
+.prog span{display:block;height:100%;width:0;background:var(--violet);transition:width .25s}
+.tnum{font-variant-numeric:tabular-nums}
+.reloj{font-weight:600;padding:2px 10px;border-radius:999px;background:var(--hl-violet)}
+.reloj.poco{background:var(--bad);color:var(--on-accent)}
+#tiempo{color:var(--soft);font-size:.92rem}
+.btn{font:inherit;font-weight:600;border:0;background:var(--violet);color:var(--on-accent);border-radius:12px;padding:12px 20px;cursor:pointer}
+.btn.sec2{background:transparent;color:var(--violet);border:1.5px solid var(--violet)}
+.acciones{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.res{display:flex;flex-direction:column;gap:6px}
+.nota{font-family:var(--display);font-weight:800;font-size:3rem;line-height:1}
+.nota.pasa{color:var(--ok)} .nota.pierde{color:var(--bad)}
+details{background:var(--sheet);border:1px solid var(--line);border-radius:18px;padding:16px 20px}
+details summary{cursor:pointer;font-weight:600;color:var(--violet)}
+details ol{padding-left:0;list-style:none;display:flex;flex-direction:column;gap:6px;font-size:.92rem;margin:12px 0 0}
+.recuerda{background:var(--hl-violet);border-radius:12px;padding:12px 14px;display:flex;flex-direction:column;gap:4px;font-size:.95rem}
+.recuerda b{font-family:var(--hand);font-size:1.25rem;color:var(--violet);font-weight:400}
+details.pista{background:transparent;border:0;border-radius:0;padding:0}
+details.pista summary{font-size:.9rem;color:var(--pink);font-weight:600}
+details.pista p{font-size:.92rem;background:var(--hl-pink);border-radius:10px;padding:8px 12px;margin-top:6px}
+.temas{display:flex;flex-direction:column;gap:6px;font-size:.92rem}
+.temas div{display:flex;flex-wrap:wrap;gap:4px 10px;align-items:baseline}
+.temas .t{font-weight:600;min-width:170px}
+.temas .rep{color:var(--soft)}
+footer{text-align:center;color:var(--soft);font-size:.85rem}
+.js .solo-sin-js{display:none}
+html:not(.js) .barra,html:not(.js) .acciones{display:none}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="hoja">
+  <span class="hand">Biología · Repaso para el parcial</span>
+  <h1>Parcial de Genética</h1>
+  <div class="datos">
+    <div><b>Nombre</b>Emilia Rendón</div>
+    <div><b>Tema</b>Herencia y leyes de Mendel</div>
+    <div><b>Preguntas</b>34 de selección múltiple</div>
+    <div><b>Valor</b>5,0 · se aprueba con 3,0</div>
+  </div>
+  <ul class="reglas"><li>Todas son de <b>selección múltiple</b> con <b>una sola</b> respuesta correcta.</li><li>No hay pistas. Las opciones incorrectas son los errores más comunes: leé cada opción completa antes de marcar.</li><li>Al entregar te explico cada respuesta y te digo qué tema repasar.</li><li>Tenés <b>45 minutos</b>. El reloj arranca al abrir el parcial y, cuando llega a cero, se entrega solo con lo que hayás respondido.</li><li>No mirés la clave hasta terminar.</li></ul>
+  <p class="aviso solo-sin-js">Si al tocar «Entregar» no pasa nada, abrilo en Safari: botón compartir → «Abrir en Safari». Así se califica solo. Si no, marcá en papel y revisá con la clave del final.</p>
+</header>
+
+<div class="barra" id="barra">
+  <span class="tnum" id="cont">0 / 34</span>
+  <div class="prog" aria-hidden="true"><span id="progbar"></span></div>
+  <span class="tnum reloj" id="reloj">⏱ 45:00</span>
+</div>
+
+<form id="parcial" autocomplete="off">
+<div class="wrap">
+<section class="sec" data-sec="A · Células y división" data-repaso="Repasá 2n y n, y la diferencia entre mitosis y meiosis."><h2>A · Células y división</h2><fieldset class="q" id="q1w" data-type="mc" data-ans="1"><p class="enun"><span class="num">1</span>Un perro tiene 78 cromosomas en cada célula de la piel. ¿Cuántos cromosomas tiene un espermatozoide de perro?</p><div class="ops"><label class="op"><input type="radio" name="q1" value="0"><span class="let">a)</span> 78</label><label class="op"><input type="radio" name="q1" value="1"><span class="let">b)</span> 39</label><label class="op"><input type="radio" name="q1" value="2"><span class="let">c)</span> 156</label><label class="op"><input type="radio" name="q1" value="3"><span class="let">d)</span> 23</label></div><p class="exp" hidden>La piel es 2n = 78. El espermatozoide es n: la mitad, 39. El 23 es el número humano, no el del perro.</p></fieldset><fieldset class="q" id="q2w" data-type="mc" data-ans="1"><p class="enun"><span class="num">2</span>Una célula con 2n = 20 hace mitosis. ¿Qué sale?</p><div class="ops"><label class="op"><input type="radio" name="q2" value="0"><span class="let">a)</span> 4 células de 10 cromosomas</label><label class="op"><input type="radio" name="q2" value="1"><span class="let">b)</span> 2 células de 20 cromosomas</label><label class="op"><input type="radio" name="q2" value="2"><span class="let">c)</span> 2 células de 10 cromosomas</label><label class="op"><input type="radio" name="q2" value="3"><span class="let">d)</span> 4 células de 20 cromosomas</label></div><p class="exp" hidden>Mitosis = mismas: 2 células idénticas a la original, con 20 cada una.</p></fieldset><fieldset class="q" id="q3w" data-type="mc" data-ans="3"><p class="enun"><span class="num">3</span>La misma célula (2n = 20) hace meiosis completa. ¿Qué sale?</p><div class="ops"><label class="op"><input type="radio" name="q3" value="0"><span class="let">a)</span> 2 células de 20</label><label class="op"><input type="radio" name="q3" value="1"><span class="let">b)</span> 2 células de 10</label><label class="op"><input type="radio" name="q3" value="2"><span class="let">c)</span> 4 células de 20</label><label class="op"><input type="radio" name="q3" value="3"><span class="let">d)</span> 4 células de 10</label></div><p class="exp" hidden>La meiosis da 4 gametos y cada uno lleva la mitad: n = 10.</p></fieldset><fieldset class="q" id="q4w" data-type="mc" data-ans="2"><p class="enun"><span class="num">4</span>¿Cuál de estas células NO es haploide?</p><div class="ops"><label class="op"><input type="radio" name="q4" value="0"><span class="let">a)</span> Óvulo</label><label class="op"><input type="radio" name="q4" value="1"><span class="let">b)</span> Espermatozoide</label><label class="op"><input type="radio" name="q4" value="2"><span class="let">c)</span> Cigoto</label><label class="op"><input type="radio" name="q4" value="3"><span class="let">d)</span> Gameto de una planta</label></div><p class="exp" hidden>El cigoto es la unión de dos gametos (n + n), así que es 2n: diploide.</p></fieldset><fieldset class="q" id="q5w" data-type="mc" data-ans="0"><p class="enun"><span class="num">5</span>¿Qué proceso devuelve el número de cromosomas a 2n?</p><div class="ops"><label class="op"><input type="radio" name="q5" value="0"><span class="let">a)</span> Fecundación</label><label class="op"><input type="radio" name="q5" value="1"><span class="let">b)</span> Mitosis</label><label class="op"><input type="radio" name="q5" value="2"><span class="let">c)</span> Meiosis</label><label class="op"><input type="radio" name="q5" value="3"><span class="let">d)</span> Segregación</label></div><p class="exp" hidden>n + n = 2n. La fecundación restaura el número.</p></fieldset><fieldset class="q" id="q6w" data-type="mc" data-ans="2"><p class="enun"><span class="num">6</span>Si la meiosis NO redujera los cromosomas a la mitad, ¿cuántos cromosomas tendría un bebé humano?</p><div class="ops"><label class="op"><input type="radio" name="q6" value="0"><span class="let">a)</span> 46</label><label class="op"><input type="radio" name="q6" value="1"><span class="let">b)</span> 23</label><label class="op"><input type="radio" name="q6" value="2"><span class="let">c)</span> 92</label><label class="op"><input type="radio" name="q6" value="3"><span class="let">d)</span> 69</label></div><p class="exp" hidden>Cada gameto traería 46: 46 + 46 = 92. Por eso la meiosis es necesaria.</p></fieldset><fieldset class="q" id="q7w" data-type="mc" data-ans="1"><p class="enun"><span class="num">7</span>Una persona se corta la mano y la herida se cierra. ¿Qué proceso lo hizo posible?</p><div class="ops"><label class="op"><input type="radio" name="q7" value="0"><span class="let">a)</span> Meiosis</label><label class="op"><input type="radio" name="q7" value="1"><span class="let">b)</span> Mitosis</label><label class="op"><input type="radio" name="q7" value="2"><span class="let">c)</span> Fecundación</label><label class="op"><input type="radio" name="q7" value="3"><span class="let">d)</span> Segregación</label></div><p class="exp" hidden>Reparar tejidos es hacer células idénticas: mitosis.</p></fieldset><fieldset class="q" id="q8w" data-type="mc" data-ans="3"><p class="enun"><span class="num">8</span>¿Por qué los gametos humanos tienen 23 cromosomas y no 46?</p><div class="ops"><label class="op"><input type="radio" name="q8" value="0"><span class="let">a)</span> Para que el bebé tenga 23</label><label class="op"><input type="radio" name="q8" value="1"><span class="let">b)</span> Porque la mitosis los reduce a la mitad</label><label class="op"><input type="radio" name="q8" value="2"><span class="let">c)</span> Porque solo se heredan los cromosomas de la mamá</label><label class="op"><input type="radio" name="q8" value="3"><span class="let">d)</span> Para que al unirse dos gametos el cigoto tenga 46</label></div><p class="exp" hidden>23 + 23 = 46. La que los reduce es la meiosis, no la mitosis, y se hereda la mitad de cada papá.</p></fieldset></section><section class="sec" data-sec="B · Conceptos" data-repaso="Repasá alelo vs. gen y genotipo vs. fenotipo."><h2>B · Conceptos</h2><p class="clave">A = ojos verdes (dominante) · a = ojos azules · B = pelo liso (dominante) · b = pelo rizado</p><fieldset class="q" id="q9w" data-type="mc" data-ans="2"><p class="enun"><span class="num">9</span>¿Cuál de estos pares son alelos?</p><div class="ops"><label class="op"><input type="radio" name="q9" value="0"><span class="let">a)</span> A y B</label><label class="op"><input type="radio" name="q9" value="1"><span class="let">b)</span> Color de ojos y forma del pelo</label><label class="op"><input type="radio" name="q9" value="2"><span class="let">c)</span> A y a</label><label class="op"><input type="radio" name="q9" value="3"><span class="let">d)</span> AA y BB</label></div><p class="exp" hidden>Los alelos son versiones del MISMO gen: A y a. Color de ojos y forma del pelo son dos genes distintos.</p></fieldset><fieldset class="q" id="q10w" data-type="mc" data-ans="0"><p class="enun"><span class="num">10</span>¿Cómo es el pelo de alguien Bb?</p><div class="ops"><label class="op"><input type="radio" name="q10" value="0"><span class="let">a)</span> Liso</label><label class="op"><input type="radio" name="q10" value="1"><span class="let">b)</span> Rizado</label><label class="op"><input type="radio" name="q10" value="2"><span class="let">c)</span> Ondulado (mezcla)</label><label class="op"><input type="radio" name="q10" value="3"><span class="let">d)</span> No se puede saber</label></div><p class="exp" hidden>Con una B basta: liso. En la herencia de Mendel no hay mezcla.</p></fieldset><fieldset class="q" id="q11w" data-type="mc" data-ans="3"><p class="enun"><span class="num">11</span>¿Cuál afirmación es FALSA?</p><div class="ops"><label class="op"><input type="radio" name="q11" value="0"><span class="let">a)</span> Un homocigoto recesivo siempre muestra el rasgo recesivo</label><label class="op"><input type="radio" name="q11" value="1"><span class="let">b)</span> El genotipo se hereda y el fenotipo se observa</label><label class="op"><input type="radio" name="q11" value="2"><span class="let">c)</span> Un heterocigoto muestra el rasgo dominante</label><label class="op"><input type="radio" name="q11" value="3"><span class="let">d)</span> Dos personas con el mismo fenotipo siempre tienen el mismo genotipo</label></div><p class="exp" hidden>Es falsa porque dos personas de ojos verdes pueden ser AA y Aa: mismo fenotipo, distinto genotipo.</p></fieldset><fieldset class="q" id="q12w" data-type="mc" data-ans="0"><p class="enun"><span class="num">12</span>Para un gen con dos alelos (A y a), ¿cuántos genotipos distintos existen?</p><div class="ops"><label class="op"><input type="radio" name="q12" value="0"><span class="let">a)</span> 3</label><label class="op"><input type="radio" name="q12" value="1"><span class="let">b)</span> 2</label><label class="op"><input type="radio" name="q12" value="2"><span class="let">c)</span> 4</label><label class="op"><input type="radio" name="q12" value="3"><span class="let">d)</span> 1</label></div><p class="exp" hidden>AA, Aa y aa: 3. Aa y aA son el mismo genotipo.</p></fieldset><fieldset class="q" id="q13w" data-type="mc" data-ans="0"><p class="enun"><span class="num">13</span>Una persona tiene ojos azules. Su genotipo es…</p><div class="ops"><label class="op"><input type="radio" name="q13" value="0"><span class="let">a)</span> aa</label><label class="op"><input type="radio" name="q13" value="1"><span class="let">b)</span> Aa</label><label class="op"><input type="radio" name="q13" value="2"><span class="let">c)</span> AA</label><label class="op"><input type="radio" name="q13" value="3"><span class="let">d)</span> AA o Aa</label></div><p class="exp" hidden>El recesivo solo se ve con dos copias: aa, seguro.</p></fieldset><fieldset class="q" id="q14w" data-type="mc" data-ans="1"><p class="enun"><span class="num">14</span>Una persona tiene ojos verdes. Solo con mirarla, ¿se sabe su genotipo?</p><div class="ops"><label class="op"><input type="radio" name="q14" value="0"><span class="let">a)</span> Sí, es AA</label><label class="op"><input type="radio" name="q14" value="1"><span class="let">b)</span> No: puede ser AA o Aa</label><label class="op"><input type="radio" name="q14" value="2"><span class="let">c)</span> Sí, es Aa</label><label class="op"><input type="radio" name="q14" value="3"><span class="let">d)</span> No: puede ser Aa o aa</label></div><p class="exp" hidden>El dominante tapa al recesivo. Para saberlo se hace un cruce de prueba con aa.</p></fieldset><fieldset class="q" id="q15w" data-type="mc" data-ans="3"><p class="enun"><span class="num">15</span>¿Qué es un individuo de «raza pura»?</p><div class="ops"><label class="op"><input type="radio" name="q15" value="0"><span class="let">a)</span> Un heterocigoto</label><label class="op"><input type="radio" name="q15" value="1"><span class="let">b)</span> Uno con fenotipo dominante</label><label class="op"><input type="radio" name="q15" value="2"><span class="let">c)</span> Uno con muchos alelos</label><label class="op"><input type="radio" name="q15" value="3"><span class="let">d)</span> Un homocigoto</label></div><p class="exp" hidden>Raza pura = homocigoto (AA o aa).</p></fieldset></section><section class="sec" data-sec="C · Un rasgo" data-repaso="Hacé otra vez el cuadro de Aa × Aa y practicá la regla del «y»."><h2>C · Un rasgo</h2><p class="clave">A = ojos verdes (dominante) · a = ojos azules</p><fieldset class="q" id="q16w" data-type="mc" data-ans="1"><p class="enun"><span class="num">16</span>En el cuadro de Punnett de Aa × Aa, ¿qué casillas salen?</p><div class="ops"><label class="op"><input type="radio" name="q16" value="0"><span class="let">a)</span> AA, Aa, aA, aa</label><label class="op"><input type="radio" name="q16" value="1"><span class="let">b)</span> AA, Aa, Aa, aa</label><label class="op"><input type="radio" name="q16" value="2"><span class="let">c)</span> AA, AA, aa, aa</label><label class="op"><input type="radio" name="q16" value="3"><span class="let">d)</span> Aa, Aa, Aa, Aa</label></div><p class="exp" hidden>AA · Aa · Aa · aa. «aA» no se escribe: la mayúscula va primero.</p></fieldset><fieldset class="q" id="q17w" data-type="mc" data-ans="2"><p class="enun"><span class="num">17</span>Aa × aa. ¿Proporción fenotípica?</p><div class="ops"><label class="op"><input type="radio" name="q17" value="0"><span class="let">a)</span> 3 : 1</label><label class="op"><input type="radio" name="q17" value="1"><span class="let">b)</span> 1 : 2 : 1</label><label class="op"><input type="radio" name="q17" value="2"><span class="let">c)</span> 1 : 1</label><label class="op"><input type="radio" name="q17" value="3"><span class="let">d)</span> Todos verdes</label></div><p class="exp" hidden>Sale Aa, Aa, aa, aa: 2 verdes y 2 azules → 1 : 1.</p></fieldset><fieldset class="q" id="q18w" data-type="mc" data-ans="0"><p class="enun"><span class="num">18</span>Aa × Aa. ¿Proporción genotípica?</p><div class="ops"><label class="op"><input type="radio" name="q18" value="0"><span class="let">a)</span> 1 : 2 : 1</label><label class="op"><input type="radio" name="q18" value="1"><span class="let">b)</span> 3 : 1</label><label class="op"><input type="radio" name="q18" value="2"><span class="let">c)</span> 1 : 1</label><label class="op"><input type="radio" name="q18" value="3"><span class="let">d)</span> 9 : 3 : 3 : 1</label></div><p class="exp" hidden>1 AA : 2 Aa : 1 aa. El 3 : 1 es la proporción del fenotipo, no del genotipo.</p></fieldset><fieldset class="q" id="q19w" data-type="mc" data-ans="2"><p class="enun"><span class="num">19</span>Aa × Aa. De los hijos de ojos VERDES, ¿qué fracción es homocigota (AA)?</p><div class="ops"><label class="op"><input type="radio" name="q19" value="0"><span class="let">a)</span> 1/4</label><label class="op"><input type="radio" name="q19" value="1"><span class="let">b)</span> 1/2</label><label class="op"><input type="radio" name="q19" value="2"><span class="let">c)</span> 1/3</label><label class="op"><input type="radio" name="q19" value="3"><span class="let">d)</span> 2/3</label></div><p class="exp" hidden>Los verdes son AA, Aa, Aa: 3 casillas. Solo 1 es AA → 1/3. El 1/4 sale de contar sobre las 4 casillas, pero los azules ya quedaron por fuera.</p></fieldset><fieldset class="q" id="q20w" data-type="mc" data-ans="3"><p class="enun"><span class="num">20</span>Aa × Aa tienen 3 hijos. ¿Probabilidad de que LOS TRES tengan ojos azules?</p><div class="ops"><label class="op"><input type="radio" name="q20" value="0"><span class="let">a)</span> 3/4</label><label class="op"><input type="radio" name="q20" value="1"><span class="let">b)</span> 1/12</label><label class="op"><input type="radio" name="q20" value="2"><span class="let">c)</span> 1/16</label><label class="op"><input type="radio" name="q20" value="3"><span class="let">d)</span> 1/64</label></div><p class="exp" hidden>Regla del «y»: 1/4 × 1/4 × 1/4 = 1/64. El 3/4 sale de sumar, y el 1/16 sería para dos hijos.</p></fieldset><fieldset class="q" id="q21w" data-type="mc" data-ans="0"><p class="enun"><span class="num">21</span>Aa × Aa. ¿Probabilidad de que el primer hijo tenga ojos verdes Y el segundo ojos azules?</p><div class="ops"><label class="op"><input type="radio" name="q21" value="0"><span class="let">a)</span> 3/16</label><label class="op"><input type="radio" name="q21" value="1"><span class="let">b)</span> 1</label><label class="op"><input type="radio" name="q21" value="2"><span class="let">c)</span> 3/4</label><label class="op"><input type="radio" name="q21" value="3"><span class="let">d)</span> 1/2</label></div><p class="exp" hidden>Verde 3/4 y azul 1/4. Como piden las dos cosas: 3/4 × 1/4 = 3/16. Sumarlas da 1, que es el error típico.</p></fieldset><fieldset class="q" id="q22w" data-type="mc" data-ans="1"><p class="enun"><span class="num">22</span>Aa × Aa tienen 4 hijos. ¿Probabilidad de que el PRIMERO tenga ojos azules y los otros TRES ojos verdes?</p><div class="ops"><label class="op"><input type="radio" name="q22" value="0"><span class="let">a)</span> 1/4</label><label class="op"><input type="radio" name="q22" value="1"><span class="let">b)</span> 27/256</label><label class="op"><input type="radio" name="q22" value="2"><span class="let">c)</span> 81/256</label><label class="op"><input type="radio" name="q22" value="3"><span class="let">d)</span> 3/4</label></div><p class="exp" hidden>1/4 × 3/4 × 3/4 × 3/4 = 27/256. El 81/256 sería que los cuatro salgan verdes.</p></fieldset><fieldset class="q" id="q23w" data-type="mc" data-ans="3"><p class="enun"><span class="num">23</span>Un ratón negro (dominante, genotipo desconocido) se cruza con uno blanco (aa). Nacen 6 negros y 5 blancos. ¿Genotipo del negro?</p><div class="ops"><label class="op"><input type="radio" name="q23" value="0"><span class="let">a)</span> AA</label><label class="op"><input type="radio" name="q23" value="1"><span class="let">b)</span> aa</label><label class="op"><input type="radio" name="q23" value="2"><span class="let">c)</span> No se puede saber</label><label class="op"><input type="radio" name="q23" value="3"><span class="let">d)</span> Aa</label></div><p class="exp" hidden>Nacieron blancos (aa), así que el negro pasó una a: era Aa. Casi 1 : 1 lo confirma.</p></fieldset><fieldset class="q" id="q24w" data-type="mc" data-ans="2"><p class="enun"><span class="num">24</span>Cruzás AA × aa. Después cruzás dos hijos de esa F1 entre sí y nacen 400 plantas. ¿Cuántas esperás que sean aa?</p><div class="ops"><label class="op"><input type="radio" name="q24" value="0"><span class="let">a)</span> 0</label><label class="op"><input type="radio" name="q24" value="1"><span class="let">b)</span> 200</label><label class="op"><input type="radio" name="q24" value="2"><span class="let">c)</span> 100</label><label class="op"><input type="radio" name="q24" value="3"><span class="let">d)</span> 300</label></div><p class="exp" hidden>La F1 es Aa. Aa × Aa da aa en 1/4. 1/4 × 400 = 100. El 0 es el error de quedarse en la F1.</p></fieldset></section><section class="sec" data-sec="D · Dos rasgos" data-repaso="Practicá cómo sacar los gametos y resolver gen por gen."><h2>D · Dos rasgos</h2><p class="clave">A = ojos verdes · a = azules · B = pelo liso · b = rizado (A y B dominantes)</p><fieldset class="q" id="q25w" data-type="mc" data-ans="3"><p class="enun"><span class="num">25</span>¿Cuántos tipos distintos de gametos produce AaBb?</p><div class="ops"><label class="op"><input type="radio" name="q25" value="0"><span class="let">a)</span> 2</label><label class="op"><input type="radio" name="q25" value="1"><span class="let">b)</span> 8</label><label class="op"><input type="radio" name="q25" value="2"><span class="let">c)</span> 16</label><label class="op"><input type="radio" name="q25" value="3"><span class="let">d)</span> 4</label></div><p class="exp" hidden>AB, Ab, aB y ab: 4. El 16 son las casillas del cuadro, no los gametos.</p></fieldset><fieldset class="q" id="q26w" data-type="mc" data-ans="0"><p class="enun"><span class="num">26</span>¿Qué gametos produce aaBb?</p><div class="ops"><label class="op"><input type="radio" name="q26" value="0"><span class="let">a)</span> aB y ab</label><label class="op"><input type="radio" name="q26" value="1"><span class="let">b)</span> AB y ab</label><label class="op"><input type="radio" name="q26" value="2"><span class="let">c)</span> aa y Bb</label><label class="op"><input type="radio" name="q26" value="3"><span class="let">d)</span> aB, ab, AB y Ab</label></div><p class="exp" hidden>Del primer gen solo hay a; se combina con B o con b: aB y ab. Un gameto lleva UNA letra de cada gen, nunca dos.</p></fieldset><fieldset class="q" id="q27w" data-type="mc" data-ans="0"><p class="enun"><span class="num">27</span>AaBb × AaBb. ¿Probabilidad de un hijo aaBB?</p><div class="ops"><label class="op"><input type="radio" name="q27" value="0"><span class="let">a)</span> 1/16</label><label class="op"><input type="radio" name="q27" value="1"><span class="let">b)</span> 1/4</label><label class="op"><input type="radio" name="q27" value="2"><span class="let">c)</span> 1/8</label><label class="op"><input type="radio" name="q27" value="3"><span class="let">d)</span> 3/16</label></div><p class="exp" hidden>aa = 1/4 y BB = 1/4. Entonces 1/4 × 1/4 = 1/16.</p></fieldset><fieldset class="q" id="q28w" data-type="mc" data-ans="2"><p class="enun"><span class="num">28</span>AaBb × AaBb. ¿Probabilidad de que un hijo muestre AL MENOS un rasgo recesivo (ojos azules, pelo rizado o los dos)?</p><div class="ops"><label class="op"><input type="radio" name="q28" value="0"><span class="let">a)</span> 9/16</label><label class="op"><input type="radio" name="q28" value="1"><span class="let">b)</span> 1/16</label><label class="op"><input type="radio" name="q28" value="2"><span class="let">c)</span> 7/16</label><label class="op"><input type="radio" name="q28" value="3"><span class="let">d)</span> 3/16</label></div><p class="exp" hidden>Lo contrario es mostrar los dos dominantes, que es 9/16. Entonces 1 − 9/16 = 7/16 (3 + 3 + 1).</p></fieldset><fieldset class="q" id="q29w" data-type="mc" data-ans="2"><p class="enun"><span class="num">29</span>AaBb × AaBb. De los hijos con ojos verdes y pelo liso, ¿qué fracción es AaBb?</p><div class="ops"><label class="op"><input type="radio" name="q29" value="0"><span class="let">a)</span> 1/4</label><label class="op"><input type="radio" name="q29" value="1"><span class="let">b)</span> 9/16</label><label class="op"><input type="radio" name="q29" value="2"><span class="let">c)</span> 4/9</label><label class="op"><input type="radio" name="q29" value="3"><span class="let">d)</span> 1/9</label></div><p class="exp" hidden>Verdes y lisos son 9 casillas. De esas 9, cuatro son AaBb → 4/9. Si contás sobre 16 (4/16 = 1/4), caés en la trampa.</p></fieldset><fieldset class="q" id="q30w" data-type="mc" data-ans="2"><p class="enun"><span class="num">30</span>AaBb × aabb. Si nacen 80, ¿cuántos esperás con ojos verdes y pelo rizado?</p><div class="ops"><label class="op"><input type="radio" name="q30" value="0"><span class="let">a)</span> 15</label><label class="op"><input type="radio" name="q30" value="1"><span class="let">b)</span> 40</label><label class="op"><input type="radio" name="q30" value="2"><span class="let">c)</span> 20</label><label class="op"><input type="radio" name="q30" value="3"><span class="let">d)</span> 5</label></div><p class="exp" hidden>La proporción es 1 : 1 : 1 : 1, así que cada grupo es 1/4. 1/4 × 80 = 20. El 15 sale de usar 3/16, que es del cruce AaBb × AaBb.</p></fieldset><fieldset class="q" id="q31w" data-type="mc" data-ans="0"><p class="enun"><span class="num">31</span>AaBb × Aabb. ¿Probabilidad de un hijo con ojos verdes y pelo liso?</p><div class="ops"><label class="op"><input type="radio" name="q31" value="0"><span class="let">a)</span> 3/8</label><label class="op"><input type="radio" name="q31" value="1"><span class="let">b)</span> 9/16</label><label class="op"><input type="radio" name="q31" value="2"><span class="let">c)</span> 1/4</label><label class="op"><input type="radio" name="q31" value="3"><span class="let">d)</span> 3/16</label></div><p class="exp" hidden>Gen por gen. Ojos: Aa × Aa da verdes 3/4. Pelo: Bb × bb da liso 1/2. 3/4 × 1/2 = 3/8.</p></fieldset><fieldset class="q" id="q32w" data-type="mc" data-ans="1"><p class="enun"><span class="num">32</span>Cruzás AABB × aabb. ¿Cómo es TODA la F1?</p><div class="ops"><label class="op"><input type="radio" name="q32" value="0"><span class="let">a)</span> AABB: verdes y lisos</label><label class="op"><input type="radio" name="q32" value="1"><span class="let">b)</span> AaBb: verdes y lisos</label><label class="op"><input type="radio" name="q32" value="2"><span class="let">c)</span> aabb: azules y rizados</label><label class="op"><input type="radio" name="q32" value="3"><span class="let">d)</span> Mitad y mitad</label></div><p class="exp" hidden>Uno solo da gametos AB y el otro solo ab: todos AaBb. Es la 1ª ley con dos rasgos.</p></fieldset><fieldset class="q" id="q33w" data-type="mc" data-ans="2"><p class="enun"><span class="num">33</span>Un papá de ojos verdes y pelo liso tiene hijos con una mamá aabb. Todos los hijos tienen ojos verdes; la mitad tiene pelo liso y la otra mitad rizado. ¿Genotipo del papá?</p><div class="ops"><label class="op"><input type="radio" name="q33" value="0"><span class="let">a)</span> AaBb</label><label class="op"><input type="radio" name="q33" value="1"><span class="let">b)</span> AABB</label><label class="op"><input type="radio" name="q33" value="2"><span class="let">c)</span> AABb</label><label class="op"><input type="radio" name="q33" value="3"><span class="let">d)</span> AaBB</label></div><p class="exp" hidden>Ojos: todos verdes con mamá aa → el papá es AA. Pelo: mitad y mitad con mamá bb → el papá es Bb. Papá = AABb.</p></fieldset><fieldset class="q" id="q34w" data-type="mc" data-ans="3"><p class="enun"><span class="num">34</span>Dos padres de ojos verdes tienen un hijo de ojos azules. ¿Cuál es la explicación correcta?</p><div class="ops"><label class="op"><input type="radio" name="q34" value="0"><span class="let">a)</span> El color de los dos padres se mezcló</label><label class="op"><input type="radio" name="q34" value="1"><span class="let">b)</span> Uno de los padres tiene que ser aa</label><label class="op"><input type="radio" name="q34" value="2"><span class="let">c)</span> Fue una mutación: dos verdes no pueden tener un hijo azul</label><label class="op"><input type="radio" name="q34" value="3"><span class="let">d)</span> Los dos son Aa y cada uno le pasó una a</label></div><p class="exp" hidden>Los dos son Aa: se ven verdes pero guardan una a. Si los dos la pasan, el hijo es aa. Si uno fuera aa, tendría ojos azules.</p></fieldset></section>
+<div class="hoja">
+  <div class="res" id="res" hidden>
+    <span class="hand">Tu nota</span>
+    <span class="nota tnum" id="nota">0,0</span>
+    <span class="tnum" id="detalle"></span>
+    <span id="msg"></span>
+    <span class="tnum" id="tiempo"></span>
+    <div class="temas tnum" id="temas"></div>
+  </div>
+  <p id="faltan" class="aviso" hidden></p>
+  <div class="acciones">
+    <button class="btn" type="submit" id="entregar">Entregar parcial</button>
+    <button class="btn sec2" type="button" id="otra" hidden>Volver a presentarlo</button>
+  </div>
+</div>
+</div>
+</form>
+
+<details>
+  <summary>Clave de respuestas (abrir solo al terminar)</summary>
+  <ol><li><b>1.</b> b) 39 — La piel es 2n = 78. El espermatozoide es n: la mitad, 39. El 23 es el número humano, no el del perro.</li><li><b>2.</b> b) 2 células de 20 cromosomas — Mitosis = mismas: 2 células idénticas a la original, con 20 cada una.</li><li><b>3.</b> d) 4 células de 10 — La meiosis da 4 gametos y cada uno lleva la mitad: n = 10.</li><li><b>4.</b> c) Cigoto — El cigoto es la unión de dos gametos (n + n), así que es 2n: diploide.</li><li><b>5.</b> a) Fecundación — n + n = 2n. La fecundación restaura el número.</li><li><b>6.</b> c) 92 — Cada gameto traería 46: 46 + 46 = 92. Por eso la meiosis es necesaria.</li><li><b>7.</b> b) Mitosis — Reparar tejidos es hacer células idénticas: mitosis.</li><li><b>8.</b> d) Para que al unirse dos gametos el cigoto tenga 46 — 23 + 23 = 46. La que los reduce es la meiosis, no la mitosis, y se hereda la mitad de cada papá.</li><li><b>9.</b> c) A y a — Los alelos son versiones del MISMO gen: A y a. Color de ojos y forma del pelo son dos genes distintos.</li><li><b>10.</b> a) Liso — Con una B basta: liso. En la herencia de Mendel no hay mezcla.</li><li><b>11.</b> d) Dos personas con el mismo fenotipo siempre tienen el mismo genotipo — Es falsa porque dos personas de ojos verdes pueden ser AA y Aa: mismo fenotipo, distinto genotipo.</li><li><b>12.</b> a) 3 — AA, Aa y aa: 3. Aa y aA son el mismo genotipo.</li><li><b>13.</b> a) aa — El recesivo solo se ve con dos copias: aa, seguro.</li><li><b>14.</b> b) No: puede ser AA o Aa — El dominante tapa al recesivo. Para saberlo se hace un cruce de prueba con aa.</li><li><b>15.</b> d) Un homocigoto — Raza pura = homocigoto (AA o aa).</li><li><b>16.</b> b) AA, Aa, Aa, aa — AA · Aa · Aa · aa. «aA» no se escribe: la mayúscula va primero.</li><li><b>17.</b> c) 1 : 1 — Sale Aa, Aa, aa, aa: 2 verdes y 2 azules → 1 : 1.</li><li><b>18.</b> a) 1 : 2 : 1 — 1 AA : 2 Aa : 1 aa. El 3 : 1 es la proporción del fenotipo, no del genotipo.</li><li><b>19.</b> c) 1/3 — Los verdes son AA, Aa, Aa: 3 casillas. Solo 1 es AA → 1/3. El 1/4 sale de contar sobre las 4 casillas, pero los azules ya quedaron por fuera.</li><li><b>20.</b> d) 1/64 — Regla del «y»: 1/4 × 1/4 × 1/4 = 1/64. El 3/4 sale de sumar, y el 1/16 sería para dos hijos.</li><li><b>21.</b> a) 3/16 — Verde 3/4 y azul 1/4. Como piden las dos cosas: 3/4 × 1/4 = 3/16. Sumarlas da 1, que es el error típico.</li><li><b>22.</b> b) 27/256 — 1/4 × 3/4 × 3/4 × 3/4 = 27/256. El 81/256 sería que los cuatro salgan verdes.</li><li><b>23.</b> d) Aa — Nacieron blancos (aa), así que el negro pasó una a: era Aa. Casi 1 : 1 lo confirma.</li><li><b>24.</b> c) 100 — La F1 es Aa. Aa × Aa da aa en 1/4. 1/4 × 400 = 100. El 0 es el error de quedarse en la F1.</li><li><b>25.</b> d) 4 — AB, Ab, aB y ab: 4. El 16 son las casillas del cuadro, no los gametos.</li><li><b>26.</b> a) aB y ab — Del primer gen solo hay a; se combina con B o con b: aB y ab. Un gameto lleva UNA letra de cada gen, nunca dos.</li><li><b>27.</b> a) 1/16 — aa = 1/4 y BB = 1/4. Entonces 1/4 × 1/4 = 1/16.</li><li><b>28.</b> c) 7/16 — Lo contrario es mostrar los dos dominantes, que es 9/16. Entonces 1 − 9/16 = 7/16 (3 + 3 + 1).</li><li><b>29.</b> c) 4/9 — Verdes y lisos son 9 casillas. De esas 9, cuatro son AaBb → 4/9. Si contás sobre 16 (4/16 = 1/4), caés en la trampa.</li><li><b>30.</b> c) 20 — La proporción es 1 : 1 : 1 : 1, así que cada grupo es 1/4. 1/4 × 80 = 20. El 15 sale de usar 3/16, que es del cruce AaBb × AaBb.</li><li><b>31.</b> a) 3/8 — Gen por gen. Ojos: Aa × Aa da verdes 3/4. Pelo: Bb × bb da liso 1/2. 3/4 × 1/2 = 3/8.</li><li><b>32.</b> b) AaBb: verdes y lisos — Uno solo da gametos AB y el otro solo ab: todos AaBb. Es la 1ª ley con dos rasgos.</li><li><b>33.</b> c) AABb — Ojos: todos verdes con mamá aa → el papá es AA. Pelo: mitad y mitad con mamá bb → el papá es Bb. Papá = AABb.</li><li><b>34.</b> d) Los dos son Aa y cada uno le pasó una a — Los dos son Aa: se ven verdes pero guardan una a. Si los dos la pasan, el hijo es aa. Si uno fuera aa, tendría ojos azules.</li></ol>
+</details>
+<footer>¡Mucha suerte, Emilia! 💜</footer>
+</div>
+
+<script>
+const TX={cont:(n,t)=>`${n} de ${t} respondidas`,det:(o,t)=>`${o} de ${t} correctas`,de:(b,t)=>`${b} de ${t}`,
+ fin:"⏰ Se acabó el tiempo",usado:t=>`Tiempo usado: ${t}`,
+ falta:f=>`Te ${f===1?"falta 1 pregunta":"faltan "+f+" preguntas"}. Si querés entregar igual, tocá «Entregar parcial» otra vez.`,
+ msg:n=>n>=4.5?"¡Excelente! Estás más que lista.":n>=3.5?"Muy bien. Leé las explicaciones de las que fallaste.":n>=3?"Aprobaste, pero repasá las que salieron en rojo.":"Todavía no. Leé las explicaciones y volvé a presentarlo."};
+document.documentElement.classList.add("js");
+const form=document.getElementById("parcial");
+const QS=[...document.querySelectorAll("fieldset.q:not(.open)")];
+const TOTAL=QS.length;
+const LIMITE=45*60;
+let entregado=false,avisado=false,t0=Date.now(),usado=0;
+
+function valor(s){
+  s=String(s).trim().replace(/\s+/g,"").replace(",",".");
+  if(!s)return NaN;
+  if(s.endsWith("%"))return parseFloat(s)/100;
+  if(s.includes("/")){const [a,b]=s.split("/").map(Number);return b?a/b:NaN}
+  return Number(s);
+}
+function respondida(f){
+  const t=f.dataset.type;
+  if(t==="mc")return !!f.querySelector("input:checked");
+  if(t==="grid")return [...f.querySelectorAll("input.cell")].every(i=>i.value.trim());
+  return f.querySelector("input.txt").value.trim()!=="";
+}
+function progreso(){
+  const n=QS.filter(respondida).length;
+  document.getElementById("cont").textContent=TX.cont(n,TOTAL);
+  document.getElementById("progbar").style.width=(n/TOTAL*100)+"%";
+  return n;
+}
+form.addEventListener("input",progreso);
+form.addEventListener("change",progreso);
+const mmss=s=>`${String(Math.floor(s/60)).padStart(2,"0")}:${String(s%60).padStart(2,"0")}`;
+// Guardado en la tablet: si se recarga o se cierra Safari, vuelven las respuestas y el reloj sigue donde iba.
+const KEY="parcial:"+document.title;
+function guardar(){if(entregado)return;try{const r={};form.querySelectorAll("input:checked").forEach(i=>r[i.name]=i.value);localStorage.setItem(KEY,JSON.stringify({t0,r}))}catch(e){}}
+function borrar(){try{localStorage.removeItem(KEY)}catch(e){}}
+try{const s=JSON.parse(localStorage.getItem(KEY)||"null");
+  if(s&&s.t0&&Date.now()-s.t0<(LIMITE+1800)*1000){t0=s.t0;
+    Object.entries(s.r||{}).forEach(([n,v])=>{const i=form.querySelector(`input[name="${n}"][value="${v}"]`);if(i)i.checked=true});}
+  else borrar();}catch(e){}
+form.addEventListener("change",guardar);
+function tick(){if(entregado)return;const pas=Math.floor((Date.now()-t0)/1000),r=Math.max(0,LIMITE-pas);
+  const el=document.getElementById("reloj");el.textContent="⏱ "+mmss(r);
+  el.classList.toggle("poco",r<=300);
+  if(r===0){usado=LIMITE;calificar(true)}}
+progreso();tick();setInterval(tick,1000);
+
+function calificar(porTiempo){
+  if(!porTiempo)usado=Math.min(LIMITE,Math.floor((Date.now()-t0)/1000));
+  let ok=0;
+  QS.forEach(f=>{
+    const t=f.dataset.type,a=f.dataset.ans;let bien=false;
+    if(t==="mc"){
+      const sel=f.querySelector("input:checked");bien=!!sel&&sel.value===a;
+      f.querySelectorAll(".op").forEach(l=>{const v=l.querySelector("input").value;
+        if(v===a)l.classList.add("right");else if(sel&&v===sel.value)l.classList.add("wrong")});
+    }else if(t==="grid"){
+      const ans=a.split(",");bien=true;
+      f.querySelectorAll("input.cell").forEach((c,i)=>{const g=c.value.trim()===ans[i];c.classList.add(g?"good":"mal");if(!g)bien=false});
+    }else{
+      bien=Math.abs(valor(f.querySelector("input.txt").value)-valor(a))<1e-6;
+    }
+    if(bien)ok++;
+    f.classList.add(bien?"ok":"bad");
+    f.querySelector(".exp").hidden=false;
+  });
+  document.querySelectorAll("fieldset.open .exp").forEach(e=>e.hidden=false);
+  form.querySelectorAll("input,textarea").forEach(i=>i.disabled=true);
+  const nota=Math.round(ok/TOTAL*50)/10;
+  const n=document.getElementById("nota");
+  n.textContent=nota.toFixed(1).replace(".",",");
+  n.className="nota tnum "+(nota>=3?"pasa":"pierde");
+  document.getElementById("detalle").textContent=TX.det(ok,TOTAL);
+  document.getElementById("msg").textContent=TX.msg(nota);
+  document.getElementById("temas").innerHTML=[...document.querySelectorAll("section.sec[data-sec]")].map(sec=>{
+    const fs=[...sec.querySelectorAll("fieldset.q:not(.open)")];if(!fs.length)return "";
+    const b=fs.filter(f=>f.classList.contains("ok")).length,pct=b/fs.length;
+    return `<div><span class="t">${pct>=.7?"✔":"✘"} ${sec.dataset.sec}</span><span>${TX.de(b,fs.length)}</span>${pct<.7?`<span class="rep">${sec.dataset.repaso}</span>`:""}</div>`}).join("");
+  document.getElementById("res").hidden=false;
+  document.getElementById("faltan").hidden=true;
+  document.getElementById("entregar").hidden=true;
+  document.getElementById("otra").hidden=false;
+  document.getElementById("tiempo").textContent=(porTiempo?TX.fin+" · ":"")+TX.usado(mmss(usado));
+  entregado=true;borrar();
+  document.getElementById("res").scrollIntoView({behavior:"smooth",block:"center"});
+}
+form.addEventListener("submit",e=>{
+  e.preventDefault();if(entregado)return;
+  const falta=TOTAL-progreso();
+  if(falta>0&&!avisado){avisado=true;const p=document.getElementById("faltan");
+    p.textContent=TX.falta(falta);p.hidden=false;return}
+  calificar();
+});
+document.getElementById("otra").addEventListener("click",()=>{
+  form.reset();form.querySelectorAll("input,textarea").forEach(i=>{i.disabled=false;i.classList.remove("good","mal")});
+  QS.forEach(f=>{f.classList.remove("ok","bad");f.querySelector(".exp").hidden=true;f.querySelectorAll(".op").forEach(l=>l.classList.remove("right","wrong"))});
+  document.querySelectorAll("fieldset.open .exp").forEach(e=>e.hidden=true);
+  ["res","otra"].forEach(id=>document.getElementById(id).hidden=true);
+  document.getElementById("entregar").hidden=false;
+  entregado=false;avisado=false;t0=Date.now();borrar();document.getElementById("reloj").classList.remove("poco");tick();progreso();window.scrollTo({top:0,behavior:"smooth"});
+});
+</script>
+</body>
+</html>

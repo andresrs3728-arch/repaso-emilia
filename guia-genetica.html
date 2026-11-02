@@ -1,0 +1,360 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Genética sin enredos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Lexend:wght@400;500;600&family=Gochi+Hand&display=swap">
+<style>
+/* Layout: cuaderno de una columna; cada tema es una hoja con su resaltador, y los simuladores rompen el ancho */
+:root{
+  --paper:#F7F4FB; --sheet:#FFFFFF; --ink:#2A2140; --soft:#6B6283; --line:#E4DDF0;
+  --violet:#7B3FE4; --pink:#E8418A; --mint:#12A585; --sky:#2F7FE0; --yellow:#FFE066; --hl-pink:#FFC2DD; --hl-violet:#DCCBFF; --hl-mint:#BFF1E3;
+  --ok:#12A585; --bad:#D9344A;
+  --display:"Bricolage Grotesque", "Avenir Next", system-ui, sans-serif;
+  --body:"Lexend", "Segoe UI", system-ui, sans-serif;
+  --hand:"Gochi Hand", "Comic Sans MS", cursive;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --paper:#16121F; --sheet:#211B2E; --ink:#F1ECFA; --soft:#B3A9C9; --line:#3A3150;
+  --violet:#A98BFF; --pink:#FF6FAE; --mint:#3FD4AF; --sky:#6AA8FF; --yellow:#8A7420; --hl-pink:#6A2848; --hl-violet:#45306F; --hl-mint:#1F5A4C;
+  --ok:#3FD4AF; --bad:#FF6B7E; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --paper:#16121F; --sheet:#211B2E; --ink:#F1ECFA; --soft:#B3A9C9; --line:#3A3150;
+  --violet:#A98BFF; --pink:#FF6FAE; --mint:#3FD4AF; --sky:#6AA8FF; --yellow:#8A7420; --hl-pink:#6A2848; --hl-violet:#45306F; --hl-mint:#1F5A4C;
+  --ok:#3FD4AF; --bad:#FF6B7E; color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--paper);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.6;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:24px 64px}
+.wrap{max-width:780px;margin:0 auto;display:flex;flex-direction:column;gap:28px}
+h1,h2,h3{font-family:var(--display);line-height:1.15;text-wrap:balance;margin:0}
+h1{font-size:clamp(2.2rem,7vw,3.6rem);font-weight:800;letter-spacing:-.02em}
+h2{font-size:clamp(1.5rem,4.5vw,2rem);font-weight:800}
+h3{font-size:1.15rem;font-weight:700}
+p{margin:0}
+.hand{font-family:var(--hand);font-size:1.25em;color:var(--violet)}
+.hl{background:linear-gradient(transparent 55%,var(--hl-pink) 55%);padding:0 .1em}
+.hl-v{background:linear-gradient(transparent 55%,var(--hl-violet) 55%);padding:0 .1em}
+.hl-m{background:linear-gradient(transparent 55%,var(--hl-mint) 55%);padding:0 .1em}
+.D{color:var(--violet);font-weight:700}
+.r{color:var(--pink);font-weight:700}
+
+header{display:flex;flex-direction:column;gap:12px;padding-top:8px}
+.eyebrow{font-size:.8rem;text-transform:uppercase;letter-spacing:.12em;color:var(--soft);font-weight:600}
+.lead{font-size:1.1rem;color:var(--soft);max-width:60ch}
+nav.chips{display:flex;flex-wrap:wrap;gap:8px}
+nav.chips a{font-size:.85rem;text-decoration:none;color:var(--ink);border:1.5px solid var(--line);background:var(--sheet);padding:6px 12px;border-radius:999px}
+nav.chips a:hover,nav.chips a:focus-visible{border-color:var(--violet);color:var(--violet);outline:none}
+
+.sheet{background:var(--sheet);border:1px solid var(--line);border-radius:18px;padding:24px clamp(18px,4vw,32px);display:flex;flex-direction:column;gap:16px;
+  background-image:repeating-linear-gradient(var(--sheet) 0 31px,var(--line) 31px 32px);background-position:0 70px}
+.sheet>.top{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
+.tag{font-family:var(--hand);font-size:1.1rem;color:var(--pink)}
+.box{background:var(--paper);border-radius:12px;padding:14px 16px;display:flex;flex-direction:column;gap:6px}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+.grid2>*{min-width:0}
+.card{border:1.5px solid var(--line);border-radius:14px;padding:14px 16px;background:var(--sheet);display:flex;flex-direction:column;gap:6px}
+.card .big{font-family:var(--display);font-size:2rem;font-weight:800;line-height:1}
+.trap{border-left:4px solid var(--pink);background:var(--paper);padding:12px 16px;border-radius:0 12px 12px 0}
+.trap b{color:var(--pink)}
+.exam{border:2px dashed var(--violet);border-radius:14px;padding:14px 16px;display:flex;flex-direction:column;gap:8px}
+.exam .q{font-weight:600}
+details summary{cursor:pointer;color:var(--violet);font-weight:600}
+details[open] summary{margin-bottom:6px}
+ul,ol{margin:0;padding-left:1.2em;display:flex;flex-direction:column;gap:4px}
+
+/* flujo de cromosomas */
+.flow{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:10px;font-family:var(--display)}
+.cell{width:92px;height:92px;border-radius:50%;display:grid;place-items:center;text-align:center;font-weight:800;font-size:1.4rem;line-height:1.05}
+.cell small{display:block;font-family:var(--body);font-size:.7rem;font-weight:500}
+.c2n{background:var(--hl-violet)} .cn{background:var(--hl-pink);width:72px;height:72px;font-size:1.15rem}
+.arrow{font-size:.85rem;color:var(--soft);text-align:center;font-family:var(--body)}
+
+/* simuladores */
+.sim{display:flex;flex-direction:column;gap:14px}
+.controls{display:flex;flex-wrap:wrap;gap:14px;align-items:flex-end}
+.controls label{display:flex;flex-direction:column;gap:4px;font-size:.85rem;color:var(--soft);font-weight:500}
+.seg{display:flex;border:1.5px solid var(--line);border-radius:10px;overflow:hidden}
+.seg button{font:inherit;font-weight:600;border:0;background:var(--sheet);color:var(--ink);padding:8px 12px;cursor:pointer;min-width:52px}
+.seg button+button{border-left:1.5px solid var(--line)}
+.seg button[aria-pressed="true"]{background:var(--violet);color:#fff}
+.seg button:focus-visible{outline:2px solid var(--pink);outline-offset:-2px}
+.scroll{overflow-x:auto}
+table.pun{border-collapse:separate;border-spacing:6px;margin:0 auto}
+table.pun th{font-family:var(--display);font-size:1.05rem;padding:4px 8px;color:var(--soft)}
+table.pun td{background:var(--paper);border-radius:10px;text-align:center;padding:10px 8px;font-family:var(--display);font-size:1.2rem;font-weight:700;min-width:64px;transition:background .25s}
+table.pun.small td{font-size:.95rem;min-width:58px;padding:8px 4px}
+table.pun td .ph{display:flex;justify-content:center;gap:4px;margin-top:4px}
+.result{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
+.result>*{min-width:0}
+.bar{display:flex;height:14px;border-radius:7px;overflow:hidden;background:var(--line)}
+.bar span{display:block;height:100%;transition:width .3s}
+.legend{display:flex;flex-direction:column;gap:4px;font-size:.92rem}
+.legend div{display:flex;align-items:center;gap:8px}
+.law{font-family:var(--hand);font-size:1.2rem;color:var(--pink)}
+.tnum{font-variant-numeric:tabular-nums}
+
+/* quiz */
+.quiz{display:flex;flex-direction:column;gap:16px}
+.qitem{display:flex;flex-direction:column;gap:8px}
+.opts{display:flex;flex-wrap:wrap;gap:8px}
+.opts button{font:inherit;border:1.5px solid var(--line);background:var(--sheet);color:var(--ink);border-radius:10px;padding:8px 14px;cursor:pointer;text-align:left}
+.opts button:hover{border-color:var(--violet)}
+.opts button:focus-visible{outline:2px solid var(--violet)}
+.opts button.right{border-color:var(--ok);background:var(--hl-mint)}
+.opts button.wrong{border-color:var(--bad);text-decoration:line-through}
+.fb{font-size:.92rem;color:var(--soft)}
+.score{font-family:var(--display);font-weight:800;font-size:1.4rem}
+.btn{font:inherit;font-weight:600;border:0;background:var(--violet);color:#fff;border-radius:10px;padding:10px 16px;cursor:pointer;align-self:flex-start}
+footer{text-align:center;color:var(--soft);font-size:.85rem}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+<header>
+  <span class="eyebrow">Biología · Parcial · Para Emilia</span>
+  <h1>Genética <span class="hl">sin enredos</span></h1>
+  <p class="lead">Todo lo de tu cuaderno, explicado con cosas de la vida diaria. Hay simuladores para jugar con los cuadros de Punnett y un parcial difícil al final para medirte.</p>
+  <nav class="chips" aria-label="Temas">
+    <a href="#celulas">1 · Células</a><a href="#procesos">2 · Mitosis, meiosis</a><a href="#conceptos">3 · Conceptos</a><a href="#mendel">4 · Leyes de Mendel</a><a href="#dihibrido">5 · Cuadro 4×4</a><a href="#pasos">6 · Cómo resolver</a><a href="#parcial">7 · Parcial difícil</a>
+  </nav>
+</header>
+
+<section class="sheet">
+  <div class="top"><h2>La idea en una frase</h2></div>
+  <p>Tu cuerpo es una cocina y el <b>ADN es el recetario</b>. Cada <b>gen</b> es una receta: "cómo hacer el color de ojos". Cada <b>alelo</b> es una versión de esa receta: "ojos verdes" o "ojos azules".</p>
+  <p class="hand">De mamá te llega un recetario completo y de papá otro. Por eso tenés todo en pares.</p>
+</section>
+
+<section class="sheet" id="celulas">
+  <div class="top"><h2>1 · Dos tipos de células</h2><span class="tag">21-09-26</span></div>
+  <div class="grid2">
+    <div class="card">
+      <span class="eyebrow">Células somáticas</span>
+      <span class="big D">2n = 46</span>
+      <p><b>Diploides</b>: tienen los cromosomas en pares (uno de mamá, otro de papá). Son 44 autosómicos + 2 sexuales.</p>
+      <p>Son casi todas: piel, músculo, sangre.</p>
+    </div>
+    <div class="card">
+      <span class="eyebrow">Gametos</span>
+      <span class="big r">n = 23</span>
+      <p><b>Haploides</b>: solo la mitad, un cromosoma de cada par.</p>
+      <p>Son las células sexuales: óvulo y espermatozoide.</p>
+    </div>
+  </div>
+  <div class="box">
+    <h3>Pensalo como medias</h3>
+    <p>Una célula del cuerpo es un cajón con <b>23 pares de medias</b> (46 medias). Un gameto es una maleta de viaje: lleva <b>una media de cada par</b> (23 medias). Si juntás dos maletas, volvés a tener 23 pares.</p>
+  </div>
+</section>
+
+<section class="sheet" id="procesos">
+  <div class="top"><h2>2 · Los tres procesos</h2></div>
+  <p>El truco para no confundirlas: <span class="hl-v"><b>Mi</b>tosis = <b>Mi</b>smas</span> · <span class="hl"><b>Me</b>iosis = <b>Me</b>dia</span> (la mitad).</p>
+  <div class="grid2">
+    <div class="card"><h3>Mitosis · crecer</h3><div class="flow"><div class="cell c2n">46<small>2n</small></div><span class="arrow">→</span><div class="cell c2n">46</div><div class="cell c2n">46</div></div><p>Una fotocopiadora. Sale una copia <b>idéntica</b>. Así crecés y se cierra una herida.</p></div>
+    <div class="card"><h3>Meiosis · reducir</h3><div class="flow"><div class="cell c2n">46<small>2n</small></div><span class="arrow">→</span><div class="cell cn">23</div><div class="cell cn">23</div></div><p>Se reparte a la mitad para hacer gametos. Pasa solo en los órganos reproductores.</p></div>
+  </div>
+  <div class="card"><h3>Fecundación · restaurar</h3><div class="flow"><div class="cell cn">23<small>óvulo</small></div><span class="arrow">+</span><div class="cell cn">23<small>esperma</small></div><span class="arrow">=</span><div class="cell c2n">46<small>cigoto</small></div></div><p>n + n = 2n. Nace el cigoto y el número de cromosomas de la especie se mantiene igual de generación en generación.</p></div>
+  <div class="exam"><span class="eyebrow">Así te lo pueden preguntar</span><p class="q">¿Por qué los gametos deben tener 23 cromosomas y no 46?</p><details><summary>Ver respuesta</summary><p>Porque en la fecundación se suman dos gametos. Si cada uno trajera 46, el bebé tendría 92, y el número se duplicaría cada generación. La meiosis lo reduce a la mitad para que el resultado vuelva a ser 46.</p></details></div>
+</section>
+
+<section class="sheet" id="conceptos">
+  <div class="top"><h2>3 · El vocabulario</h2></div>
+  <div class="grid2">
+    <div class="card"><h3>Gen</h3><p>La receta de un rasgo. Ejemplo: el gen del color de ojos.</p></div>
+    <div class="card"><h3>Alelo</h3><p>Cada versión de esa misma receta: <span class="D">A</span> = ojos verdes, <span class="r">a</span> = ojos azules.</p></div>
+    <div class="card"><h3>Genotipo</h3><p>Las letras que llevás escritas. Lo que heredás: <b>AA, Aa o aa</b>.</p></div>
+    <div class="card"><h3>Fenotipo</h3><p>Lo que se ve por fuera: <b>ojos verdes</b>. Es lo que el genotipo "dibuja".</p></div>
+    <div class="card"><h3>Homocigoto</h3><p>Dos alelos <b>iguales</b>: <span class="D">AA</span> o <span class="r">aa</span>. También se dice "raza pura".</p></div>
+    <div class="card"><h3>Heterocigoto</h3><p>Dos alelos <b>distintos</b>: <span class="D">A</span><span class="r">a</span>.</p></div>
+  </div>
+  <div class="box">
+    <h3>Dominante y recesivo: el que habla duro</h3>
+    <p>El alelo <span class="D">dominante (mayúscula)</span> es el que habla duro: con que esté <b>una vez</b>, se nota. El <span class="r">recesivo (minúscula)</span> habla pasito: solo se oye si está <b>dos veces</b> (aa).</p>
+    <p class="tnum"><span class="D">AA</span> → verdes · <span class="D">A</span><span class="r">a</span> → verdes · <span class="r">aa</span> → azules</p>
+  </div>
+  <div class="trap"><b>Ojo, esto está mal en el cuaderno:</b> en la página de "alelo" aparecen "color de ojos" y "tamaño de la nariz" como alelo 1 y alelo 2. Esos son <b>dos genes diferentes</b>. Los alelos son versiones del <b>mismo</b> gen (ojos verdes vs. azules), y van en el mismo lugar del par de cromosomas.</div>
+  <p class="fb">En la vida real el color de ojos depende de varios genes. En clase se usa como ejemplo simplificado, y así lo vas a ver en el parcial.</p>
+</section>
+
+<section class="sheet" id="mendel">
+  <div class="top"><h2>4 · Mendel y sus leyes</h2><span class="tag">29-09-26</span></div>
+  <p>Gregor Mendel, un monje, cruzó plantas de guisantes y contó cómo salían las hijas. Por eso es el <b>padre de la genética</b>. Con este simulador podés hacer sus cruces vos misma.</p>
+  <div class="sim">
+    <div class="controls">
+      <label>Papá<div class="seg" id="m-p"></div></label>
+      <label>Mamá<div class="seg" id="m-m"></div></label>
+    </div>
+    <div class="scroll"><table class="pun" id="m-grid"></table></div>
+    <div class="result">
+      <div class="box"><span class="eyebrow">Genotipo (las letras)</span><div class="legend tnum" id="m-geno"></div></div>
+      <div class="box"><span class="eyebrow">Fenotipo (lo que se ve)</span><div class="bar" id="m-bar"></div><div class="legend tnum" id="m-feno"></div></div>
+    </div>
+    <p class="law" id="m-law"></p>
+  </div>
+  <div class="grid2">
+    <div class="card"><h3>1ª ley · Uniformidad</h3><p>Probá <b>AA × aa</b>. Cruzás dos razas puras distintas y <b>todos</b> los hijos salen iguales: Aa, ojos verdes.</p></div>
+    <div class="card"><h3>2ª ley · Segregación</h3><p>Probá <b>Aa × Aa</b>. Los alelos se separan y en la segunda generación vuelve a aparecer el azul: <b>3 verdes : 1 azul</b>.</p></div>
+  </div>
+  <div class="exam"><span class="eyebrow">Así te lo pueden preguntar</span><p class="q">Dos padres de ojos verdes tienen un hijo de ojos azules. ¿Cómo es posible?</p><details><summary>Ver respuesta</summary><p>Los dos son heterocigotos (Aa). Se ven verdes porque A domina, pero cada uno guarda una <span class="r">a</span> escondida. Si los dos le pasan la <span class="r">a</span>, el hijo es <span class="r">aa</span> → azul. Probabilidad: 1 de 4 (25 %). Probalo arriba con Aa × Aa.</p></details></div>
+</section>
+
+<section class="sheet" id="dihibrido">
+  <div class="top"><h2>5 · Dos rasgos a la vez</h2><span class="tag">20-10-26</span></div>
+  <p><b>3ª ley · Transmisión independiente:</b> los genes de rasgos distintos se heredan <b>cada uno por su lado</b>. Que salgas con ojos verdes no dice nada sobre si tu pelo es liso o rizado.</p>
+  <p class="tnum"><span class="D">A</span> = ojos verdes · <span class="r">a</span> = ojos azules · <span class="D">B</span> = pelo liso · <span class="r">b</span> = pelo rizado</p>
+  <div class="sim">
+    <div class="controls">
+      <label>Papá · ojos<div class="seg" id="d-pa"></div></label>
+      <label>Papá · pelo<div class="seg" id="d-pb"></div></label>
+      <label>Mamá · ojos<div class="seg" id="d-ma"></div></label>
+      <label>Mamá · pelo<div class="seg" id="d-mb"></div></label>
+    </div>
+    <div class="scroll"><table class="pun small" id="d-grid"></table></div>
+    <div class="result">
+      <div class="box"><span class="eyebrow">Fenotipo de 16</span><div class="bar" id="d-bar"></div><div class="legend tnum" id="d-feno"></div></div>
+      <div class="box"><span class="eyebrow">Genotipos de 16</span><div class="legend tnum" id="d-geno" style="columns:2;display:block"></div></div>
+    </div>
+  </div>
+  <div class="box">
+    <h3>El número mágico: 9 : 3 : 3 : 1</h3>
+    <p>Con <b>AaBb × AaBb</b> siempre sale: 9 con los dos dominantes, 3 con el primero dominante, 3 con el segundo dominante y 1 con los dos recesivos. Suma 16, porque el cuadro tiene 4 × 4 casillas.</p>
+  </div>
+  <div class="box">
+    <h3>Cómo sacar los gametos de AaBb (el paso que más se olvida)</h3>
+    <p>Combiná una letra de cada gen, como cuando armás un combo de comida: <b>(A o a) con (B o b)</b>.</p>
+    <p class="tnum"><b>AB · Ab · aB · ab</b> → esos van en la fila y en la columna del cuadro.</p>
+  </div>
+</section>
+
+<section class="sheet" id="pasos">
+  <div class="top"><h2>6 · Receta para cualquier ejercicio</h2></div>
+  <ol>
+    <li><b>Escribí la clave.</b> Qué letra es qué: A = verdes, a = azules.</li>
+    <li><b>Sacá el genotipo de cada papá.</b> Si te dicen "raza pura", es homocigoto (AA o aa).</li>
+    <li><b>Sacá los gametos.</b> Uno: separá las letras (Aa → A, a). Dos rasgos: hacé los combos (AB, Ab, aB, ab).</li>
+    <li><b>Armá el cuadro.</b> Gametos de papá arriba, de mamá al lado. Llená cada casilla juntando fila + columna. La mayúscula va primero.</li>
+    <li><b>Contá dos veces.</b> Primero las letras (genotipo) y después lo que se ve (fenotipo). En el examen piden las dos cosas por separado.</li>
+  </ol>
+  <div class="trap"><b>Errores que quitan puntos:</b> confundir genotipo con fenotipo · escribir "aA" en vez de "Aa" · contar solo 4 casillas en un cuadro de 16 · llamar "alelo" a un gen distinto.</div>
+</section>
+
+<section class="sheet" id="parcial">
+  <div class="top"><h2>7 · Parcial nivel difícil</h2><span class="tag">con lápiz y papel</span></div>
+  <p>Doce preguntas más duras que las del examen: cruces de prueba, probabilidades, fracciones y preguntas trampa. Si estas te salen, el parcial te va a parecer fácil. Tocá una opción y te explico paso a paso.</p>
+  <div class="box"><h3>Dos trucos que vas a necesitar</h3><p><b>Regla del "y":</b> si piden dos cosas que pasan juntas (dos hijos, o dos genes), <b>multiplicá</b> las probabilidades. Ejemplo: 1/2 × 1/2 = 1/4.</p><p><b>Gen por gen:</b> en los cruces de dos rasgos, resolvé primero los ojos, después el pelo, y al final multiplicá. Es más rápido que hacer el cuadro de 16.</p></div>
+  <div class="quiz" id="quiz"></div>
+  <div class="box"><span class="score tnum" id="score">0 / 12</span><span class="fb" id="scoremsg">Respondé todas para ver tu nota.</span></div>
+  <button class="btn" id="reset" type="button">Volver a empezar</button>
+</section>
+
+<footer>Hecho con los apuntes de tu cuaderno · ¡Mucha suerte en el parcial! 💜</footer>
+</div>
+
+<script>
+const GENO=["AA","Aa","aa"];
+const sortPair=(x,y)=>x===x.toUpperCase()?x+y:(y===y.toUpperCase()?y+x:x+y);
+const isDom=g=>g!==g.toLowerCase();
+const css=v=>getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+function eye(dom){return `<svg width="18" height="18" viewBox="0 0 18 18" aria-label="${dom?'ojos verdes':'ojos azules'}"><ellipse cx="9" cy="9" rx="8" ry="5.5" fill="var(--sheet)" stroke="var(--ink)" stroke-width="1.2"/><circle cx="9" cy="9" r="3.6" fill="${dom?'var(--mint)':'var(--sky)'}"/><circle cx="9" cy="9" r="1.4" fill="var(--ink)"/></svg>`}
+function hair(dom){return dom?`<svg width="18" height="18" viewBox="0 0 18 18" aria-label="pelo liso"><path d="M4 2v14M9 2v14M14 2v14" stroke="var(--ink)" stroke-width="1.6" fill="none" stroke-linecap="round"/></svg>`:`<svg width="18" height="18" viewBox="0 0 18 18" aria-label="pelo rizado"><path d="M4 2c3 2-3 4 0 6s-3 4 0 6M9 2c3 2-3 4 0 6s-3 4 0 6M14 2c3 2-3 4 0 6s-3 4 0 6" stroke="var(--ink)" stroke-width="1.6" fill="none" stroke-linecap="round"/></svg>`}
+const color=s=>[...s].map(c=>c===c.toUpperCase()?`<span class="D">${c}</span>`:`<span class="r">${c}</span>`).join("");
+
+function seg(id,opts,val,onChange){
+  const el=document.getElementById(id);el.innerHTML="";
+  opts.forEach(o=>{const b=document.createElement("button");b.type="button";b.textContent=o;b.setAttribute("aria-pressed",o===val);
+    b.onclick=()=>{[...el.children].forEach(c=>c.setAttribute("aria-pressed",c===b));onChange(o)};el.appendChild(b)});
+}
+
+/* Monohíbrido */
+const mono={p:"AA",m:"aa"};
+function drawMono(){
+  const gp=[...mono.p], gm=[...mono.m];
+  let h=`<tr><th>P \\ M</th>${gm.map(g=>`<th>${color(g)}</th>`).join("")}</tr>`;
+  const cells=[];
+  gp.forEach(a=>{h+=`<tr><th>${color(a)}</th>`;gm.forEach(b=>{const g=sortPair(a,b);cells.push(g);
+    h+=`<td>${color(g)}<div class="ph">${eye(isDom(g))}</div></td>`});h+="</tr>"});
+  document.getElementById("m-grid").innerHTML=h;
+  const cnt={};cells.forEach(g=>cnt[g]=(cnt[g]||0)+1);
+  document.getElementById("m-geno").innerHTML=GENO.filter(g=>cnt[g]).map(g=>`<div><b>${color(g)}</b> = ${cnt[g]} de 4 (${cnt[g]*25} %) · ${g[0]===g[1]?'homocigoto':'heterocigoto'}</div>`).join("");
+  const v=cells.filter(isDom).length, az=4-v;
+  document.getElementById("m-bar").innerHTML=`<span style="width:${v*25}%;background:var(--mint)"></span><span style="width:${az*25}%;background:var(--sky)"></span>`;
+  document.getElementById("m-feno").innerHTML=`<div>${eye(true)} Ojos verdes: <b>${v} de 4</b> (${v*25} %)</div><div>${eye(false)} Ojos azules: <b>${az} de 4</b> (${az*25} %)</div>`;
+  const k=[mono.p,mono.m].sort().join("×");
+  const law={"AA×aa":"¡Esta es la 1ª ley! Todos los hijos salen Aa: uniformidad.","Aa×Aa":"¡Esta es la 2ª ley! Proporción 3 : 1, el azul reaparece.","Aa×aa":"Cruce de prueba: mitad y mitad (1 : 1).","AA×AA":"Raza pura con raza pura igual: todo AA.","aa×aa":"Los dos azules: todos los hijos salen azules.","AA×Aa":"Todos verdes, aunque la mitad guarda una a escondida."};
+  document.getElementById("m-law").textContent=law[k]||"";
+}
+seg("m-p",GENO,mono.p,v=>{mono.p=v;drawMono()});
+seg("m-m",GENO,mono.m,v=>{mono.m=v;drawMono()});
+drawMono();
+
+/* Dihíbrido */
+const di={pa:"Aa",pb:"Bb",ma:"Aa",mb:"Bb"};
+const gam=(a,b)=>[a[0]+b[0],a[0]+b[1],a[1]+b[0],a[1]+b[1]];
+function drawDi(){
+  const gp=gam(di.pa,di.pb), gm=gam(di.ma,di.mb);
+  let h=`<tr><th>P \\ M</th>${gm.map(g=>`<th>${color(g)}</th>`).join("")}</tr>`;
+  const cells=[];
+  gp.forEach(x=>{h+=`<tr><th>${color(x)}</th>`;gm.forEach(y=>{const g=sortPair(x[0],y[0])+sortPair(x[1],y[1]);cells.push(g);
+    h+=`<td>${color(g)}<div class="ph">${eye(isDom(g.slice(0,2)))}${hair(isDom(g.slice(2)))}</div></td>`});h+="</tr>"});
+  document.getElementById("d-grid").innerHTML=h;
+  const f={vl:0,vr:0,al:0,ar:0};
+  cells.forEach(g=>{const e=isDom(g.slice(0,2)),p=isDom(g.slice(2));f[(e?"v":"a")+(p?"l":"r")]++});
+  const rows=[["vl","Verdes + liso",true,true,"var(--violet)"],["vr","Verdes + rizado",true,false,"var(--mint)"],["al","Azules + liso",false,true,"var(--sky)"],["ar","Azules + rizado",false,false,"var(--pink)"]];
+  document.getElementById("d-bar").innerHTML=rows.map(r=>`<span style="width:${f[r[0]]/16*100}%;background:${r[4]}"></span>`).join("");
+  document.getElementById("d-feno").innerHTML=rows.map(r=>`<div><span style="width:10px;height:10px;border-radius:3px;background:${r[4]};display:inline-block"></span>${eye(r[2])}${hair(r[3])} ${r[1]}: <b>${f[r[0]]}</b></div>`).join("");
+  const cnt={};cells.forEach(g=>cnt[g]=(cnt[g]||0)+1);
+  const order=["AABB","AABb","AaBB","AaBb","AAbb","Aabb","aaBB","aaBb","aabb"];
+  document.getElementById("d-geno").innerHTML=order.filter(g=>cnt[g]).map(g=>`<div>${color(g)} = <b>${cnt[g]}</b></div>`).join("");
+}
+seg("d-pa",GENO,di.pa,v=>{di.pa=v;drawDi()});
+seg("d-pb",["BB","Bb","bb"],di.pb,v=>{di.pb=v;drawDi()});
+seg("d-ma",GENO,di.ma,v=>{di.ma=v;drawDi()});
+seg("d-mb",["BB","Bb","bb"],di.mb,v=>{di.mb=v;drawDi()});
+drawDi();
+
+/* Mini parcial */
+const Q=[
+ ["Una especie tiene gametos con n = 8. ¿Cuántos cromosomas tiene cada célula que sale de una mitosis en su piel?",["8","16","32","4"],1,"La piel es somática (2n). Si n = 8, entonces 2n = 16. La mitosis copia igual: sigue en 16."],
+ ["¿Cuántos cromosomas sexuales lleva un espermatozoide humano?",["0","1","2","23"],1,"Las células del cuerpo tienen 2 sexuales (XX o XY). El gameto lleva la mitad de cada par: 1 (X o Y)."],
+ ["Una planta de flor morada (dominante, genotipo desconocido) se cruza con una blanca (aa). Salen 52 moradas y 48 blancas. ¿Cuál era el genotipo de la morada?",["AA","Aa","aa","No se puede saber"],1,"Salió casi mitad y mitad (1 : 1). Para que aparezcan blancas (aa), la morada tuvo que pasar una a: era Aa. Esto se llama cruce de prueba."],
+ ["Mismo cruce, pero ahora salen 100 moradas y 0 blancas. ¿Genotipo de la morada?",["AA","Aa","aa","Mitad AA y mitad Aa"],0,"Si nunca sale aa, la morada nunca pasó una a. Era homocigota: AA."],
+ ["Aa × Aa. De los hijos que tienen ojos VERDES, ¿qué fracción es heterocigota?",["1/4","1/2","2/3","3/4"],2,"Los verdes son AA, Aa, Aa (3 casillas). De esas 3, dos son Aa → 2/3. La trampa: no se cuenta sobre 4 porque la pregunta ya descartó a los azules."],
+ ["Pareja Aa × Aa. ¿Probabilidad de que sus DOS primeros hijos tengan ojos azules?",["1/4","1/8","1/16","1/2"],2,"Cada hijo es un evento aparte: 1/4 para el primero y 1/4 para el segundo. Se multiplican: 1/4 × 1/4 = 1/16."],
+ ["Cruzás AaBb × aabb. ¿Qué proporción fenotípica sale?",["9 : 3 : 3 : 1","3 : 1","1 : 1 : 1 : 1","Todos iguales"],2,"El aabb solo da gametos ab. El AaBb da AB, Ab, aB, ab. Cada uno se junta con ab y salen 4 fenotipos distintos, uno de cada uno: 1 : 1 : 1 : 1."],
+ ["En AaBb × AaBb, ¿qué probabilidad hay de un hijo con genotipo AaBb exacto?",["1/16","1/4","9/16","1/2"],1,"Por separado: Aa sale 2/4 = 1/2 y Bb sale 1/2. Se multiplican: 1/2 × 1/2 = 1/4 (son 4 casillas de 16)."],
+ ["AaBb × AaBb tienen 160 hijos (son plantas 😄). ¿Cuántos esperás con ojos verdes y pelo rizado?",["10","30","90","40"],1,"Verdes + rizado es el grupo del 3 en 9 : 3 : 3 : 1, o sea 3/16. Luego 3/16 × 160 = 30."],
+ ["Cruzás AABb × aaBb. ¿Probabilidad de un hijo de ojos azules?",["1/4","1/2","1/16","0"],3,"El papá AA solo pasa A, así que todos los hijos son Aa en ese gen y tienen ojos verdes. Azul = 0. Pregunta trampa: mirá gen por gen antes de armar el cuadro."],
+ ["¿Cuántos tipos distintos de gametos produce un individuo AaBB?",["1","2","3","4"],1,"Combos: A con B, a con B. Como solo tiene B en el segundo gen, salen AB y aB: 2 tipos."],
+ ["Dos padres de ojos verdes y pelo liso tienen un hijo de ojos azules y pelo rizado. ¿Cuál es el genotipo de los padres?",["AABB × AABB","AaBb × AaBb","AaBB × AaBB","aabb × AABB"],1,"El hijo es aabb: recibió a y b de cada papá. Pero los padres se ven verdes y lisos, así que también tienen A y B. Los dos son AaBb."]
+];
+let answered={};
+function drawQuiz(){
+  const el=document.getElementById("quiz");el.innerHTML="";answered={};
+  Q.forEach((q,i)=>{
+    const d=document.createElement("div");d.className="qitem";
+    d.innerHTML=`<p><b>${i+1}.</b> ${q[0]}</p><div class="opts"></div><p class="fb" aria-live="polite"></p>`;
+    const o=d.querySelector(".opts"),fb=d.querySelector(".fb");
+    q[1].forEach((t,j)=>{const b=document.createElement("button");b.type="button";b.textContent=t;
+      b.onclick=()=>{if(i in answered)return;answered[i]=j===q[2];
+        [...o.children].forEach((c,k)=>{if(k===q[2])c.classList.add("right");else if(k===j)c.classList.add("wrong")});
+        fb.textContent=(j===q[2]?"✔ ¡Bien! ":"✘ Casi. ")+q[3];score()};o.appendChild(b)});
+    el.appendChild(d)});
+  score();
+}
+function score(){
+  const n=Object.keys(answered).length,ok=Object.values(answered).filter(Boolean).length;
+  document.getElementById("score").textContent=`${ok} / ${Q.length}`;
+  document.getElementById("scoremsg").textContent=n<Q.length?"Respondé todas para ver tu nota.":ok>=11?"¡Nivel experta! El parcial te queda chiquito 🎉":ok>=8?"Muy bien. Revisá la explicación de las que fallaste y volvé a intentar.":"Estas son difíciles. Repasá los temas 4 y 5, hacé los cruces en el simulador y repetí.";
+}
+document.getElementById("reset").onclick=drawQuiz;
+drawQuiz();
+</script>
+
+</body>
+</html>

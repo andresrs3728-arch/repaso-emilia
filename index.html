@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Repaso de Emilia</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,800&family=Lexend:wght@400;600&family=Gochi+Hand&display=swap">
+<style>
+:root{--paper:#F7F4FB;--sheet:#fff;--ink:#2A2140;--soft:#6B6283;--line:#E4DDF0;--violet:#7B3FE4;--pink:#E8418A;--teal:#0F7C80;--on:#fff;
+--display:"Bricolage Grotesque","Avenir Next",system-ui,sans-serif;--body:"Lexend","Segoe UI",system-ui,sans-serif;--hand:"Gochi Hand",cursive}
+@media (prefers-color-scheme: dark){:root{--paper:#16121F;--sheet:#211B2E;--ink:#F1ECFA;--soft:#B3A9C9;--line:#3A3150;--violet:#A98BFF;--pink:#FF6FAE;--teal:#4FC9C9;--on:#16121F;color-scheme:dark}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--body);line-height:1.5;padding:28px max(16px,env(safe-area-inset-right,0px)) 48px max(16px,env(safe-area-inset-left,0px))}
+.wrap{max-width:720px;margin:0 auto;display:flex;flex-direction:column;gap:20px}
+h1{font-family:var(--display);font-size:clamp(2.2rem,8vw,3.2rem);margin:0;line-height:1.05}
+.hand{font-family:var(--hand);font-size:1.3rem;color:var(--pink)}
+.materia{background:var(--sheet);border:1px solid var(--line);border-radius:18px;padding:18px 20px;display:flex;flex-direction:column;gap:12px}
+.materia h2{font-family:var(--display);margin:0;font-size:1.5rem}
+.btns{display:flex;flex-wrap:wrap;gap:10px}
+.btns a{text-decoration:none;font-weight:600;border-radius:12px;padding:12px 18px}
+.g{border:2px solid var(--teal);color:var(--teal)}
+.p{background:var(--violet);color:var(--on)}
+.pronto{color:var(--soft);font-size:.95rem}
+p{margin:0}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <span class="hand">Para Emilia 💜</span>
+  <h1>Tu repaso para los parciales</h1>
+  <p>Primero leé la <b>guía</b> de cada materia. Cuando te sintás lista, presentá el <b>parcial</b>: tiene reloj, se califica solo y al final te explica cada respuesta.</p>
+  <div class="materia">
+    <h2>🧬 Genética</h2>
+    <div class="btns"><a class="g" href="guia-genetica.html">Guía de estudio</a><a class="p" href="parcial-genetica.html">Parcial</a></div>
+  </div>
+  <div class="materia">
+    <h2>📜 Español</h2>
+    <div class="btns"><a class="g" href="guia-espanol.html">Guía de estudio</a><a class="p" href="parcial-espanol.html">Parcial</a></div>
+  </div>
+  <div class="materia">
+    <h2>🌎 Sociales</h2>
+    <p class="pronto">Muy pronto aparece acá.</p>
+  </div>
+  <div class="materia">
+    <h2>🔬 Biology</h2>
+    <p class="pronto">Coming soon.</p>
+  </div>
+</div>
+</body>
+</html>

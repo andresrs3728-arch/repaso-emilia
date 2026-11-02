@@ -1,0 +1,260 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Español sin enredos</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Lexend:wght@400;500;600&family=Gochi+Hand&display=swap">
+<style>
+/* Cuaderno de una columna: cada tema es una hoja con su resaltador; todo funciona sin JavaScript */
+:root{
+  --paper:#F6F7F2; --sheet:#FFFFFF; --ink:#1F2A33; --soft:#5E6B73; --line:#E1E6DE;
+  --teal:#0F7C80; --coral:#E2553F; --mustard:#E0A526; --hl-teal:#C6EEEA; --hl-coral:#FFD6CC; --hl-yellow:#FFEDB0;
+  --display:"Bricolage Grotesque","Avenir Next",system-ui,sans-serif;
+  --body:"Lexend","Segoe UI",system-ui,sans-serif;
+  --hand:"Gochi Hand","Comic Sans MS",cursive;
+  --on-accent:#FFFFFF;
+}
+@media (prefers-color-scheme: dark){:root{
+  --paper:#12181C; --sheet:#1B2328; --ink:#EEF2F0; --soft:#A9B6BC; --line:#2E3A40;
+  --teal:#4FC9C9; --coral:#FF8A73; --mustard:#F2C35A; --hl-teal:#164A49; --hl-coral:#5C2A22; --hl-yellow:#57461A; --on-accent:#12181C; color-scheme:dark}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.6;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:24px 64px}
+.wrap{max-width:780px;margin:0 auto;display:flex;flex-direction:column;gap:26px}
+h1,h2,h3{font-family:var(--display);line-height:1.15;margin:0;text-wrap:balance}
+h1{font-size:clamp(2.2rem,7vw,3.4rem);font-weight:800;letter-spacing:-.02em}
+h2{font-size:clamp(1.45rem,4.5vw,1.9rem);font-weight:800}
+h3{font-size:1.1rem;font-weight:700}
+p{margin:0}
+ul,ol{margin:0;padding-left:1.2em;display:flex;flex-direction:column;gap:4px}
+.eyebrow{font-size:.8rem;text-transform:uppercase;letter-spacing:.12em;color:var(--soft);font-weight:600}
+.lead{font-size:1.08rem;color:var(--soft);max-width:62ch}
+.hand{font-family:var(--hand);font-size:1.25em;color:var(--teal)}
+.hl{background:linear-gradient(transparent 55%,var(--hl-coral) 55%);padding:0 .1em}
+.hl-t{background:linear-gradient(transparent 55%,var(--hl-teal) 55%);padding:0 .1em}
+.hl-y{background:linear-gradient(transparent 55%,var(--hl-yellow) 55%);padding:0 .1em}
+nav.chips{display:flex;flex-wrap:wrap;gap:8px}
+nav.chips a{font-size:.85rem;text-decoration:none;color:var(--ink);border:1.5px solid var(--line);background:var(--sheet);padding:6px 12px;border-radius:999px}
+.sheet{background:var(--sheet);border:1px solid var(--line);border-radius:18px;padding:24px clamp(18px,4vw,32px);display:flex;flex-direction:column;gap:16px}
+.top{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
+.tag{font-family:var(--hand);font-size:1.1rem;color:var(--coral)}
+.box{background:var(--paper);border-radius:12px;padding:14px 16px;display:flex;flex-direction:column;gap:6px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px}
+.grid>*{min-width:0}
+.card{border:1.5px solid var(--line);border-radius:14px;padding:14px 16px;display:flex;flex-direction:column;gap:6px}
+.card .k{font-family:var(--display);font-weight:800;font-size:1.15rem;color:var(--teal)}
+.formula{display:flex;flex-wrap:wrap;gap:8px;align-items:center;font-family:var(--display);font-weight:800;font-size:1.05rem}
+.formula span{background:var(--hl-teal);border-radius:10px;padding:6px 12px}
+.formula i{font-style:normal;color:var(--soft)}
+.trap{border-left:4px solid var(--coral);background:var(--paper);padding:12px 16px;border-radius:0 12px 12px 0}
+.trap b{color:var(--coral)}
+.scroll{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:.95rem}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-family:var(--display);color:var(--soft);font-weight:700}
+.coin{display:grid;grid-template-columns:1fr 1fr;gap:0;border-radius:14px;overflow:hidden;border:1.5px solid var(--line)}
+.coin div{padding:14px 16px;display:flex;flex-direction:column;gap:4px}
+.coin .a{background:var(--hl-teal)} .coin .b{background:var(--hl-yellow)}
+.coin .big{font-family:var(--display);font-weight:800;font-size:1.5rem;letter-spacing:.08em}
+.steps{display:flex;flex-direction:column;gap:0}
+.step{display:grid;grid-template-columns:44px 1fr;gap:12px;align-items:start;padding:10px 0}
+.step .n{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;font-family:var(--display);font-weight:800;background:var(--teal);color:var(--on-accent)}
+.article{border:2px solid var(--ink);border-radius:6px;padding:18px 20px;display:flex;flex-direction:column;gap:10px;font-family:Georgia,"Times New Roman",serif}
+.article .tt{font-family:var(--display);font-size:1.6rem;font-weight:800}
+.article .lab{font-family:var(--body);font-size:.72rem;text-transform:uppercase;letter-spacing:.1em;color:var(--coral);font-weight:600}
+.article .w{background:var(--hl-yellow);padding:0 .15em;border-radius:3px}
+details{border:1.5px dashed var(--teal);border-radius:12px;padding:10px 14px}
+details summary{cursor:pointer;color:var(--teal);font-weight:600}
+details p{margin-top:8px}
+.quiz{display:flex;flex-direction:column;gap:10px}
+footer{text-align:center;color:var(--soft);font-size:.85rem}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header style="display:flex;flex-direction:column;gap:12px">
+  <span class="eyebrow">Español · Guía para el parcial · Para Emilia</span>
+  <h1>Español <span class="hl">sin enredos</span></h1>
+  <p class="lead">Todo lo de tu cuaderno, del 30 de septiembre al 28 de octubre, explicado con ejemplos de la vida diaria. Al final hay trampas típicas y preguntas para practicar.</p>
+  <nav class="chips" aria-label="Temas">
+    <a href="#cronicas">1 · Crónicas de Indias</a><a href="#cronistas">2 · Quién las escribió</a><a href="#caracteristicas">3 · Características</a><a href="#granada">4 · Nueva Granada</a><a href="#tipos">5 · Tipos de crónicas</a><a href="#signo">6 · Signo lingüístico</a><a href="#articulo">7 · Artículo periodístico</a><a href="#trampas">8 · Trampas</a><a href="#practica">9 · Practicá</a>
+  </nav>
+</header>
+
+<section class="sheet" id="cronicas">
+  <div class="top"><h2>1 · Las crónicas de Indias</h2><span class="tag">30-09-26</span></div>
+  <p>Cuando los europeos llegaron a América, todo era nuevo para ellos: animales, comidas, pueblos, ríos. Muchos lo escribieron. Esos textos son las <b>crónicas de Indias</b>.</p>
+  <div class="box">
+    <h3>La definición para el examen</h3>
+    <p>Las crónicas de Indias son <span class="hl-t"><b>relatos escritos durante la exploración, la conquista y la colonización de América</b></span>.</p>
+  </div>
+  <p class="hand">Pensalas como los vlogs de hace 500 años: alguien viaja, ve cosas que nunca había visto y las cuenta.</p>
+  <h3>Tres formas en que el cronista supo lo que cuenta</h3>
+  <div class="grid">
+    <div class="card"><span class="k">Lo presenció</span><p>Lo vio con sus propios ojos.</p></div>
+    <div class="card"><span class="k">Lo conoció</span><p>Estuvo cerca, sabía del tema.</p></div>
+    <div class="card"><span class="k">Se lo contaron</span><p>Lo recibió de otras personas. <b>También vale.</b></p></div>
+  </div>
+  <h3>La fórmula de una crónica</h3>
+  <div class="formula"><span>Historia</span><i>+</i><span>Literatura</span><i>+</i><span>Testimonio</span><i>+</i><span>Descripción</span></div>
+  <p>Por eso estos textos son <b>dos cosas a la vez</b>: literatura y documentación histórica de la época.</p>
+  <h3>¿De qué escribieron? Los 8 temas</h3>
+  <p class="hl-y" style="align-self:flex-start">Naturaleza · Territorios · Pueblos indígenas · Conflictos · Religión · Recursos · Ciudades y poblaciones · Costumbres y culturas</p>
+  <p>Dejaron testimonios <b>viajeros, conquistadores, religiosos y funcionarios</b>.</p>
+</section>
+
+<section class="sheet" id="cronistas">
+  <div class="top"><h2>2 · ¿Quién la escribió?</h2><span class="tag">02-10-26</span></div>
+  <p>El truco es mirar <b>de qué habla el texto</b>. El tema te dice quién lo escribió.</p>
+  <div class="scroll"><table>
+    <tr><th>Si el texto habla de…</th><th>Lo escribió un…</th></tr>
+    <tr><td>Expediciones, batallas, territorios conquistados</td><td><b>Conquistador</b> ⚔️</td></tr>
+    <tr><td>Pueblos, costumbres, enseñar la religión (evangelización)</td><td><b>Religioso</b> ✝️</td></tr>
+    <tr><td>Cómo se gobernaba y administraba la colonia</td><td><b>Funcionario</b> 📜</td></tr>
+    <tr><td>Las sociedades americanas y sus tradiciones</td><td><b>Otros escritores</b> ✍️</td></tr>
+  </table></div>
+  <p class="hand">Truco: «Fray» es como se llamaba a un fraile. Fray Pedro Simón era un religioso.</p>
+</section>
+
+<section class="sheet" id="caracteristicas">
+  <div class="top"><h2>3 · Las 7 características</h2><span class="tag">02-10-26</span></div>
+  <p>Cada una con un ejemplo inventado para que la reconozcás. En el parcial te van a dar una frase y vas a tener que decir qué característica muestra.</p>
+  <div class="scroll"><table>
+    <tr><th>Característica</th><th>Así se ve en un texto</th></tr>
+    <tr><td><b>Narración de acontecimientos</b></td><td>«Salimos del puerto y al tercer día llegamos a la costa».</td></tr>
+    <tr><td><b>Descripción de lugares</b></td><td>«El valle era ancho, rodeado de montañas muy altas».</td></tr>
+    <tr><td><b>Descripción de personas y costumbres</b></td><td>«Se pintaban la cara de rojo para las fiestas».</td></tr>
+    <tr><td><b>Relación con hechos históricos</b></td><td>Cuenta la fundación de una ciudad que sí ocurrió.</td></tr>
+    <tr><td><b>Mirada personal del cronista</b></td><td>«A mí me pareció la tierra más hermosa que he visto». Opina, siente.</td></tr>
+    <tr><td><b>Territorios y naturaleza</b></td><td>Ríos, plantas, animales y recursos del lugar.</td></tr>
+    <tr><td><b>Mezcla de realidad y creencias de la época</b></td><td>«Dicen que más allá vive gente con la cabeza en el pecho». Cosas que creían, aunque no fueran reales.</td></tr>
+  </table></div>
+</section>
+
+<section class="sheet" id="granada">
+  <div class="top"><h2>4 · Crónicas de la Nueva Granada</h2><span class="tag">14-10-26</span></div>
+  <p>El <b>Nuevo Reino de Granada</b> fue el nombre, en la Colonia, de los territorios que hoy son <b>principalmente Colombia y zonas vecinas</b>.</p>
+  <p>Los cronistas describieron dos cosas. La <b>naturaleza</b>: montañas, ríos, vegetación y recursos. Y la <b>gente</b>: poblaciones, comunidades indígenas, expediciones y conflictos, y evangelización.</p>
+  <div class="scroll"><table>
+    <tr><th>Cronista</th><th>Qué escribió</th></tr>
+    <tr><td><b>Gonzalo Fernández de Oviedo</b></td><td>Sobre diferentes territorios y pueblos americanos.</td></tr>
+    <tr><td><b>Pedro Cieza de León</b></td><td>Territorios, pueblos y costumbres de distintas regiones de América.</td></tr>
+    <tr><td><b>Fray Pedro Simón</b></td><td><i>Noticias historiales de las conquistas de Tierra Firme en las Indias Occidentales</i>. Clave para conocer el territorio de la actual Colombia.</td></tr>
+    <tr><td><b>Juan de Castellanos</b></td><td><i>Elegías de varones ilustres de Indias</i>. Obra extensa sobre la conquista.</td></tr>
+  </table></div>
+  <div class="box">
+    <h3>Para no confundir las dos obras</h3>
+    <p><b>Simón → Noticias.</b> Pensá en «Simón te da las noticias».</p>
+    <p><b>Castellanos → Elegías.</b> Una elegía es un poema, y Juan de Castellanos escribió su crónica en verso: «Castellanos le canta a la conquista».</p>
+  </div>
+</section>
+
+<section class="sheet" id="tipos">
+  <div class="top"><h2>5 · Dos tipos de crónicas</h2><span class="tag">16-10-26</span></div>
+  <p>Se clasifican según <b>la información que predomina</b>, o sea, lo que más aparece.</p>
+  <div class="grid">
+    <div class="card"><span class="k">Socioculturales 👥</span><p>Hablan de <b>la gente</b>: costumbres, tradiciones, alimentación, vestimenta, organización social, creencias, prácticas religiosas y relaciones entre comunidades.</p></div>
+    <div class="card"><span class="k" style="color:var(--coral)">De lugares y geografías 🏔️</span><p>Hablan del <b>lugar</b>: territorios, paisajes, ríos, montañas, caminos, ciudades, clima, flora y fauna.</p></div>
+  </div>
+  <div class="box"><h3>La pregunta que lo resuelve</h3><p>¿El texto se centra en <b>personas</b> o en el <b>paisaje</b>?</p></div>
+  <div class="trap"><b>Caso trampa:</b> «Cómo una comunidad celebraba la cosecha a la orilla del río». Aparece un río, pero el centro es una <b>costumbre</b>: es sociocultural.</div>
+</section>
+
+<section class="sheet" id="signo">
+  <div class="top"><h2>6 · El signo lingüístico</h2><span class="tag">21-10-26</span></div>
+  <p>Es una <b>unidad de comunicación que relaciona una forma con un significado</b>. Cada palabra que usás es un signo.</p>
+  <div class="coin">
+    <div class="a"><span class="eyebrow">Significante · la forma</span><span class="big">C-A-S-A</span><p>Los sonidos o las letras. Lo que oís o leés.</p></div>
+    <div class="b"><span class="eyebrow">Significado · la idea</span><span class="big">🏠</span><p>El concepto: «lugar donde vivimos».</p></div>
+  </div>
+  <p class="hand">Son como las dos caras de una hoja de papel: no podés cortar una sin cortar la otra.</p>
+  <h3>Las 3 características</h3>
+  <div class="grid">
+    <div class="card"><span class="k">1 · Arbitrario</span><p>No hay relación natural entre la palabra y la cosa. Por eso cada idioma la llama distinto: <b>perro</b> / <b>dog</b>.</p></div>
+    <div class="card"><span class="k">2 · Lineal</span><p>Los sonidos o letras van uno detrás de otro: <b>C-O-R-A-Z-Ó-N</b>. Si cambiás el orden, cambia la palabra: <b>ROMA</b> no es <b>AMOR</b>.</p></div>
+    <div class="card"><span class="k">3 · Convencional</span><p>Una comunidad se pone de acuerdo en usarlo. En Colombia todos entendemos <b>parce, parcero, parcera</b>.</p></div>
+  </div>
+  <div class="trap"><b>Arbitrario vs. convencional, la confusión más común:</b> <i>arbitrario</i> responde a «¿por qué se llama así?» (por nada, no hay razón natural). <i>Convencional</i> responde a «¿por qué lo entendemos?» (porque nos pusimos de acuerdo).</div>
+  <h3>Tu ejercicio de clase, revisado</h3>
+  <div class="scroll"><table>
+    <tr><th>Significante</th><th>Significado</th><th>Ojo</th></tr>
+    <tr><td>C-O-R-A-Z-Ó-N</td><td>Órgano del cuerpo humano</td><td>✔</td></tr>
+    <tr><td>S-I-L-L-A</td><td>Elemento para sentarse</td><td>✔</td></tr>
+    <tr><td>T-A-R-R-O</td><td>Recipiente</td><td>✔</td></tr>
+    <tr><td>L-I-N-T-E-R-N-A</td><td>Dispositivo que ilumina</td><td>✔</td></tr>
+    <tr><td>E-S-P-A-Ñ-O-L</td><td>Idioma, nacionalidad</td><td>✔ Tiene dos significados.</td></tr>
+    <tr><td>C-O-L-A</td><td>Extremidad de un animal, fila</td><td>✔ <b>Un significante con dos significados.</b></td></tr>
+    <tr><td>C-R-I-S-P-E-T-A-S</td><td>Comida</td><td>Muy general. Mejor: «maíz reventado que se come de pasabocas».</td></tr>
+    <tr><td>cat / gato</td><td>—</td><td>Este no es un par significante → significado. Es un ejemplo de que el signo es <b>arbitrario</b>: dos significantes para la misma idea.</td></tr>
+  </table></div>
+  <p>Quedan 7 pares válidos: al ejercicio le faltan 3 palabras para llegar a las 10.</p>
+</section>
+
+<section class="sheet" id="articulo">
+  <div class="top"><h2>7 · El artículo periodístico</h2><span class="tag">28-10-26</span></div>
+  <p>Es un texto escrito que aborda <b>un hecho, acontecimiento, situación o tema de interés</b> para los lectores.</p>
+  <h3>5 propósitos</h3>
+  <p class="hl-y" style="align-self:flex-start">Informar · Explicar · Analizar · Presentar una opinión · Generar reflexión</p>
+  <h3>7 características</h3>
+  <ul>
+    <li>Trata un tema de interés.</li>
+    <li>Presenta información organizada.</li>
+    <li>Usa un lenguaje claro y preciso.</li>
+    <li>Tiene una intención comunicativa definida.</li>
+    <li>Puede incluir testimonios y opiniones.</li>
+    <li>Responde a <b>¿qué? ¿quién? ¿cuándo? ¿cómo? ¿dónde? ¿por qué?</b></li>
+    <li>Usa un título atractivo.</li>
+  </ul>
+  <h3>La estructura, en orden</h3>
+  <div class="steps">
+    <div class="step"><span class="n">1</span><div><b>Titular.</b> Presenta el tema y llama la atención.</div></div>
+    <div class="step"><span class="n">2</span><div><b>Entrada o intro.</b> Resume lo más importante del acontecimiento.</div></div>
+    <div class="step"><span class="n">3</span><div><b>Desarrollo.</b> Amplía con datos, explicaciones, antecedentes, testimonios, ejemplos y citas.</div></div>
+    <div class="step"><span class="n">4</span><div><b>Cierre.</b> Concluye o deja una reflexión.</div></div>
+  </div>
+  <h3>Modelo: tu artículo «Un día en la City», terminado</h3>
+  <p>En el cuaderno quedó solo el título. Así podría quedar, usando tus palabras del ejercicio:</p>
+  <div class="article">
+    <span class="lab">Titular</span>
+    <span class="tt">Un día en la City</span>
+    <span class="lab">Entrada</span>
+    <p>Un grupo de estudiantes pasó el sábado recorriendo el centro de la ciudad para conocer sus lugares más visitados.</p>
+    <span class="lab">Desarrollo</span>
+    <p>La caminata empezó a las nueve. En el parque, una larga <span class="w">cola</span> esperaba frente al carrito de <span class="w">crispetas</span>. «Valió la pena, estaban recién hechas», contó una de las estudiantes. Después entraron a un museo oscuro, donde el guía alumbró con una <span class="w">linterna</span> un <span class="w">tarro</span> de barro de hace siglos. Al final de la tarde no quedaba una <span class="w">silla</span> libre en la plaza de comidas.</p>
+    <span class="lab">Cierre</span>
+    <p>Conocer la ciudad a pie cambia la forma de verla: lo que todos los días parece normal se vuelve una historia que vale la pena contar con el <span class="w">corazón</span>.</p>
+  </div>
+  <p class="hand">Fijate: el testimonio entre comillas es una característica, y el cierre deja una reflexión.</p>
+</section>
+
+<section class="sheet" id="trampas">
+  <div class="top"><h2>8 · Trampas que quitan puntos</h2></div>
+  <div class="trap"><b>Crónica de Indias ≠ crónica periodística.</b> Gabriel García Márquez escribió crónicas, pero en el siglo XX y como periodista. Las de Indias son de la exploración, la conquista y la colonia.</div>
+  <div class="trap"><b>«Se lo contaron» también vale.</b> Un cronista podía escribir lo que otros le contaron, no solo lo que vio.</div>
+  <div class="trap"><b>Arbitrario ≠ convencional.</b> Arbitrario responde «¿por qué se llama así?» (por nada natural: perro/dog). Convencional responde «¿por qué lo entendemos?» (porque nos pusimos de acuerdo: parce/parcero).</div>
+  <div class="trap"><b>Entrada ≠ desarrollo.</b> La entrada resume; los datos, testimonios y citas van en el desarrollo.</div>
+  <div class="trap"><b>Simón ≠ Castellanos.</b> Noticias historiales es de Fray Pedro Simón. Elegías de varones ilustres es de Juan de Castellanos.</div>
+</section>
+
+<section class="sheet" id="practica">
+  <div class="top"><h2>9 · Practicá antes del parcial</h2></div>
+  <p>Respondé en tu cabeza y después tocá «Ver respuesta».</p>
+  <div class="quiz">
+    <details><summary>¿Qué cuatro elementos combinan las crónicas de Indias?</summary><p>Historia, literatura, testimonio y descripción.</p></details>
+    <details><summary>Un texto cuenta cómo se enseñaba la fe católica a los indígenas. ¿Quién lo escribió?</summary><p>Un religioso: la evangelización es su tema.</p></details>
+    <details><summary>«Allá viven unas mujeres guerreras que no dejan entrar a ningún hombre». ¿Qué característica muestra?</summary><p>Mezcla de realidad y creencias de la época.</p></details>
+    <details><summary>Una crónica describe el clima, los caminos y la fauna de una región. ¿De qué tipo es?</summary><p>De lugares y geografías.</p></details>
+    <details><summary>¿Quién escribió las Elegías de varones ilustres de Indias?</summary><p>Juan de Castellanos.</p></details>
+    <details><summary>En «linterna», ¿cuál es el significante y cuál el significado?</summary><p>Significante: L-I-N-T-E-R-N-A. Significado: dispositivo que ilumina.</p></details>
+    <details><summary>«Crispetas» en Colombia, «palomitas» en México y «pochoclo» en Argentina, para la misma comida. ¿Qué dos características muestra?</summary><p>Que es <b>arbitrario</b> (no hay una razón natural para llamarlo así) y <b>convencional</b> (cada comunidad se puso de acuerdo en su palabra).</p></details>
+    <details><summary>¿En qué parte del artículo van las citas y los testimonios?</summary><p>En el desarrollo.</p></details>
+    <details><summary>¿Cuáles son las seis preguntas que responde un artículo periodístico?</summary><p>¿Qué?, ¿quién?, ¿cuándo?, ¿cómo?, ¿dónde? y ¿por qué?</p></details>
+  </div>
+</section>
+
+<footer>Hecho con los apuntes de tu cuaderno · ¡Mucha suerte en el parcial! 💜</footer>
+</div>
+</body>
+</html>

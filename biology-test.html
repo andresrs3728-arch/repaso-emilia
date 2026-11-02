@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Biology Test</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Lexend:wght@400;500;600&family=Gochi+Hand&display=swap">
+<style>
+/* Exam sheet: one column, test-style header, each section with its highlighter */
+:root{
+  --t-ok:"✔ Correct. "; --t-bad:"✘ Answer: "; --on-accent:#FFFFFF;
+  --paper:#F7F4FB; --sheet:#FFFFFF; --ink:#2A2140; --soft:#6B6283; --line:#E4DDF0;
+  --violet:#7B3FE4; --pink:#E8418A; --hl-pink:#FFC2DD; --hl-violet:#DCCBFF; --hl-mint:#BFF1E3; --hl-bad:#FFD3DA;
+  --ok:#0E8F72; --bad:#D9344A;
+  --display:"Bricolage Grotesque","Avenir Next",system-ui,sans-serif;
+  --body:"Lexend","Segoe UI",system-ui,sans-serif;
+  --hand:"Gochi Hand","Comic Sans MS",cursive;
+}
+@media (prefers-color-scheme: dark){:root{
+  --paper:#16121F; --sheet:#211B2E; --ink:#F1ECFA; --soft:#B3A9C9; --line:#3A3150;
+  --violet:#A98BFF; --pink:#FF6FAE; --hl-pink:#6A2848; --hl-violet:#45306F; --hl-mint:#1F5A4C; --hl-bad:#5E2430;
+  --ok:#3FD4AF; --bad:#FF6B7E; --on-accent:#16121F; color-scheme:dark}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.55;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:20px 64px}
+.wrap{max-width:780px;margin:0 auto;display:flex;flex-direction:column;gap:22px}
+h1,h2{font-family:var(--display);line-height:1.15;margin:0;text-wrap:balance}
+h1{font-size:clamp(2rem,6vw,3rem);font-weight:800}
+h2{font-size:1.4rem;font-weight:800;background:linear-gradient(transparent 58%,var(--hl-violet) 58%);align-self:flex-start;padding:0 .15em}
+p{margin:0}
+.hoja{background:var(--sheet);border:1px solid var(--line);border-radius:18px;padding:20px clamp(16px,4vw,28px);display:flex;flex-direction:column;gap:12px}
+.datos{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px 16px;font-size:.92rem}
+.datos div{border-bottom:1.5px solid var(--line);padding-bottom:4px}
+.datos b{color:var(--soft);font-weight:500;font-size:.8rem;text-transform:uppercase;letter-spacing:.08em;display:block}
+.hand{font-family:var(--hand);font-size:1.2rem;color:var(--pink)}
+.aviso{background:var(--hl-pink);border-radius:12px;padding:10px 14px;font-size:.92rem}
+ul.reglas{margin:0;padding-left:1.2em;display:flex;flex-direction:column;gap:2px;font-size:.95rem}
+.sec{background:var(--sheet);border:1px solid var(--line);border-radius:18px;padding:20px clamp(16px,4vw,28px);display:flex;flex-direction:column;gap:14px}
+.clave{font-size:.9rem;color:var(--soft)}
+fieldset.q{border:0;margin:0;padding:14px 0 0;border-top:1.5px dashed var(--line);display:flex;flex-direction:column;gap:10px;min-width:0}
+.enun{font-weight:500}
+.num{display:inline-grid;place-items:center;min-width:28px;height:28px;padding:0 6px;border-radius:8px;background:var(--violet);color:var(--on-accent);font-family:var(--display);font-weight:800;font-size:.9rem;margin-right:10px}
+.ops{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:8px}
+.op{display:flex;gap:8px;align-items:flex-start;border:1.5px solid var(--line);border-radius:10px;padding:9px 12px;cursor:pointer;min-width:0}
+.op input{margin-top:4px;accent-color:var(--violet)}
+.op:has(input:checked){border-color:var(--violet);background:var(--hl-violet)}
+.let{font-weight:600;color:var(--violet)}
+input.txt{font:inherit;font-size:1.1rem;border:1.5px solid var(--line);border-radius:10px;padding:8px 12px;width:min(220px,100%);background:var(--paper);color:var(--ink)}
+textarea{font:inherit;border:1.5px solid var(--line);border-radius:10px;padding:10px 12px;width:100%;background:var(--paper);color:var(--ink);resize:vertical}
+input.txt:focus,textarea:focus,input.cell:focus{outline:2px solid var(--violet);outline-offset:1px}
+.scroll{overflow-x:auto}
+table.pun{border-collapse:separate;border-spacing:6px}
+table.pun th{font-family:var(--display);color:var(--soft);padding:4px 10px}
+input.cell{font-family:var(--display);font-size:1.2rem;font-weight:700;text-align:center;width:70px;height:48px;border:1.5px solid var(--line);border-radius:10px;background:var(--paper);color:var(--ink)}
+.exp{font-size:.92rem;border-radius:10px;padding:10px 12px;background:var(--paper)}
+fieldset.ok .exp{background:var(--hl-mint)}
+fieldset.bad .exp{background:var(--hl-bad)}
+fieldset.ok .num{background:var(--ok)} fieldset.bad .num{background:var(--bad)}
+fieldset.ok .exp::before{content:var(--t-ok);font-weight:700;color:var(--ok)}
+fieldset.bad .exp::before{content:var(--t-bad);font-weight:700;color:var(--bad)}
+.op.right{border-color:var(--ok)} .op.wrong{border-color:var(--bad);text-decoration:line-through}
+input.cell.good{border-color:var(--ok)} input.cell.mal{border-color:var(--bad);background:var(--hl-bad)}
+.barra{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--sheet);border:1px solid var(--line);border-radius:14px;padding:10px 14px;display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center;justify-content:space-between;font-size:.9rem}
+.prog{flex:1 1 160px;height:8px;border-radius:4px;background:var(--line);overflow:hidden}
+.prog span{display:block;height:100%;width:0;background:var(--violet);transition:width .25s}
+.tnum{font-variant-numeric:tabular-nums}
+.reloj{font-weight:600;padding:2px 10px;border-radius:999px;background:var(--hl-violet)}
+.reloj.poco{background:var(--bad);color:var(--on-accent)}
+#tiempo{color:var(--soft);font-size:.92rem}
+.btn{font:inherit;font-weight:600;border:0;background:var(--violet);color:var(--on-accent);border-radius:12px;padding:12px 20px;cursor:pointer}
+.btn.sec2{background:transparent;color:var(--violet);border:1.5px solid var(--violet)}
+.acciones{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.res{display:flex;flex-direction:column;gap:6px}
+.nota{font-family:var(--display);font-weight:800;font-size:3rem;line-height:1}
+.nota.pasa{color:var(--ok)} .nota.pierde{color:var(--bad)}
+details{background:var(--sheet);border:1px solid var(--line);border-radius:18px;padding:16px 20px}
+details summary{cursor:pointer;font-weight:600;color:var(--violet)}
+details ol{padding-left:0;list-style:none;display:flex;flex-direction:column;gap:6px;font-size:.92rem;margin:12px 0 0}
+.recuerda{background:var(--hl-violet);border-radius:12px;padding:12px 14px;display:flex;flex-direction:column;gap:4px;font-size:.95rem}
+.recuerda b{font-family:var(--hand);font-size:1.25rem;color:var(--violet);font-weight:400}
+details.pista{background:transparent;border:0;border-radius:0;padding:0}
+details.pista summary{font-size:.9rem;color:var(--pink);font-weight:600}
+details.pista p{font-size:.92rem;background:var(--hl-pink);border-radius:10px;padding:8px 12px;margin-top:6px}
+.temas{display:flex;flex-direction:column;gap:6px;font-size:.92rem}
+.temas div{display:flex;flex-wrap:wrap;gap:4px 10px;align-items:baseline}
+.temas .t{font-weight:600;min-width:170px}
+.temas .rep{color:var(--soft)}
+footer{text-align:center;color:var(--soft);font-size:.85rem}
+.js .solo-sin-js{display:none}
+html:not(.js) .barra,html:not(.js) .acciones{display:none}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="hoja">
+  <span class="hand">Biology · Test practice</span>
+  <h1>Biology Test</h1>
+  <div class="datos">
+    <div><b>Name</b>Emilia Rendón</div>
+    <div><b>Topic</b>Mitosis, reproduction and Mendelian genetics</div>
+    <div><b>Questions</b>36 multiple choice</div>
+    <div><b>Grade</b>Out of 5.0 · passing grade 3.0</div>
+  </div>
+  <ul class="reglas"><li>All questions are <b>multiple choice</b> with <b>only one</b> correct answer.</li><li>No hints. The wrong options are the most common mistakes: read every option before you choose.</li><li>When you submit, every answer is explained and you see which topic to review.</li><li>You have <b>50 minutes</b>. The timer starts when you open the test and, when it reaches zero, the test is submitted automatically with what you have answered.</li><li>Don't look at the key until you finish.</li></ul>
+  <p class="aviso solo-sin-js">If nothing happens when you tap "Submit test", open this page in Safari from its link. There it grades itself. Otherwise, answer on paper and check with the key at the end.</p>
+</header>
+
+<div class="barra" id="barra">
+  <span class="tnum" id="cont">0 / 36</span>
+  <div class="prog" aria-hidden="true"><span id="progbar"></span></div>
+  <span class="tnum reloj" id="reloj">⏱ 50:00</span>
+</div>
+
+<form id="parcial" autocomplete="off">
+<div class="wrap">
+<section class="sec" data-sec="A · Mitosis and cytokinesis" data-repaso="Review the order PMAT and what happens in each phase."><h2>A · Mitosis and cytokinesis</h2><fieldset class="q" id="q1w" data-type="mc" data-ans="1"><p class="enun"><span class="num">1</span>What is the main result of mitosis?</p><div class="ops"><label class="op"><input type="radio" name="q1" value="0"><span class="let">a)</span> The cell copies its DNA for the first time</label><label class="op"><input type="radio" name="q1" value="1"><span class="let">b)</span> Each new cell receives an identical set of chromosomes</label><label class="op"><input type="radio" name="q1" value="2"><span class="let">c)</span> Each new cell receives half of the chromosomes</label><label class="op"><input type="radio" name="q1" value="3"><span class="let">d)</span> Two gametes fuse to form a zygote</label></div><p class="exp" hidden>Mitosis divides the nucleus so that each new cell gets an identical set of chromosomes.</p></fieldset><fieldset class="q" id="q2w" data-type="mc" data-ans="0"><p class="enun"><span class="num">2</span>What is the correct order of the phases of mitosis?</p><div class="ops"><label class="op"><input type="radio" name="q2" value="0"><span class="let">a)</span> Prophase → metaphase → anaphase → telophase</label><label class="op"><input type="radio" name="q2" value="1"><span class="let">b)</span> Telophase → anaphase → metaphase → prophase</label><label class="op"><input type="radio" name="q2" value="2"><span class="let">c)</span> Prophase → anaphase → metaphase → telophase</label><label class="op"><input type="radio" name="q2" value="3"><span class="let">d)</span> Metaphase → prophase → anaphase → telophase</label></div><p class="exp" hidden>PMAT: Please Make Another Twin.</p></fieldset><fieldset class="q" id="q3w" data-type="mc" data-ans="3"><p class="enun"><span class="num">3</span>In which phase do chromosomes condense and the nuclear envelope dissolve?</p><div class="ops"><label class="op"><input type="radio" name="q3" value="0"><span class="let">a)</span> Telophase</label><label class="op"><input type="radio" name="q3" value="1"><span class="let">b)</span> Anaphase</label><label class="op"><input type="radio" name="q3" value="2"><span class="let">c)</span> Metaphase</label><label class="op"><input type="radio" name="q3" value="3"><span class="let">d)</span> Prophase</label></div><p class="exp" hidden>Prophase = prepare: chromosomes condense, the envelope dissolves and spindle fibers begin to form.</p></fieldset><fieldset class="q" id="q4w" data-type="mc" data-ans="1"><p class="enun"><span class="num">4</span>In which phase do chromosomes line up at the equatorial plane?</p><div class="ops"><label class="op"><input type="radio" name="q4" value="0"><span class="let">a)</span> Telophase</label><label class="op"><input type="radio" name="q4" value="1"><span class="let">b)</span> Metaphase</label><label class="op"><input type="radio" name="q4" value="2"><span class="let">c)</span> Anaphase</label><label class="op"><input type="radio" name="q4" value="3"><span class="let">d)</span> Prophase</label></div><p class="exp" hidden>Metaphase = middle.</p></fieldset><fieldset class="q" id="q5w" data-type="mc" data-ans="1"><p class="enun"><span class="num">5</span>In which phase are sister chromatids pulled to opposite poles?</p><div class="ops"><label class="op"><input type="radio" name="q5" value="0"><span class="let">a)</span> Prophase</label><label class="op"><input type="radio" name="q5" value="1"><span class="let">b)</span> Anaphase</label><label class="op"><input type="radio" name="q5" value="2"><span class="let">c)</span> Metaphase</label><label class="op"><input type="radio" name="q5" value="3"><span class="let">d)</span> Telophase</label></div><p class="exp" hidden>Anaphase = away.</p></fieldset><fieldset class="q" id="q6w" data-type="mc" data-ans="3"><p class="enun"><span class="num">6</span>In which phase do nuclear envelopes reform around two nuclei?</p><div class="ops"><label class="op"><input type="radio" name="q6" value="0"><span class="let">a)</span> Prophase</label><label class="op"><input type="radio" name="q6" value="1"><span class="let">b)</span> Anaphase</label><label class="op"><input type="radio" name="q6" value="2"><span class="let">c)</span> Metaphase</label><label class="op"><input type="radio" name="q6" value="3"><span class="let">d)</span> Telophase</label></div><p class="exp" hidden>Telophase = two: two new nuclei form and chromosomes decondense into chromatin.</p></fieldset><fieldset class="q" id="q7w" data-type="mc" data-ans="0"><p class="enun"><span class="num">7</span>During metaphase, what do the spindle fibers attach to?</p><div class="ops"><label class="op"><input type="radio" name="q7" value="0"><span class="let">a)</span> The centromeres</label><label class="op"><input type="radio" name="q7" value="1"><span class="let">b)</span> The cell membrane</label><label class="op"><input type="radio" name="q7" value="2"><span class="let">c)</span> The nuclear envelope</label><label class="op"><input type="radio" name="q7" value="3"><span class="let">d)</span> The cytoplasm</label></div><p class="exp" hidden>The fibers attach to the centromere (at the kinetochore), the point in the middle of each chromosome.</p></fieldset><fieldset class="q" id="q8w" data-type="mc" data-ans="1"><p class="enun"><span class="num">8</span>What are spindle fibers made of?</p><div class="ops"><label class="op"><input type="radio" name="q8" value="0"><span class="let">a)</span> Cytoplasm</label><label class="op"><input type="radio" name="q8" value="1"><span class="let">b)</span> Microtubules</label><label class="op"><input type="radio" name="q8" value="2"><span class="let">c)</span> Chromatin</label><label class="op"><input type="radio" name="q8" value="3"><span class="let">d)</span> Gametes</label></div><p class="exp" hidden>Spindle fibers are made of microtubules and pull the chromosomes.</p></fieldset><fieldset class="q" id="q9w" data-type="mc" data-ans="0"><p class="enun"><span class="num">9</span>After the sister chromatids separate in anaphase, each chromatid is…</p><div class="ops"><label class="op"><input type="radio" name="q9" value="0"><span class="let">a)</span> An individual chromosome</label><label class="op"><input type="radio" name="q9" value="1"><span class="let">b)</span> A new nucleus</label><label class="op"><input type="radio" name="q9" value="2"><span class="let">c)</span> A gamete</label><label class="op"><input type="radio" name="q9" value="3"><span class="let">d)</span> A centromere</label></div><p class="exp" hidden>Once separated, each chromatid is considered an individual chromosome.</p></fieldset><fieldset class="q" id="q10w" data-type="mc" data-ans="2"><p class="enun"><span class="num">10</span>Which two phases are like a video played backwards?</p><div class="ops"><label class="op"><input type="radio" name="q10" value="0"><span class="let">a)</span> Anaphase and cytokinesis</label><label class="op"><input type="radio" name="q10" value="1"><span class="let">b)</span> Prophase and metaphase</label><label class="op"><input type="radio" name="q10" value="2"><span class="let">c)</span> Prophase and telophase</label><label class="op"><input type="radio" name="q10" value="3"><span class="let">d)</span> Metaphase and anaphase</label></div><p class="exp" hidden>Prophase condenses chromosomes and dissolves the envelope; telophase decondenses them and rebuilds it.</p></fieldset><fieldset class="q" id="q11w" data-type="mc" data-ans="2"><p class="enun"><span class="num">11</span>What does cytokinesis divide?</p><div class="ops"><label class="op"><input type="radio" name="q11" value="0"><span class="let">a)</span> The DNA</label><label class="op"><input type="radio" name="q11" value="1"><span class="let">b)</span> The nucleus</label><label class="op"><input type="radio" name="q11" value="2"><span class="let">c)</span> The cytoplasm</label><label class="op"><input type="radio" name="q11" value="3"><span class="let">d)</span> The chromosomes</label></div><p class="exp" hidden>Cytokinesis divides the cytoplasm as the membrane pinches inwards. Mitosis divides the nucleus.</p></fieldset></section><section class="sec" data-sec="B · Sexual and asexual reproduction" data-repaso="Review the differences between asexual (clones) and sexual (variation) reproduction and the four ways to build a clone."><h2>B · Sexual and asexual reproduction</h2><fieldset class="q" id="q12w" data-type="mc" data-ans="0"><p class="enun"><span class="num">12</span>Why is asexual reproduction called &quot;the cloning machine&quot;?</p><div class="ops"><label class="op"><input type="radio" name="q12" value="0"><span class="let">a)</span> Because it produces genetically identical offspring</label><label class="op"><input type="radio" name="q12" value="1"><span class="let">b)</span> Because it requires the fusion of an egg and a sperm</label><label class="op"><input type="radio" name="q12" value="2"><span class="let">c)</span> Because it creates a lot of genetic variation in the offspring</label><label class="op"><input type="radio" name="q12" value="3"><span class="let">d)</span> Because it needs two different parents to work</label></div><p class="exp" hidden>One parent and no fusion of gametes: the offspring are clones.</p></fieldset><fieldset class="q" id="q13w" data-type="mc" data-ans="3"><p class="enun"><span class="num">13</span>Which of these is a feature of sexual reproduction?</p><div class="ops"><label class="op"><input type="radio" name="q13" value="0"><span class="let">a)</span> It produces exact clones</label><label class="op"><input type="radio" name="q13" value="1"><span class="let">b)</span> It uses very little energy</label><label class="op"><input type="radio" name="q13" value="2"><span class="let">c)</span> It involves only one parent</label><label class="op"><input type="radio" name="q13" value="3"><span class="let">d)</span> It requires the fusion of gametes</label></div><p class="exp" hidden>Sexual reproduction joins an egg and a sperm and produces variation.</p></fieldset><fieldset class="q" id="q14w" data-type="mc" data-ans="0"><p class="enun"><span class="num">14</span>Which organism does your notebook list as an example of sexual reproduction?</p><div class="ops"><label class="op"><input type="radio" name="q14" value="0"><span class="let">a)</span> Sharks</label><label class="op"><input type="radio" name="q14" value="1"><span class="let">b)</span> Hydra</label><label class="op"><input type="radio" name="q14" value="2"><span class="let">c)</span> Bacteria</label><label class="op"><input type="radio" name="q14" value="3"><span class="let">d)</span> Amoeba</label></div><p class="exp" hidden>Your notes list humans, dogs, birds and sharks as sexual, and bacteria, amoeba and hydra as asexual.</p></fieldset><fieldset class="q" id="q15w" data-type="mc" data-ans="2"><p class="enun"><span class="num">15</span>What is the strategic advantage of asexual reproduction?</p><div class="ops"><label class="op"><input type="radio" name="q15" value="0"><span class="let">a)</span> It produces offspring with a lot of genetic variation</label><label class="op"><input type="radio" name="q15" value="1"><span class="let">b)</span> It mixes the traits of two different parents in each child</label><label class="op"><input type="radio" name="q15" value="2"><span class="let">c)</span> In a stable environment it is the fastest way to dominate an ecosystem</label><label class="op"><input type="radio" name="q15" value="3"><span class="let">d)</span> It protects the species against every new disease that appears</label></div><p class="exp" hidden>Clones multiply fast and need no mate, which works well while nothing changes.</p></fieldset><fieldset class="q" id="q16w" data-type="mc" data-ans="3"><p class="enun"><span class="num">16</span>What is the strategic flaw of asexual reproduction?</p><div class="ops"><label class="op"><input type="radio" name="q16" value="0"><span class="let">a)</span> It needs a lot of energy and a partner to be able to reproduce</label><label class="op"><input type="radio" name="q16" value="1"><span class="let">b)</span> It can only happen inside the bodies of large animals</label><label class="op"><input type="radio" name="q16" value="2"><span class="let">c)</span> It produces offspring that are too different from each other</label><label class="op"><input type="radio" name="q16" value="3"><span class="let">d)</span> Zero genetic variation makes it vulnerable to new diseases and changes</label></div><p class="exp" hidden>If all individuals are identical, a disease that kills one can kill them all.</p></fieldset><fieldset class="q" id="q17w" data-type="mc" data-ans="2"><p class="enun"><span class="num">17</span>A bacterium splits into two equal cells. Which method is this?</p><div class="ops"><label class="op"><input type="radio" name="q17" value="0"><span class="let">a)</span> Fragmentation</label><label class="op"><input type="radio" name="q17" value="1"><span class="let">b)</span> Spore formation</label><label class="op"><input type="radio" name="q17" value="2"><span class="let">c)</span> Binary fission</label><label class="op"><input type="radio" name="q17" value="3"><span class="let">d)</span> Budding</label></div><p class="exp" hidden>Binary fission: one cell breaks into two.</p></fieldset><fieldset class="q" id="q18w" data-type="mc" data-ans="1"><p class="enun"><span class="num">18</span>A hydra grows a small bud that breaks off and becomes a new hydra. Which method is this?</p><div class="ops"><label class="op"><input type="radio" name="q18" value="0"><span class="let">a)</span> Binary fission</label><label class="op"><input type="radio" name="q18" value="1"><span class="let">b)</span> Budding</label><label class="op"><input type="radio" name="q18" value="2"><span class="let">c)</span> Fragmentation</label><label class="op"><input type="radio" name="q18" value="3"><span class="let">d)</span> Spore formation</label></div><p class="exp" hidden>Budding: a bud grows on the parent and then separates.</p></fieldset><fieldset class="q" id="q19w" data-type="mc" data-ans="1"><p class="enun"><span class="num">19</span>A planarian is cut into pieces and each piece grows into a new worm. Which method is this?</p><div class="ops"><label class="op"><input type="radio" name="q19" value="0"><span class="let">a)</span> Budding</label><label class="op"><input type="radio" name="q19" value="1"><span class="let">b)</span> Fragmentation</label><label class="op"><input type="radio" name="q19" value="2"><span class="let">c)</span> Fertilization</label><label class="op"><input type="radio" name="q19" value="3"><span class="let">d)</span> Binary fission</label></div><p class="exp" hidden>Fragmentation: each fragment becomes a new organism.</p></fieldset><fieldset class="q" id="q20w" data-type="mc" data-ans="2"><p class="enun"><span class="num">20</span>Which organisms reproduce by spore formation, according to your notes?</p><div class="ops"><label class="op"><input type="radio" name="q20" value="0"><span class="let">a)</span> Bacteria</label><label class="op"><input type="radio" name="q20" value="1"><span class="let">b)</span> Hydra</label><label class="op"><input type="radio" name="q20" value="2"><span class="let">c)</span> Fungi</label><label class="op"><input type="radio" name="q20" value="3"><span class="let">d)</span> Sharks</label></div><p class="exp" hidden>Fungi release spores that grow into new organisms.</p></fieldset></section><section class="sec" data-sec="C · Fertilization" data-repaso="Review the four steps: gametes → fertilization → zygote → genetic variation."><h2>C · Fertilization</h2><fieldset class="q" id="q21w" data-type="mc" data-ans="0"><p class="enun"><span class="num">21</span>What are gametes?</p><div class="ops"><label class="op"><input type="radio" name="q21" value="0"><span class="let">a)</span> Specialized sex cells, like the egg and the sperm</label><label class="op"><input type="radio" name="q21" value="1"><span class="let">b)</span> The first cells of a new organism</label><label class="op"><input type="radio" name="q21" value="2"><span class="let">c)</span> The two halves of a chromosome</label><label class="op"><input type="radio" name="q21" value="3"><span class="let">d)</span> The threads that pull the chromosomes</label></div><p class="exp" hidden>Gametes are the cells for sexual reproduction: the egg (female) and the sperm (male).</p></fieldset><fieldset class="q" id="q22w" data-type="mc" data-ans="1"><p class="enun"><span class="num">22</span>What is fertilization?</p><div class="ops"><label class="op"><input type="radio" name="q22" value="0"><span class="let">a)</span> The moment chromosomes line up</label><label class="op"><input type="radio" name="q22" value="1"><span class="let">b)</span> The precise moment when the gametes fuse</label><label class="op"><input type="radio" name="q22" value="2"><span class="let">c)</span> The moment the cell copies its DNA</label><label class="op"><input type="radio" name="q22" value="3"><span class="let">d)</span> The moment the cytoplasm divides</label></div><p class="exp" hidden>Fertilization is when the male and female gametes join.</p></fieldset><fieldset class="q" id="q23w" data-type="mc" data-ans="2"><p class="enun"><span class="num">23</span>What is a zygote?</p><div class="ops"><label class="op"><input type="radio" name="q23" value="0"><span class="let">a)</span> A male gamete</label><label class="op"><input type="radio" name="q23" value="1"><span class="let">b)</span> The last phase of mitosis</label><label class="op"><input type="radio" name="q23" value="2"><span class="let">c)</span> The first cell of the new organism</label><label class="op"><input type="radio" name="q23" value="3"><span class="let">d)</span> A type of asexual reproduction</label></div><p class="exp" hidden>The zygote forms after fertilization and is 2n.</p></fieldset><fieldset class="q" id="q24w" data-type="mc" data-ans="3"><p class="enun"><span class="num">24</span>What is the correct order of the fertilization process?</p><div class="ops"><label class="op"><input type="radio" name="q24" value="0"><span class="let">a)</span> Zygote → gametes → fertilization → genetic variation</label><label class="op"><input type="radio" name="q24" value="1"><span class="let">b)</span> Gametes → zygote → fertilization → genetic variation</label><label class="op"><input type="radio" name="q24" value="2"><span class="let">c)</span> Fertilization → gametes → zygote → genetic variation</label><label class="op"><input type="radio" name="q24" value="3"><span class="let">d)</span> Gametes → fertilization → zygote → genetic variation</label></div><p class="exp" hidden>First the separate gametes, then they fuse, the zygote forms, and the offspring has a unique mix of traits.</p></fieldset><fieldset class="q" id="q25w" data-type="mc" data-ans="3"><p class="enun"><span class="num">25</span>Why are brothers and sisters (who are not twins) different from each other?</p><div class="ops"><label class="op"><input type="radio" name="q25" value="0"><span class="let">a)</span> Because each one has a different number of chromosomes</label><label class="op"><input type="radio" name="q25" value="1"><span class="let">b)</span> Because mitosis makes every cell in the body different</label><label class="op"><input type="radio" name="q25" value="2"><span class="let">c)</span> Because they come from asexual reproduction, like clones</label><label class="op"><input type="radio" name="q25" value="3"><span class="let">d)</span> Because sexual reproduction gives each child a unique mix of traits</label></div><p class="exp" hidden>Each fertilization combines the parents&#x27; genes in a different way: genetic variation.</p></fieldset></section><section class="sec" data-sec="D · Mendelian genetics and Punnett squares" data-repaso="Review genotype vs. phenotype and practice Punnett squares, also backwards."><h2>D · Mendelian genetics and Punnett squares</h2><fieldset class="q" id="q26w" data-type="mc" data-ans="1"><p class="enun"><span class="num">26</span>What is a gene?</p><div class="ops"><label class="op"><input type="radio" name="q26" value="0"><span class="let">a)</span> The visible version of a trait</label><label class="op"><input type="radio" name="q26" value="1"><span class="let">b)</span> A section of DNA that codes for a trait</label><label class="op"><input type="radio" name="q26" value="2"><span class="let">c)</span> A type of gamete</label><label class="op"><input type="radio" name="q26" value="3"><span class="let">d)</span> A whole cell that carries a trait</label></div><p class="exp" hidden>A gene is a section of DNA. The visible version of a trait is the phenotype.</p></fieldset><fieldset class="q" id="q27w" data-type="mc" data-ans="3"><p class="enun"><span class="num">27</span>What is a genotype?</p><div class="ops"><label class="op"><input type="radio" name="q27" value="0"><span class="let">a)</span> The physical trait you can see, like brown eyes</label><label class="op"><input type="radio" name="q27" value="1"><span class="let">b)</span> The study of genes and inheritance</label><label class="op"><input type="radio" name="q27" value="2"><span class="let">c)</span> A square used to predict offspring</label><label class="op"><input type="radio" name="q27" value="3"><span class="let">d)</span> The combination of alleles, like Bb</label></div><p class="exp" hidden>Genotype = the letters. Phenotype = what you see.</p></fieldset><fieldset class="q" id="q28w" data-type="mc" data-ans="0"><p class="enun"><span class="num">28</span>Brown eyes (B) are dominant and blue eyes (b) are recessive. What color are the eyes of a person who is Bb?</p><div class="ops"><label class="op"><input type="radio" name="q28" value="0"><span class="let">a)</span> Brown</label><label class="op"><input type="radio" name="q28" value="1"><span class="let">b)</span> Half brown, half blue</label><label class="op"><input type="radio" name="q28" value="2"><span class="let">c)</span> Blue</label><label class="op"><input type="radio" name="q28" value="3"><span class="let">d)</span> It can&#x27;t be known</label></div><p class="exp" hidden>With one dominant allele, the dominant trait shows.</p></fieldset><fieldset class="q" id="q29w" data-type="mc" data-ans="3"><p class="enun"><span class="num">29</span>Which genotype is heterozygous?</p><div class="ops"><label class="op"><input type="radio" name="q29" value="0"><span class="let">a)</span> BB</label><label class="op"><input type="radio" name="q29" value="1"><span class="let">b)</span> B</label><label class="op"><input type="radio" name="q29" value="2"><span class="let">c)</span> bb</label><label class="op"><input type="radio" name="q29" value="3"><span class="let">d)</span> Bb</label></div><p class="exp" hidden>Heterozygous means two different alleles.</p></fieldset><fieldset class="q" id="q30w" data-type="mc" data-ans="0"><p class="enun"><span class="num">30</span>Two different genotypes, BB and Bb, both give brown eyes. This shows that…</p><div class="ops"><label class="op"><input type="radio" name="q30" value="0"><span class="let">a)</span> Different genotypes can produce the same phenotype</label><label class="op"><input type="radio" name="q30" value="1"><span class="let">b)</span> Genotype and phenotype are the same thing</label><label class="op"><input type="radio" name="q30" value="2"><span class="let">c)</span> Brown eyes cannot be inherited</label><label class="op"><input type="radio" name="q30" value="3"><span class="let">d)</span> The recessive allele is always stronger</label></div><p class="exp" hidden>BB and Bb look the same (brown) but have different letters.</p></fieldset><fieldset class="q" id="q31w" data-type="mc" data-ans="0"><p class="enun"><span class="num">31</span>Emilia (Bb) and Peter (Bb) have a child. What is the probability that the child has blue eyes?</p><div class="ops"><label class="op"><input type="radio" name="q31" value="0"><span class="let">a)</span> 1/4</label><label class="op"><input type="radio" name="q31" value="1"><span class="let">b)</span> 1/2</label><label class="op"><input type="radio" name="q31" value="2"><span class="let">c)</span> 3/4</label><label class="op"><input type="radio" name="q31" value="3"><span class="let">d)</span> 0</label></div><p class="exp" hidden>The square gives BB, Bb, Bb, bb. Only bb is blue: 1 out of 4.</p></fieldset><fieldset class="q" id="q32w" data-type="mc" data-ans="3"><p class="enun"><span class="num">32</span>Emilia (Bb) × Peter (Bb). What fraction of the children are expected to be heterozygous?</p><div class="ops"><label class="op"><input type="radio" name="q32" value="0"><span class="let">a)</span> 1/4</label><label class="op"><input type="radio" name="q32" value="1"><span class="let">b)</span> 1/3</label><label class="op"><input type="radio" name="q32" value="2"><span class="let">c)</span> 3/4</label><label class="op"><input type="radio" name="q32" value="3"><span class="let">d)</span> 1/2</label></div><p class="exp" hidden>Bb appears in 2 of the 4 boxes: 2/4 = 1/2.</p></fieldset><fieldset class="q" id="q33w" data-type="mc" data-ans="2"><p class="enun"><span class="num">33</span>A Bb parent and a bb parent have children. What fraction is expected to have blue eyes?</p><div class="ops"><label class="op"><input type="radio" name="q33" value="0"><span class="let">a)</span> 1/4</label><label class="op"><input type="radio" name="q33" value="1"><span class="let">b)</span> 0</label><label class="op"><input type="radio" name="q33" value="2"><span class="let">c)</span> 1/2</label><label class="op"><input type="radio" name="q33" value="3"><span class="let">d)</span> 3/4</label></div><p class="exp" hidden>The square gives Bb, Bb, bb, bb: half blue.</p></fieldset><fieldset class="q" id="q34w" data-type="mc" data-ans="1"><p class="enun"><span class="num">34</span>A BB parent and a bb parent have children. What fraction is expected to have blue eyes?</p><div class="ops"><label class="op"><input type="radio" name="q34" value="0"><span class="let">a)</span> 1/4</label><label class="op"><input type="radio" name="q34" value="1"><span class="let">b)</span> 0</label><label class="op"><input type="radio" name="q34" value="2"><span class="let">c)</span> 3/4</label><label class="op"><input type="radio" name="q34" value="3"><span class="let">d)</span> 1/2</label></div><p class="exp" hidden>The BB parent always passes B, so every child is Bb and brown.</p></fieldset><fieldset class="q" id="q35w" data-type="mc" data-ans="2"><p class="enun"><span class="num">35</span>Rachel has blue eyes, her brother Isaac has brown eyes, and their mother has blue eyes. What is the father&#x27;s genotype?</p><div class="ops"><label class="op"><input type="radio" name="q35" value="0"><span class="let">a)</span> BB</label><label class="op"><input type="radio" name="q35" value="1"><span class="let">b)</span> bb</label><label class="op"><input type="radio" name="q35" value="2"><span class="let">c)</span> Bb</label><label class="op"><input type="radio" name="q35" value="3"><span class="let">d)</span> It can&#x27;t be known</label></div><p class="exp" hidden>Isaac is brown but got a b from Mom, so Dad gave him B. Rachel is bb, so Dad also gave her b. Dad = Bb.</p></fieldset><fieldset class="q" id="q36w" data-type="mc" data-ans="2"><p class="enun"><span class="num">36</span>In Rachel&#x27;s family, what is Isaac&#x27;s genotype?</p><div class="ops"><label class="op"><input type="radio" name="q36" value="0"><span class="let">a)</span> It can&#x27;t be known</label><label class="op"><input type="radio" name="q36" value="1"><span class="let">b)</span> BB</label><label class="op"><input type="radio" name="q36" value="2"><span class="let">c)</span> Bb</label><label class="op"><input type="radio" name="q36" value="3"><span class="let">d)</span> bb</label></div><p class="exp" hidden>His mother (bb) can only give b. He is brown, so he also has a B: Bb.</p></fieldset></section>
+<div class="hoja">
+  <div class="res" id="res" hidden>
+    <span class="hand">Your score</span>
+    <span class="nota tnum" id="nota">0,0</span>
+    <span class="tnum" id="detalle"></span>
+    <span id="msg"></span>
+    <span class="tnum" id="tiempo"></span>
+    <div class="temas tnum" id="temas"></div>
+  </div>
+  <p id="faltan" class="aviso" hidden></p>
+  <div class="acciones">
+    <button class="btn" type="submit" id="entregar">Submit test</button>
+    <button class="btn sec2" type="button" id="otra" hidden>Take it again</button>
+  </div>
+</div>
+</div>
+</form>
+
+<details>
+  <summary>Answer key (open only when you finish)</summary>
+  <ol><li><b>1.</b> b) Each new cell receives an identical set of chromosomes — Mitosis divides the nucleus so that each new cell gets an identical set of chromosomes.</li><li><b>2.</b> a) Prophase → metaphase → anaphase → telophase — PMAT: Please Make Another Twin.</li><li><b>3.</b> d) Prophase — Prophase = prepare: chromosomes condense, the envelope dissolves and spindle fibers begin to form.</li><li><b>4.</b> b) Metaphase — Metaphase = middle.</li><li><b>5.</b> b) Anaphase — Anaphase = away.</li><li><b>6.</b> d) Telophase — Telophase = two: two new nuclei form and chromosomes decondense into chromatin.</li><li><b>7.</b> a) The centromeres — The fibers attach to the centromere (at the kinetochore), the point in the middle of each chromosome.</li><li><b>8.</b> b) Microtubules — Spindle fibers are made of microtubules and pull the chromosomes.</li><li><b>9.</b> a) An individual chromosome — Once separated, each chromatid is considered an individual chromosome.</li><li><b>10.</b> c) Prophase and telophase — Prophase condenses chromosomes and dissolves the envelope; telophase decondenses them and rebuilds it.</li><li><b>11.</b> c) The cytoplasm — Cytokinesis divides the cytoplasm as the membrane pinches inwards. Mitosis divides the nucleus.</li><li><b>12.</b> a) Because it produces genetically identical offspring — One parent and no fusion of gametes: the offspring are clones.</li><li><b>13.</b> d) It requires the fusion of gametes — Sexual reproduction joins an egg and a sperm and produces variation.</li><li><b>14.</b> a) Sharks — Your notes list humans, dogs, birds and sharks as sexual, and bacteria, amoeba and hydra as asexual.</li><li><b>15.</b> c) In a stable environment it is the fastest way to dominate an ecosystem — Clones multiply fast and need no mate, which works well while nothing changes.</li><li><b>16.</b> d) Zero genetic variation makes it vulnerable to new diseases and changes — If all individuals are identical, a disease that kills one can kill them all.</li><li><b>17.</b> c) Binary fission — Binary fission: one cell breaks into two.</li><li><b>18.</b> b) Budding — Budding: a bud grows on the parent and then separates.</li><li><b>19.</b> b) Fragmentation — Fragmentation: each fragment becomes a new organism.</li><li><b>20.</b> c) Fungi — Fungi release spores that grow into new organisms.</li><li><b>21.</b> a) Specialized sex cells, like the egg and the sperm — Gametes are the cells for sexual reproduction: the egg (female) and the sperm (male).</li><li><b>22.</b> b) The precise moment when the gametes fuse — Fertilization is when the male and female gametes join.</li><li><b>23.</b> c) The first cell of the new organism — The zygote forms after fertilization and is 2n.</li><li><b>24.</b> d) Gametes → fertilization → zygote → genetic variation — First the separate gametes, then they fuse, the zygote forms, and the offspring has a unique mix of traits.</li><li><b>25.</b> d) Because sexual reproduction gives each child a unique mix of traits — Each fertilization combines the parents&#x27; genes in a different way: genetic variation.</li><li><b>26.</b> b) A section of DNA that codes for a trait — A gene is a section of DNA. The visible version of a trait is the phenotype.</li><li><b>27.</b> d) The combination of alleles, like Bb — Genotype = the letters. Phenotype = what you see.</li><li><b>28.</b> a) Brown — With one dominant allele, the dominant trait shows.</li><li><b>29.</b> d) Bb — Heterozygous means two different alleles.</li><li><b>30.</b> a) Different genotypes can produce the same phenotype — BB and Bb look the same (brown) but have different letters.</li><li><b>31.</b> a) 1/4 — The square gives BB, Bb, Bb, bb. Only bb is blue: 1 out of 4.</li><li><b>32.</b> d) 1/2 — Bb appears in 2 of the 4 boxes: 2/4 = 1/2.</li><li><b>33.</b> c) 1/2 — The square gives Bb, Bb, bb, bb: half blue.</li><li><b>34.</b> b) 0 — The BB parent always passes B, so every child is Bb and brown.</li><li><b>35.</b> c) Bb — Isaac is brown but got a b from Mom, so Dad gave him B. Rachel is bb, so Dad also gave her b. Dad = Bb.</li><li><b>36.</b> c) Bb — His mother (bb) can only give b. He is brown, so he also has a B: Bb.</li></ol>
+</details>
+<footer>Good luck, Emilia! 💜</footer>
+</div>
+
+<script>
+const TX={dec:".",cont:(n,t)=>`${n} of ${t} answered`,det:(o,t)=>`${o} of ${t} correct`,de:(b,t)=>`${b} of ${t}`,
+ fin:"⏰ Time is up",usado:t=>`Time used: ${t}`,
+ falta:f=>`You have ${f===1?"1 question":f+" questions"} left. To submit anyway, tap "Submit test" again.`,
+ msg:n=>n>=4.5?"Excellent! You are more than ready.":n>=3.5?"Very good. Read the explanations for the ones you missed.":n>=3?"You passed, but review the ones in red.":"Not yet. Read the explanations and take it again."};
+document.documentElement.classList.add("js");
+const form=document.getElementById("parcial");
+const QS=[...document.querySelectorAll("fieldset.q:not(.open)")];
+const TOTAL=QS.length;
+const LIMITE=50*60;
+let entregado=false,avisado=false,t0=Date.now(),usado=0;
+
+function valor(s){
+  s=String(s).trim().replace(/\s+/g,"").replace(",",".");
+  if(!s)return NaN;
+  if(s.endsWith("%"))return parseFloat(s)/100;
+  if(s.includes("/")){const [a,b]=s.split("/").map(Number);return b?a/b:NaN}
+  return Number(s);
+}
+function respondida(f){
+  const t=f.dataset.type;
+  if(t==="mc")return !!f.querySelector("input:checked");
+  if(t==="grid")return [...f.querySelectorAll("input.cell")].every(i=>i.value.trim());
+  return f.querySelector("input.txt").value.trim()!=="";
+}
+function progreso(){
+  const n=QS.filter(respondida).length;
+  document.getElementById("cont").textContent=TX.cont(n,TOTAL);
+  document.getElementById("progbar").style.width=(n/TOTAL*100)+"%";
+  return n;
+}
+form.addEventListener("input",progreso);
+form.addEventListener("change",progreso);
+const mmss=s=>`${String(Math.floor(s/60)).padStart(2,"0")}:${String(s%60).padStart(2,"0")}`;
+// Saved on the device: after a reload, answers come back and the timer keeps running.
+const KEY="parcial:"+document.title;
+function guardar(){if(entregado)return;try{const r={};form.querySelectorAll("input:checked").forEach(i=>r[i.name]=i.value);localStorage.setItem(KEY,JSON.stringify({t0,r}))}catch(e){}}
+function borrar(){try{localStorage.removeItem(KEY)}catch(e){}}
+try{const s=JSON.parse(localStorage.getItem(KEY)||"null");
+  if(s&&s.t0&&Date.now()-s.t0<(LIMITE+1800)*1000){t0=s.t0;
+    Object.entries(s.r||{}).forEach(([n,v])=>{const i=form.querySelector(`input[name="${n}"][value="${v}"]`);if(i)i.checked=true});}
+  else borrar();}catch(e){}
+form.addEventListener("change",guardar);
+function tick(){if(entregado)return;const pas=Math.floor((Date.now()-t0)/1000),r=Math.max(0,LIMITE-pas);
+  const el=document.getElementById("reloj");el.textContent="⏱ "+mmss(r);
+  el.classList.toggle("poco",r<=300);
+  if(r===0){usado=LIMITE;calificar(true)}}
+progreso();tick();setInterval(tick,1000);
+
+function calificar(porTiempo){
+  if(!porTiempo)usado=Math.min(LIMITE,Math.floor((Date.now()-t0)/1000));
+  let ok=0;
+  QS.forEach(f=>{
+    const t=f.dataset.type,a=f.dataset.ans;let bien=false;
+    if(t==="mc"){
+      const sel=f.querySelector("input:checked");bien=!!sel&&sel.value===a;
+      f.querySelectorAll(".op").forEach(l=>{const v=l.querySelector("input").value;
+        if(v===a)l.classList.add("right");else if(sel&&v===sel.value)l.classList.add("wrong")});
+    }else if(t==="grid"){
+      const ans=a.split(",");bien=true;
+      f.querySelectorAll("input.cell").forEach((c,i)=>{const g=c.value.trim()===ans[i];c.classList.add(g?"good":"mal");if(!g)bien=false});
+    }else{
+      bien=Math.abs(valor(f.querySelector("input.txt").value)-valor(a))<1e-6;
+    }
+    if(bien)ok++;
+    f.classList.add(bien?"ok":"bad");
+    f.querySelector(".exp").hidden=false;
+  });
+  document.querySelectorAll("fieldset.open .exp").forEach(e=>e.hidden=false);
+  form.querySelectorAll("input,textarea").forEach(i=>i.disabled=true);
+  const nota=Math.round(ok/TOTAL*50)/10;
+  const n=document.getElementById("nota");
+  n.textContent=nota.toFixed(1).replace(".",TX.dec||",");
+  n.className="nota tnum "+(nota>=3?"pasa":"pierde");
+  document.getElementById("detalle").textContent=TX.det(ok,TOTAL);
+  document.getElementById("msg").textContent=TX.msg(nota);
+  document.getElementById("temas").innerHTML=[...document.querySelectorAll("section.sec[data-sec]")].map(sec=>{
+    const fs=[...sec.querySelectorAll("fieldset.q:not(.open)")];if(!fs.length)return "";
+    const b=fs.filter(f=>f.classList.contains("ok")).length,pct=b/fs.length;
+    return `<div><span class="t">${pct>=.7?"✔":"✘"} ${sec.dataset.sec}</span><span>${TX.de(b,fs.length)}</span>${pct<.7?`<span class="rep">${sec.dataset.repaso}</span>`:""}</div>`}).join("");
+  document.getElementById("res").hidden=false;
+  document.getElementById("faltan").hidden=true;
+  document.getElementById("entregar").hidden=true;
+  document.getElementById("otra").hidden=false;
+  document.getElementById("tiempo").textContent=(porTiempo?TX.fin+" · ":"")+TX.usado(mmss(usado));
+  entregado=true;borrar();
+  document.getElementById("res").scrollIntoView({behavior:"smooth",block:"center"});
+}
+form.addEventListener("submit",e=>{
+  e.preventDefault();if(entregado)return;
+  const falta=TOTAL-progreso();
+  if(falta>0&&!avisado){avisado=true;const p=document.getElementById("faltan");
+    p.textContent=TX.falta(falta);p.hidden=false;return}
+  calificar();
+});
+document.getElementById("otra").addEventListener("click",()=>{
+  form.reset();form.querySelectorAll("input,textarea").forEach(i=>{i.disabled=false;i.classList.remove("good","mal")});
+  QS.forEach(f=>{f.classList.remove("ok","bad");f.querySelector(".exp").hidden=true;f.querySelectorAll(".op").forEach(l=>l.classList.remove("right","wrong"))});
+  document.querySelectorAll("fieldset.open .exp").forEach(e=>e.hidden=true);
+  ["res","otra"].forEach(id=>document.getElementById(id).hidden=true);
+  document.getElementById("entregar").hidden=false;
+  entregado=false;avisado=false;t0=Date.now();borrar();document.getElementById("reloj").classList.remove("poco");tick();progreso();window.scrollTo({top:0,behavior:"smooth"});
+});
+</script>
+</body>
+</html>

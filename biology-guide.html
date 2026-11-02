@@ -1,0 +1,245 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Biology Made Simple</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Lexend:wght@400;500;600&family=Gochi+Hand&display=swap">
+<style>
+/* One-column notebook: each topic is a sheet with its highlighter; works without JavaScript */
+:root{
+  --paper:#F4F8F3; --sheet:#FFFFFF; --ink:#1F2A33; --soft:#5E6B73; --line:#E1E6DE;
+  --teal:#1D7F4E; --coral:#C8508A; --mustard:#E0A526; --hl-teal:#CFF0DC; --hl-coral:#FBD3E6; --hl-yellow:#FFEDB0;
+  --display:"Bricolage Grotesque","Avenir Next",system-ui,sans-serif;
+  --body:"Lexend","Segoe UI",system-ui,sans-serif;
+  --hand:"Gochi Hand","Comic Sans MS",cursive;
+  --on-accent:#FFFFFF;
+}
+@media (prefers-color-scheme: dark){:root{
+  --paper:#12181C; --sheet:#1B2328; --ink:#EEF2F0; --soft:#A9B6BC; --line:#2E3A40;
+  --teal:#6FD69E; --coral:#F28BBE; --mustard:#F2C35A; --hl-teal:#1B4A30; --hl-coral:#5A2440; --hl-yellow:#57461A; --on-accent:#12181C; color-scheme:dark}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.6;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:24px 64px}
+.wrap{max-width:780px;margin:0 auto;display:flex;flex-direction:column;gap:26px}
+h1,h2,h3{font-family:var(--display);line-height:1.15;margin:0;text-wrap:balance}
+h1{font-size:clamp(2.2rem,7vw,3.4rem);font-weight:800;letter-spacing:-.02em}
+h2{font-size:clamp(1.45rem,4.5vw,1.9rem);font-weight:800}
+h3{font-size:1.1rem;font-weight:700}
+p{margin:0}
+ul,ol{margin:0;padding-left:1.2em;display:flex;flex-direction:column;gap:4px}
+.eyebrow{font-size:.8rem;text-transform:uppercase;letter-spacing:.12em;color:var(--soft);font-weight:600}
+.lead{font-size:1.08rem;color:var(--soft);max-width:62ch}
+.hand{font-family:var(--hand);font-size:1.25em;color:var(--teal)}
+.hl{background:linear-gradient(transparent 55%,var(--hl-coral) 55%);padding:0 .1em}
+.hl-t{background:linear-gradient(transparent 55%,var(--hl-teal) 55%);padding:0 .1em}
+.hl-y{background:linear-gradient(transparent 55%,var(--hl-yellow) 55%);padding:0 .1em}
+nav.chips{display:flex;flex-wrap:wrap;gap:8px}
+nav.chips a{font-size:.85rem;text-decoration:none;color:var(--ink);border:1.5px solid var(--line);background:var(--sheet);padding:6px 12px;border-radius:999px}
+.sheet{background:var(--sheet);border:1px solid var(--line);border-radius:18px;padding:24px clamp(18px,4vw,32px);display:flex;flex-direction:column;gap:16px}
+.top{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
+.tag{font-family:var(--hand);font-size:1.1rem;color:var(--coral)}
+.box{background:var(--paper);border-radius:12px;padding:14px 16px;display:flex;flex-direction:column;gap:6px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px}
+.grid>*{min-width:0}
+.card{border:1.5px solid var(--line);border-radius:14px;padding:14px 16px;display:flex;flex-direction:column;gap:6px}
+.card .k{font-family:var(--display);font-weight:800;font-size:1.15rem;color:var(--teal)}
+.formula{display:flex;flex-wrap:wrap;gap:8px;align-items:center;font-family:var(--display);font-weight:800;font-size:1.05rem}
+.formula span{background:var(--hl-teal);border-radius:10px;padding:6px 12px}
+.formula i{font-style:normal;color:var(--soft)}
+.trap{border-left:4px solid var(--coral);background:var(--paper);padding:12px 16px;border-radius:0 12px 12px 0}
+.trap b{color:var(--coral)}
+.scroll{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:.95rem}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-family:var(--display);color:var(--soft);font-weight:700}
+.coin{display:grid;grid-template-columns:1fr 1fr;gap:0;border-radius:14px;overflow:hidden;border:1.5px solid var(--line)}
+.coin div{padding:14px 16px;display:flex;flex-direction:column;gap:4px}
+.coin .a{background:var(--hl-teal)} .coin .b{background:var(--hl-yellow)}
+.coin .big{font-family:var(--display);font-weight:800;font-size:1.5rem;letter-spacing:.08em}
+.steps{display:flex;flex-direction:column;gap:0}
+.step{display:grid;grid-template-columns:44px 1fr;gap:12px;align-items:start;padding:10px 0}
+.step .n{width:44px;height:44px;font-size:.9rem;border-radius:50%;display:grid;place-items:center;font-family:var(--display);font-weight:800;background:var(--teal);color:var(--on-accent)}
+.article{border:2px solid var(--ink);border-radius:6px;padding:18px 20px;display:flex;flex-direction:column;gap:10px;font-family:Georgia,"Times New Roman",serif}
+.article .tt{font-family:var(--display);font-size:1.6rem;font-weight:800}
+.article .lab{font-family:var(--body);font-size:.72rem;text-transform:uppercase;letter-spacing:.1em;color:var(--coral);font-weight:600}
+.article .w{background:var(--hl-yellow);padding:0 .15em;border-radius:3px}
+details{border:1.5px dashed var(--teal);border-radius:12px;padding:10px 14px}
+details summary{cursor:pointer;color:var(--teal);font-weight:600}
+details p{margin-top:8px}
+.quiz{display:flex;flex-direction:column;gap:10px}
+footer{text-align:center;color:var(--soft);font-size:.85rem}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header style="display:flex;flex-direction:column;gap:12px">
+  <span class="eyebrow">Biology · Study guide · For Emilia</span>
+  <h1>Biology <span class="hl">made simple</span></h1>
+  <p class="lead">Everything from your notebook, from September 3 to October 21, explained with everyday examples. At the end you'll find the notebook corrections and practice questions.</p>
+  <nav class="chips" aria-label="Topics">
+    <a href="#cycle">0 · Cell cycle</a><a href="#mitosis">1 · Mitosis</a><a href="#cyto">2 · Cytokinesis</a><a href="#repro">3 · Sexual vs. asexual</a><a href="#fert">4 · Fertilization</a><a href="#asexual">5 · Asexual in depth</a><a href="#mendel">6 · Mendel & Punnett</a><a href="#fixes">7 · Notebook fixes</a><a href="#practice">8 · Practice</a>
+  </nav>
+</header>
+
+<section class="sheet" id="cycle">
+  <div class="top"><h2>0 · The cell cycle (the page before mitosis)</h2></div>
+  <p class="hand">This page is in your notebook but it didn't come in the photos. Here is the standard version, so you're covered.</p>
+  <div class="steps">
+    <div class="step"><span class="n">G1</span><div><b>G1 phase:</b> the cell grows and does its normal job.</div></div>
+    <div class="step"><span class="n">S</span><div><b>S phase:</b> the cell <b>copies its DNA</b> (S = synthesis). Now each chromosome has two identical copies.</div></div>
+    <div class="step"><span class="n">G2</span><div><b>G2 phase:</b> the cell keeps growing and gets ready to divide.</div></div>
+    <div class="step"><span class="n">M</span><div><b>M phase:</b> mitosis + cytokinesis. The cell divides into two daughter cells.</div></div>
+  </div>
+  <p><b>Interphase</b> = G1 + S + G2: everything before division. <b>Checkpoints</b> are quality controls: the cell checks that the DNA is copied correctly and repairs damage before it continues.</p>
+</section>
+
+<section class="sheet" id="mitosis">
+  <div class="top"><h2>1 · Mitosis</h2><span class="tag">Sep 3</span></div>
+  <div class="box">
+    <h3>Definition for the test</h3>
+    <p>Mitosis is the process in which the cell's <b>nucleus divides</b>, so that each new cell receives an <b>identical set of chromosomes</b>.</p>
+  </div>
+  <p class="hand">Think of a photocopier: one original in, two identical copies out.</p>
+  <h3>The 4 phases, in order: P · M · A · T</h3>
+  <p class="hl-y" style="align-self:flex-start"><b>P</b>lease <b>M</b>ake <b>A</b>nother <b>T</b>win → Prophase · Metaphase · Anaphase · Telophase</p>
+  <div class="scroll"><table>
+    <tr><th>Phase</th><th>What happens</th><th>Memory trick</th></tr>
+    <tr><td><b>1 · Prophase</b></td><td>Chromosomes <b>condense</b> and become visible. The <b>nuclear envelope dissolves</b>. <b>Spindle fibers</b> begin to form.</td><td><b>P</b>rophase = <b>P</b>repare</td></tr>
+    <tr><td><b>2 · Metaphase</b></td><td>Chromosomes <b>line up</b> in the middle (the <b>equatorial plane</b>). Spindle fibers attach to the <b>centromeres</b>.</td><td><b>M</b>etaphase = <b>M</b>iddle</td></tr>
+    <tr><td><b>3 · Anaphase</b></td><td><b>Sister chromatids</b> are pulled apart to <b>opposite poles</b>. Each chromatid is now an individual chromosome.</td><td><b>A</b>naphase = <b>A</b>way</td></tr>
+    <tr><td><b>4 · Telophase</b></td><td>Chromosomes <b>decondense</b> into chromatin. <b>Nuclear envelopes reform</b> around <b>two nuclei</b>.</td><td><b>T</b>elophase = <b>T</b>wo</td></tr>
+  </table></div>
+  <div class="trap"><b>Prophase and telophase are opposites:</b> in prophase chromosomes condense and the envelope dissolves; in telophase chromosomes decondense and the envelope reforms. Like rewinding a video.</div>
+  <h3>Key vocabulary</h3>
+  <div class="grid">
+    <div class="card"><span class="k">Chromosome</span><p>A package of DNA. After the DNA is copied (S phase), it looks like an X.</p></div>
+    <div class="card"><span class="k">Sister chromatids</span><p>The two identical halves of that X.</p></div>
+    <div class="card"><span class="k">Centromere</span><p>The point in the middle of the X that holds the two chromatids together.</p></div>
+    <div class="card"><span class="k">Spindle fibers</span><p>Threads made of <b>microtubules</b> that pull the chromosomes, like ropes.</p></div>
+    <div class="card"><span class="k">Chromatin</span><p>DNA in its loose, relaxed form, like a ball of tangled thread.</p></div>
+    <div class="card"><span class="k">Equatorial plane</span><p>The imaginary line across the middle of the cell.</p></div>
+  </div>
+</section>
+
+<section class="sheet" id="cyto">
+  <div class="top"><h2>2 · Cytokinesis</h2></div>
+  <p>The <b>cytoplasm divides</b> as the <b>cell membrane pinches inwards</b>, until the cell separates into <b>two daughter cells</b>. Each one gets organelles and a nucleus.</p>
+  <div class="trap"><b>Mitosis ≠ cytokinesis.</b> Mitosis divides the <b>nucleus</b>. Cytokinesis divides the <b>cytoplasm</b> (the rest of the cell). Picture squeezing a balloon in the middle until it becomes two.</div>
+</section>
+
+<section class="sheet" id="repro">
+  <div class="top"><h2>3 · Sexual vs. asexual reproduction</h2><span class="tag">Sep 24</span></div>
+  <div class="scroll"><table>
+    <tr><th></th><th>Asexual · <i>the cloning machine</i></th><th>Sexual · <i>the diversity engine</i></th></tr>
+    <tr><td><b>Parents</b></td><td>One</td><td>Two</td></tr>
+    <tr><td><b>Gametes</b></td><td>No fusion of gametes</td><td>Fusion of gametes (egg + sperm)</td></tr>
+    <tr><td><b>Offspring</b></td><td>Genetically identical (clones)</td><td>Genetic variation</td></tr>
+    <tr><td><b>Examples</b></td><td>Bacteria, amoeba, hydra, yeast, starfish</td><td>Humans, dogs, birds, sharks</td></tr>
+  </table></div>
+  <p><b>Gametes</b> are the special cells for sexual reproduction in animals, plants and fungi. The <b>egg</b> is the female gamete and the <b>sperm</b> is the male gamete.</p>
+  <div class="trap"><b>Careful with starfish, hydra and yeast:</b> they can reproduce in both ways. Starfish reproduce mostly sexually, but they can also regrow from a piece (fragmentation).</div>
+</section>
+
+<section class="sheet" id="fert">
+  <div class="top"><h2>4 · The fertilization process</h2><span class="tag">Oct 1</span></div>
+  <div class="formula"><span>Gametes</span><i>→</i><span>Fertilization</span><i>→</i><span>Zygote (2n)</span><i>→</i><span>Genetic variation</span></div>
+  <div class="steps">
+    <div class="step"><span class="n">1</span><div><b>Gametes:</b> separate male and female gametes.</div></div>
+    <div class="step"><span class="n">2</span><div><b>Fertilization:</b> the precise moment the gametes fuse.</div></div>
+    <div class="step"><span class="n">3</span><div><b>Zygote:</b> the first cell of the new organism. It is <b>2n</b>: two sets of chromosomes, one set from each parent.</div></div>
+    <div class="step"><span class="n">4</span><div><b>Genetic variation:</b> the offspring inherits a <b>unique mix</b> of traits from both parents.</div></div>
+  </div>
+  <p class="hand">That's why you look a bit like your mom and a bit like your dad, but you are not a copy of either one.</p>
+</section>
+
+<section class="sheet" id="asexual">
+  <div class="top"><h2>5 · Asexual reproduction in depth</h2><span class="tag">Oct 21</span></div>
+  <p>It needs <b>no mate</b>, uses <b>very little energy</b>, and it is nature's ultimate mechanism for <b>rapid multiplication</b>.</p>
+  <div class="grid">
+    <div class="card"><span class="k">✔ Strategic advantage</span><p>In a perfectly <b>stable</b> environment, making exact clones is the fastest way to <b>dominate</b> an ecosystem.</p></div>
+    <div class="card"><span class="k" style="color:var(--coral)">✘ Strategic flaw</span><p><b>Zero genetic variation</b>: total vulnerability to new diseases or environmental changes. If one clone gets sick, they all can.</p></div>
+  </div>
+  <h3>Four ways to build a clone</h3>
+  <div class="scroll"><table>
+    <tr><th>Method</th><th>How it works</th><th>Examples</th></tr>
+    <tr><td><b>Binary fission</b></td><td>The cell splits into two equal halves.</td><td>Bacteria, amoeba</td></tr>
+    <tr><td><b>Budding</b></td><td>A small bud grows on the parent and then breaks off.</td><td>Yeast, hydra</td></tr>
+    <tr><td><b>Fragmentation</b></td><td>The body breaks into pieces and each piece grows into a new organism.</td><td>Starfish, planaria</td></tr>
+    <tr><td><b>Spore formation</b></td><td>It releases tiny spores that grow into new organisms.</td><td>Fungi</td></tr>
+  </table></div>
+  <p class="hand">Trick: <b>B</b>inary = <b>B</b>reak in two · <b>B</b>udding = <b>B</b>aby bump · <b>F</b>ragmentation = <b>F</b>ragments · <b>S</b>pores = <b>S</b>pecks in the air.</p>
+</section>
+
+<section class="sheet" id="mendel">
+  <div class="top"><h2>6 · Mendelian genetics & Punnett squares</h2><span class="tag">Oct 21</span></div>
+  <div class="grid">
+    <div class="card"><span class="k">Genetics</span><p>The study of <b>genes</b> and how they are inherited.</p></div>
+    <div class="card"><span class="k">Gene</span><p>A <b>section of DNA</b> that codes for a trait.</p></div>
+    <div class="card"><span class="k">Allele</span><p>A version of a gene: <b>B</b> (brown) or <b>b</b> (blue).</p></div>
+    <div class="card"><span class="k">Genotype</span><p>The <b>combination of alleles</b>: BB, Bb or bb.</p></div>
+    <div class="card"><span class="k">Phenotype</span><p>The <b>physical trait</b> you can see: brown eyes. Different genotypes can give the same phenotype.</p></div>
+    <div class="card"><span class="k">Gregor Mendel</span><p>Grew plants, found patterns and concluded that there are <b>dominant</b> and <b>recessive</b> traits.</p></div>
+  </div>
+  <div class="box">
+    <h3>Dominant vs. recessive</h3>
+    <p><b>Capital letter = dominant</b> (B = brown). With <b>one</b> copy it shows.</p>
+    <p><b>Small letter = recessive</b> (b = blue). It only shows with <b>two</b> copies: bb.</p>
+    <p><b>Homozygous</b> = two equal alleles (BB or bb) · <b>Heterozygous</b> = two different alleles (Bb).</p>
+  </div>
+  <h3>Example 1 · Emilia (Bb) × Peter (Bb)</h3>
+  <div class="scroll"><table style="width:auto">
+    <tr><th>P \ E</th><th>B</th><th>b</th></tr>
+    <tr><th>B</th><td><b>BB</b> · brown</td><td><b>Bb</b> · brown</td></tr>
+    <tr><th>b</th><td><b>Bb</b> · brown</td><td><b>bb</b> · blue</td></tr>
+  </table></div>
+  <p>Brown eyes: <b>3/4</b> (75%) · Blue eyes: <b>1/4</b> (25%). Yes, two brown-eyed parents can have a blue-eyed child.</p>
+  <h3>Example 2 · Solving it backwards (Rachel's family)</h3>
+  <p>Rachel has blue eyes, her brother Isaac has brown eyes and their mother has blue eyes. <b>What color are the father's eyes?</b></p>
+  <div class="steps">
+    <div class="step"><span class="n">1</span><div>Rachel is blue → recessive → <b>bb</b>.</div></div>
+    <div class="step"><span class="n">2</span><div>Mom is blue → <b>bb</b>. She can only give <b>b</b>.</div></div>
+    <div class="step"><span class="n">3</span><div>Isaac is brown, but he got a <b>b</b> from Mom → he is <b>Bb</b>. His <b>B</b> must come from Dad.</div></div>
+    <div class="step"><span class="n">4</span><div>Rachel is bb, so Dad also gave her a <b>b</b>.</div></div>
+    <div class="step"><span class="n">✔</span><div><b>Dad is Bb, with brown eyes.</b> (Your notebook stops before writing this answer.)</div></div>
+  </div>
+</section>
+
+<section class="sheet" id="fixes">
+  <div class="top"><h2>7 · Notebook fixes</h2></div>
+  <div class="trap"><b>Prophase drawing:</b> the yellow dots at the poles are <b>centrosomes</b>, not microtubules. The microtubules are the <b>spindle fibers</b> (the lines).</div>
+  <div class="trap"><b>The last fertilization drawing</b> shows an embryo with many cells. That is the zygote dividing; genetic variation is the <i>idea</i> that the baby is a unique mix.</div>
+  <div class="scroll"><table>
+    <tr><th>Notebook</th><th>Correct spelling</th></tr>
+    <tr><td>Sprinkle fibers</td><td><b>Spindle fibers</b></td></tr>
+    <tr><td>centromanes</td><td><b>centromeres</b></td></tr>
+    <tr><td>chromantin</td><td><b>chromatin</b></td></tr>
+    <tr><td>Nucleal envelope</td><td><b>Nuclear envelope</b></td></tr>
+    <tr><td>ganetes</td><td><b>gametes</b></td></tr>
+    <tr><td>Binnary fission</td><td><b>Binary fission</b></td></tr>
+    <tr><td>Punnet square</td><td><b>Punnett square</b></td></tr>
+    <tr><td>recieves · expresed</td><td><b>receives · expressed</b></td></tr>
+  </table></div>
+</section>
+
+<section class="sheet" id="practice">
+  <div class="top"><h2>8 · Practice before the test</h2></div>
+  <p>Answer in your head, then tap the question to see the answer.</p>
+  <div class="quiz">
+    <details><summary>What is the correct order of the phases of mitosis?</summary><p>Prophase, metaphase, anaphase, telophase (PMAT).</p></details>
+    <details><summary>In which phase do sister chromatids move to opposite poles?</summary><p>Anaphase (A = away).</p></details>
+    <details><summary>What does cytokinesis divide?</summary><p>The cytoplasm. Mitosis divides the nucleus.</p></details>
+    <details><summary>Why is sexual reproduction called "the diversity engine"?</summary><p>Because it mixes genes from two parents and produces genetic variation.</p></details>
+    <details><summary>What is a zygote?</summary><p>The first cell of a new organism, formed when two gametes fuse (2n).</p></details>
+    <details><summary>A hydra grows a small bud that breaks off and becomes a new hydra. Which method is it?</summary><p>Budding.</p></details>
+    <details><summary>What is the main weakness of asexual reproduction?</summary><p>Zero genetic variation: one new disease can affect all the clones.</p></details>
+    <details><summary>Two parents are Bb × bb. What fraction of the children have blue eyes?</summary><p>1/2: the square gives Bb, Bb, bb, bb.</p></details>
+    <details><summary>A brown-eyed person has a blue-eyed child. Can the brown-eyed parent be BB?</summary><p>No. A BB parent always passes B, and the child would be brown. The parent must be Bb.</p></details>
+  </div>
+</section>
+
+<footer>Made from your notebook notes · Good luck on your test! 💜</footer>
+</div>
+</body>
+</html>

@@ -1,0 +1,746 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Matemáticas 8° · Plan de estudio</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Lexend:wght@400;500;600;700&family=Gochi+Hand&display=swap">
+<style>
+:root{
+  --paper:#F7F4FB;--sheet:#fff;--ink:#2A2140;--soft:#6B6283;--line:#E4DDF0;
+  --violet:#7B3FE4;--pink:#E8418A;--teal:#0F7C80;--mango:#E07A00;--lima:#4E8C1E;
+  --violet-soft:#F2EBFF;--pink-soft:#FFEDF5;--teal-soft:#E3F6F6;--mango-soft:#FFF2DE;--lima-soft:#EEF8E2;
+  --on:#fff;
+  --display:"Bricolage Grotesque","Avenir Next",system-ui,sans-serif;
+  --body:"Lexend","Segoe UI",system-ui,sans-serif;
+  --hand:"Gochi Hand",cursive;
+  --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --paper:#16121F;--sheet:#211B2E;--ink:#F1ECFA;--soft:#B3A9C9;--line:#3A3150;
+  --violet:#A98BFF;--pink:#FF6FAE;--teal:#4FC9C9;--mango:#FFB454;--lima:#A8D96A;
+  --violet-soft:#2C2342;--pink-soft:#36203A;--teal-soft:#15323A;--mango-soft:#3A2E1B;--lima-soft:#243318;
+  --on:#16121F;color-scheme:dark;
+}}
+:root[data-theme="dark"]{
+  --paper:#16121F;--sheet:#211B2E;--ink:#F1ECFA;--soft:#B3A9C9;--line:#3A3150;
+  --violet:#A98BFF;--pink:#FF6FAE;--teal:#4FC9C9;--mango:#FFB454;--lima:#A8D96A;
+  --violet-soft:#2C2342;--pink-soft:#36203A;--teal-soft:#15323A;--mango-soft:#3A2E1B;--lima-soft:#243318;
+  --on:#16121F;color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--body);line-height:1.55;
+  padding:26px max(16px,env(safe-area-inset-right,0px)) 60px max(16px,env(safe-area-inset-left,0px));
+  -webkit-text-size-adjust:100%}
+.wrap{max-width:760px;margin:0 auto;display:flex;flex-direction:column;gap:26px}
+h1{font-family:var(--display);font-size:clamp(2rem,7.5vw,3rem);margin:0;line-height:1.04;letter-spacing:-.02em}
+h2{font-family:var(--display);font-size:clamp(1.3rem,4.5vw,1.7rem);margin:0;line-height:1.15}
+h3{font-family:var(--display);font-size:1.08rem;margin:0}
+p{margin:0}
+a{color:var(--violet)}
+.hand{font-family:var(--hand);font-size:1.35rem;color:var(--pink);line-height:1}
+.lead{font-size:1.05rem;color:var(--soft)}
+
+/* ---------- barra superior ---------- */
+.top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.back{text-decoration:none;font-weight:600;font-size:.92rem;color:var(--soft);
+  border:1px solid var(--line);border-radius:999px;padding:7px 14px;background:var(--sheet)}
+
+/* ---------- card base ---------- */
+.card{background:var(--sheet);border:1px solid var(--line);border-radius:20px;padding:20px;
+  display:flex;flex-direction:column;gap:14px}
+
+/* ---------- contador ---------- */
+.countdown{background:linear-gradient(135deg,var(--violet),var(--pink));color:#fff;border:0;
+  border-radius:22px;padding:22px;display:flex;flex-direction:column;gap:12px}
+.countdown label{font-size:.9rem;opacity:.9;font-weight:600}
+.countdown input[type=date]{font-family:var(--body);font-size:1rem;padding:10px 12px;border-radius:12px;
+  border:0;background:rgba(255,255,255,.95);color:#2A2140;width:100%;max-width:260px}
+.cd-big{font-family:var(--display);font-size:clamp(1.6rem,6vw,2.3rem);line-height:1.1}
+.cd-sub{font-size:.95rem;opacity:.92}
+
+/* ---------- progreso ---------- */
+.bar{height:14px;background:var(--line);border-radius:999px;overflow:hidden}
+.bar i{display:block;height:100%;width:0;border-radius:999px;
+  background:linear-gradient(90deg,var(--teal),var(--lima));transition:width .4s ease}
+.bar-row{display:flex;justify-content:space-between;align-items:baseline;gap:10px;font-size:.92rem;color:var(--soft)}
+.bar-row b{color:var(--ink);font-size:1.05rem}
+
+/* ---------- línea de tiempo ---------- */
+.tl{display:flex;flex-direction:column;gap:0;position:relative}
+.tl-item{display:grid;grid-template-columns:62px 1fr;gap:14px;padding:11px 0;align-items:start;
+  border-bottom:1px dashed var(--line)}
+.tl-item:last-child{border-bottom:0}
+.tl-date{font-family:var(--mono);font-size:.78rem;color:var(--soft);padding-top:3px;white-space:nowrap}
+.tl-name{font-weight:600;font-size:.98rem}
+.tl-tag{font-size:.82rem;color:var(--soft)}
+
+/* ---------- flojos ---------- */
+.flojo{background:var(--pink-soft);border:1px solid var(--line);border-left:5px solid var(--pink);
+  border-radius:14px;padding:15px 17px;display:flex;flex-direction:column;gap:7px}
+.flojo h3{color:var(--pink)}
+.flojo .evid{font-size:.9rem;color:var(--soft)}
+
+/* ---------- sesiones ---------- */
+.ses{background:var(--sheet);border:1px solid var(--line);border-radius:18px;overflow:hidden}
+.ses[open]{border-color:var(--violet)}
+.ses summary{list-style:none;cursor:pointer;padding:16px 18px;display:grid;
+  grid-template-columns:auto 1fr auto;gap:13px;align-items:center}
+.ses summary::-webkit-details-marker{display:none}
+.num{width:34px;height:34px;flex:none;border-radius:11px;background:var(--violet-soft);color:var(--violet);
+  font-family:var(--display);font-size:1.02rem;display:grid;place-items:center}
+.ses[open] .num{background:var(--violet);color:var(--on)}
+.ses.done .num{background:var(--lima);color:#fff}
+.s-tit{font-family:var(--display);font-size:1.08rem;line-height:1.2}
+.s-sub{font-size:.86rem;color:var(--soft);margin-top:2px}
+.chev{color:var(--soft);font-size:1.2rem;transition:transform .2s}
+.ses[open] .chev{transform:rotate(90deg)}
+.s-body{padding:4px 18px 18px;display:flex;flex-direction:column;gap:15px;border-top:1px solid var(--line)}
+
+.block{display:flex;flex-direction:column;gap:7px}
+.block > .lbl{font-size:.76rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--soft)}
+.truco{background:var(--teal-soft);border-radius:13px;padding:13px 15px}
+.truco .lbl{color:var(--teal)}
+.ojo{background:var(--mango-soft);border-radius:13px;padding:13px 15px}
+.ojo .lbl{color:var(--mango)}
+.ojo ul{margin:4px 0 0;padding-left:19px}
+.ojo li{margin-bottom:5px}
+.ojo li:last-child{margin-bottom:0}
+
+.eq{font-family:var(--mono);font-size:.97rem;background:var(--violet-soft);color:var(--ink);
+  padding:3px 7px;border-radius:7px;display:inline-block;white-space:nowrap}
+.eqline{font-family:var(--mono);font-size:.95rem;background:var(--violet-soft);border-radius:11px;
+  padding:11px 13px;overflow-x:auto;white-space:pre;line-height:1.75}
+
+/* ---------- ejercicios ---------- */
+.ej{border:1px solid var(--line);border-radius:13px;padding:0;overflow:hidden}
+.ej > summary{list-style:none;cursor:pointer;padding:12px 15px;font-family:var(--mono);font-size:.95rem;
+  display:flex;justify-content:space-between;gap:12px;align-items:center}
+.ej > summary::-webkit-details-marker{display:none}
+.ej .ver{font-family:var(--body);font-size:.8rem;font-weight:600;color:var(--violet);white-space:nowrap}
+.ej[open] .ver{color:var(--soft)}
+.ej-sol{padding:0 15px 14px;border-top:1px solid var(--line);padding-top:12px}
+
+/* ---------- botones ---------- */
+.btn{display:inline-block;text-decoration:none;font-family:var(--body);font-weight:600;font-size:.98rem;
+  border-radius:13px;padding:13px 20px;border:0;cursor:pointer;text-align:center}
+.btn-p{background:var(--violet);color:var(--on)}
+.btn-g{background:transparent;border:2px solid var(--teal);color:var(--teal)}
+.btn-done{background:var(--lima-soft);border:2px solid var(--lima);color:var(--lima);width:100%}
+.ses.done .btn-done{background:var(--lima);color:#fff;border-color:var(--lima)}
+.btns{display:flex;flex-wrap:wrap;gap:10px}
+
+/* ---------- chuleta ---------- */
+.chu{display:grid;grid-template-columns:repeat(auto-fit,minmax(215px,1fr));gap:12px}
+.chu div{background:var(--violet-soft);border-radius:13px;padding:13px 15px}
+.chu h4{margin:0 0 6px;font-family:var(--display);font-size:.95rem}
+.chu code{font-family:var(--mono);font-size:.88rem;display:block;line-height:1.85}
+
+/* ---------- cierre ---------- */
+.cta{background:linear-gradient(135deg,var(--teal),var(--lima));color:#fff;border-radius:22px;
+  padding:24px;display:flex;flex-direction:column;gap:13px;align-items:flex-start}
+.cta h2{color:#fff}
+.cta .btn{background:#fff;color:var(--teal)}
+footer{text-align:center;color:var(--soft);font-size:.86rem;padding-top:8px}
+@media(max-width:420px){.ses summary{grid-template-columns:auto 1fr;}.chev{display:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="top">
+    <span class="hand">Para Emilia 💜</span>
+    <a class="back" href="index.html">← Todas las materias</a>
+  </div>
+
+  <header style="display:flex;flex-direction:column;gap:10px">
+    <h1>Matemáticas 8°<br>de principio a fin</h1>
+    <p class="lead">Todo lo que la profe te dio este año, <b>en el mismo orden en que te lo dio</b>. Diez sesiones de 30 minutos. Al final, un parcial de verdad que se califica solo.</p>
+  </header>
+
+  <!-- CONTADOR -->
+  <div class="countdown">
+    <label for="fecha">📅 ¿Qué día es tu parcial?</label>
+    <input type="date" id="fecha">
+    <div class="cd-big" id="cdBig">Pon la fecha y te reparto las sesiones</div>
+    <div class="cd-sub" id="cdSub">Se guarda sola en este dispositivo.</div>
+  </div>
+
+  <!-- PROGRESO -->
+  <div class="card">
+    <div class="bar-row"><span>Tu avance</span><span><b id="pNum">0</b> de 10 sesiones</span></div>
+    <div class="bar"><i id="pBar"></i></div>
+    <p class="lead" id="pMsg" style="font-size:.95rem">Arranca por la 1. Están en orden por algo: cada una usa lo de la anterior.</p>
+  </div>
+
+  <!-- MAPA -->
+  <div class="card">
+    <h2>🗺️ El año entero, en una pantalla</h2>
+    <p class="lead" style="font-size:.95rem">Las fechas son las de tu propio cuaderno. Si un tema se te olvidó, el día en que lo viste te ayuda a ubicarlo.</p>
+    <div class="tl">
+      <div class="tl-item"><span class="tl-date">13 ago</span><div><div class="tl-name">Conjuntos numéricos</div><div class="tl-tag">ℕ, ℤ, ℚ y sus cuatro operaciones</div></div></div>
+      <div class="tl-item"><span class="tl-date">14 ago</span><div><div class="tl-name">Expresión decimal de un racional</div><div class="tl-tag">finito · periódico puro · periódico mixto</div></div></div>
+      <div class="tl-item"><span class="tl-date">18 ago</span><div><div class="tl-name">Operaciones combinadas</div><div class="tl-tag">paréntesis, corchetes, llaves y la jerarquía</div></div></div>
+      <div class="tl-item"><span class="tl-date">25 ago</span><div><div class="tl-name">Números irracionales</div><div class="tl-tag">π, e, φ, raíces no exactas y la recta con Pitágoras</div></div></div>
+      <div class="tl-item"><span class="tl-date">1 sep</span><div><div class="tl-name">Números reales</div><div class="tl-tag">el diagrama completo y el orden en la recta</div></div></div>
+      <div class="tl-item"><span class="tl-date">3 y 10 sep</span><div><div class="tl-name">Propiedades de las operaciones</div><div class="tl-tag">clausurativa, conmutativa, asociativa, modulativa, inversos</div></div></div>
+      <div class="tl-item"><span class="tl-date">16 sep</span><div><div class="tl-name">Radicales semejantes</div><div class="tl-tag">sumar y restar raíces, productos de binomios</div></div></div>
+      <div class="tl-item"><span class="tl-date">24 sep</span><div><div class="tl-name">Potenciación en reales</div><div class="tl-tag">las cinco propiedades de las potencias</div></div></div>
+      <div class="tl-item"><span class="tl-date">29 sep</span><div><div class="tl-name">Radicación</div><div class="tl-tag">producto, cociente, raíz como potencia, raíz de raíz</div></div></div>
+      <div class="tl-item"><span class="tl-date">6 y 13 oct</span><div><div class="tl-name">Logaritmación</div><div class="tl-tag">producto, cociente, fracción unitaria, potencia</div></div></div>
+      <div class="tl-item"><span class="tl-date">15 oct</span><div><div class="tl-name">Ecuaciones de primer grado</div><div class="tl-tag">con fracciones, con decimales, con paréntesis</div></div></div>
+      <div class="tl-item"><span class="tl-date">20 y 28 oct</span><div><div class="tl-name">Inecuaciones e intervalos</div><div class="tl-tag">la recta, la notación y el Taller N5</div></div></div>
+    </div>
+  </div>
+
+  <!-- PUNTOS FLOJOS -->
+  <div class="card">
+    <h2>🎯 Tus tres puntos flojos</h2>
+    <p class="lead" style="font-size:.95rem">Esto no es a la lotería: salió de revisar tu cuaderno entero. Si arreglas estos tres, subes más que estudiando cinco temas nuevos.</p>
+
+    <div class="flojo">
+      <h3>1. El m.c.m. cuando sumas fracciones</h3>
+      <p>Es tu error más repetido. No falla el concepto: falla el denominador común. Cuando lo escribes mal, todo lo que sigue sale mal aunque el procedimiento sea perfecto.</p>
+      <p class="evid">En tu cuaderno: <span class="eq">−7/3 + 7/5 − 8/6</span> te dio <span class="eq">−4/15</span>. El m.c.m. de 3, 5 y 6 es <b>30</b>, no 15 → <span class="eq">−70/30 + 42/30 − 40/30 = −68/30 = −34/15</span>.</p>
+      <p><b>La costumbre que te salva:</b> antes de operar, escribe el m.c.m. solo, en un rincón de la hoja, y enciérralo. Si no lo ves escrito, no empieces.</p>
+    </div>
+
+    <div class="flojo">
+      <h3>2. La regla del signo en inecuaciones</h3>
+      <p>La profe te la marcó en rojo dos veces en la misma hoja, y escribió <i>«Regla»</i> al lado. Es la que más puntos cuesta en el parcial porque la respuesta queda al revés: no es un error chiquito, es el intervalo contrario.</p>
+      <p class="evid">En tu cuaderno: <span class="eq">9,6z + 0,5 ≥ −4,8</span>. Dividiste entre <b>9,6</b>, que es <b>positivo</b> → el signo <b>no</b> se voltea: <span class="eq">z ≥ −0,55</span>, o sea <span class="eq">[−0,55 , ∞)</span>. Habías puesto <span class="eq">z ≤ −0,55</span>.</p>
+      <p><b>La costumbre que te salva:</b> cuando despejes, mira el número que divide. ¿Negativo? Voltea. ¿Positivo? No toques nada. Nunca voltees por los números que están al otro lado del signo.</p>
+    </div>
+
+    <div class="flojo">
+      <h3>3. No comprobar la respuesta</h3>
+      <p>Varias veces llegaste al final con un número que no cuadraba, y nadie lo atajó. Comprobar cuesta veinte segundos y te salva el punto entero.</p>
+      <p class="evid">En el Taller N5: la factura de Natalia te dio <b>160</b> minutos. Reemplaza: <span class="eq">310 × 160 + 6.300 = 55.900</span>, y la factura era de <b>62.100</b>. No daba. La buena es <b>180</b>: <span class="eq">310 × 180 + 6.300 = 62.100</span> ✓</p>
+      <p><b>La costumbre que te salva:</b> en toda ecuación, reemplaza tu respuesta en la original. Si los dos lados dan lo mismo, está. Si no, ya sabes antes de entregar.</p>
+    </div>
+  </div>
+
+  <!-- SESIONES -->
+  <h2 style="margin-top:6px">📚 Las diez sesiones</h2>
+
+  <!-- 1 -->
+  <details class="ses" data-s="1">
+    <summary><span class="num">1</span><span><span class="s-tit">Los conjuntos, de adentro hacia afuera</span><span class="s-sub">13 ago y 1 sep · 30 min</span></span><span class="chev">›</span></summary>
+    <div class="s-body">
+      <div class="block"><span class="lbl">En una frase</span>
+        <p>Los números viven en cajas, una dentro de otra: <b>ℕ ⊂ ℤ ⊂ ℚ ⊂ ℝ</b>. Y aparte, sin tocar a ℚ, está la caja de los irracionales <b>𝕀</b>.</p>
+        <div class="eqline">ℕ = {1, 2, 3, 4, …}              naturales
+ℤ = {…, −2, −1, 0, 1, 2, …}      enteros
+ℚ = {a/b , con b ≠ 0}            racionales
+𝕀 = decimales infinitos NO periódicos
+ℝ = ℚ ∪ 𝕀                        todo junto</div>
+      </div>
+      <div class="truco block"><span class="lbl">El truco</span>
+        <p>Pregúntate siempre: <b>¿lo puedo escribir como fracción de enteros?</b> Si sí, es racional. Si no, es irracional. Nada más. Y ojo: un número puede estar en varias cajas a la vez — <span class="eq">∛27 = 3</span> es natural, entero <i>y</i> racional, las tres.</p>
+      </div>
+      <div class="ojo block"><span class="lbl">Donde se cae todo el mundo</span>
+        <ul>
+          <li><span class="eq">√49</span> <b>no</b> es irracional: da 7 exacto. Lo irracional es la raíz <b>no exacta</b>, como <span class="eq">√13</span>.</li>
+          <li><span class="eq">0,55̂</span> es racional (periódico puro). Infinito <b>no</b> significa irracional; irracional es infinito <b>y sin período</b>.</li>
+          <li><span class="eq">π/3</span> sigue siendo irracional: dividir un irracional entre un entero no lo arregla.</li>
+        </ul>
+      </div>
+      <div class="block"><span class="lbl">Hazlo tú</span>
+        <details class="ej"><summary><span>Clasifica: √141 · √13 · 9/25 · √2 − 2</span><span class="ver">Ver solución</span></summary>
+          <div class="ej-sol"><p><span class="eq">√141</span> → irracional (141 no es cuadrado perfecto).<br><span class="eq">√13</span> → irracional.<br><span class="eq">9/25</span> → racional (es 0,36 exacto).<br><span class="eq">√2 − 2</span> → irracional: racional menos irracional siempre da irracional.</p></div></details>
+        <details class="ej"><summary><span>¿√2 × √8 es racional o irracional?</span><span class="ver">Ver solución</span></summary>
+          <div class="ej-sol"><p><b>Racional.</b> <span class="eq">√2 × √8 = √16 = 4</span>. Es la trampa clásica: dos irracionales multiplicados <b>pueden</b> dar racional. Pero un racional más un irracional <b>nunca</b> da racional.</p></div></details>
+        <details class="ej"><summary><span>¿A qué conjuntos pertenece −17/2?</span><span class="ver">Ver solución</span></summary>
+          <div class="ej-sol"><p>Solo a <b>ℚ</b> y a <b>ℝ</b>. Da −8,5: no es entero, mucho menos natural. Pero es fracción de enteros, así que es racional.</p></div></details>
+      </div>
+      <button class="btn btn-done" data-done="1">Marcar como hecha ✓</button>
+    </div>
+  </details>
+
+  <!-- 2 -->
+  <details class="ses" data-s="2">
+    <summary><span class="num">2</span><span><span class="s-tit">Cuándo un decimal delata su fracción</span><span class="s-sub">14 ago · 25 min</span></span><span class="chev">›</span></summary>
+    <div class="s-body">
+      <div class="block"><span class="lbl">En una frase</span>
+        <p>Toda fracción, al dividirla, cae en una de tres: se acaba, se repite desde el principio, o se repite después de un pedazo.</p>
+        <div class="eqline">7/2  = 3,5          → FINITO (se acaba)
+10/3 = 3,3̂          → PERIÓDICO PURO (repite desde la coma)
+7,13̂               → PERIÓDICO MIXTO (hay 1 suelto y luego repite)</div>
+      </div>
+      <div class="truco block"><span class="lbl">El truco</span>
+        <p>No tienes que dividir para saberlo. Simplifica la fracción al máximo y <b>mira el denominador</b>: si solo tiene <b>2 y 5</b> como factores, es finito. Si no tiene ni 2 ni 5, es periódico puro. Si tiene 2 o 5 <b>mezclados</b> con otro, es mixto.</p>
+        <div class="eqline">3/8   → 8 = 2·2·2        solo 2  → FINITO (0,375)
+2/7   → 7                sin 2 ni 5 → PURO
+5/12  → 12 = 2·2·3       mezclado → MIXTO (0,41666…)</div>
+      </div>
+      <div class="ojo block"><span class="lbl">Donde se cae todo el mundo</span>
+        <ul>
+          <li>Olvidar simplificar antes de mirar el denominador. <span class="eq">6/12</span> parece mixto y en realidad es <span class="eq">1/2 = 0,5</span>, finito.</li>
+          <li>Confundir mixto con puro. En <span class="eq">0,41666…</span> el 4 no se repite: por eso es mixto, no puro.</li>
+          <li>El gorrito va <b>solo</b> encima de lo que se repite. En <span class="eq">7,13̂</span> el 3 es el que repite, el 1 no.</li>
+        </ul>
+      </div>
+      <div class="block"><span class="lbl">Hazlo tú</span>
+        <details class="ej"><summary><span>Sin dividir: ¿3/20 es finito, puro o mixto?</span><span class="ver">Ver solución</span></summary>
+          <div class="ej-sol"><p><b>Finito.</b> 20 = 2·2·5, solo doses y cincos. Comprobación: 3/20 = 0,15.</p></div></details>
+        <details class="ej"><summary><span>¿Y 7/15?</span><span class="ver">Ver solución</span></summary>
+          <div class="ej-sol"><p><b>Mixto.</b> 15 = 3·5: hay un 5 mezclado con un 3. Comprobación: 7/15 = 0,4666… → el 4 no repite, el 6 sí.</p></div></details>
+        <details class="ej"><summary><span>Clasifica 51,9̂ y 3,51</span><span class="ver">Ver solución</span></summary>
+          <div class="ej-sol"><p><span class="eq">51,9̂</span> → periódico <b>puro</b> (repite justo después de la coma).<br><span class="eq">3,51</span> → <b>finito</b>, se acabó ahí. Los dos son racionales.</p></div></details>
+      </div>
+      <button class="btn btn-done" data-done="2">Marcar como hecha ✓</button>
+    </div>
+  </details>
+
+  <!-- 3 -->
+  <details class="ses" data-s="3">
+    <summary><span class="num">3</span><span><span class="s-tit">La jerarquía manda</span><span class="s-sub">18 ago · 35 min</span></span><span class="chev">›</span></summary>
+    <div class="s-body">
+      <div class="block"><span class="lbl">En una frase</span>
+        <p>De adentro hacia afuera: primero <b>( )</b>, luego <b>[ ]</b>, luego <b>{ }</b>. Y dentro de cada uno: potencias → multiplicar y dividir → sumar y restar.</p>
+        <div class="eqline">{[10 × (3+6) ÷ 3 × (9−4)] ÷ 2} × 20
+{[10 ×    9   ÷ 3 ×   5  ] ÷ 2} × 20
+{[    90      ÷ 3 ×   5  ] ÷ 2} × 20
+{[        30      ×   5  ] ÷ 2} × 20
+{            150           ÷ 2} × 20
+                      75         × 20  =  1.500</div>
+      </div>
+      <div class="truco block"><span class="lbl">El truco</span>
+        <p>Multiplicar y dividir <b>empatan</b>: se hacen de <b>izquierda a derecha</b>, no la multiplicación primero. En <span class="eq">90 ÷ 3 × 5</span> va <span class="eq">30 × 5 = 150</span>. Si hicieras <span class="eq">3 × 5</span> primero te daría 6, y está mal. Lo mismo entre sumar y restar.</p>
+      </div>
+      <div class="ojo block"><span class="lbl">Donde se cae todo el mundo</span>
+        <ul>
+          <li>El menos delante del corchete: <span class="eq">−[12 − (−3)] = −[15] = −15</span>. El signo se le reparte a <b>todo</b> lo de adentro, no solo al primero.</li>
+          <li>Restar un negativo. <span class="eq">−2 − (−3) = −2 + 3 = 1</span>. Dos menos seguidos se vuelven más, siempre.</li>
+          <li><b>Tu error favorito:</b> el m.c.m. mal escrito. Repasa el punto flojo 1 antes de este bloque.</li>
+        </ul>
+      </div>
+      <div class="block"><span class="lbl">Hazlo tú</span>
+        <details class="ej"><summary><span>{−[12 − (−3)] − 15} × (5 − 12)</span><span class="ver">Ver solución</span></summary>
+          <div class="ej-sol"><div class="eqline">{−[12 + 3] − 15} × (−7)
+{−15 − 15} × (−7)
+     −30    × (−7)  =  +210</div></div></details>
+        <details class="ej"><summary><span>[24 + (3 − 8 − 4)] ÷ (4 − 9)</span><span class="ver">Ver solución</span></summary>
+          <div class="ej-sol"><div class="eqline">[24 + (−9)] ÷ (−5)
+      15      ÷ (−5)  =  −3</div></div></details>
+        <details class="ej"><summary><span>−7/3 + 7/5 − 8/6 &nbsp;(el que te salió mal)</span><span class="ver">Ver solución</span></summary>
+          <div class="ej-sol"><p>m.c.m. de 3, 5 y 6 → <b>30</b>. Escríbelo y enciérralo antes de nada.</p><div class="eqline">−70/30 + 42/30 − 40/30
+      −68/30
+      −34/15   ≈ −2,27</div><p style="margin-top:8px">Comprobación rápida con decimales: −2,33 + 1,4 − 1,33 = −2,27 ✓</p></div></details>
+      </div>
+      <button class="btn btn-done" data-done="3">Marcar como hecha ✓</button>
+    </div>
+  </details>
+
+  <!-- 4 -->
+  <details class="ses" data-s="4">
+    <summary><span class="num">4</span><span><span class="s-tit">Los que no caben en una fracción</span><span class="s-sub">25 ago · 30 min</span></span><span class="chev">›</span></summary>
+    <div class="s-body">
+      <div class="block"><span class="lbl">En una frase</span>
+        <p>Los irracionales son decimales infinitos <b>sin período</b>. No se pueden escribir como fracción, y aun así tienen su punto exacto en la recta.</p>
+        <div class="eqline">π ≈ 3,1415…     e ≈ 2,71…     φ ≈ 1,61…
+√2  √3  √5  √7  √11   (raíces no exactas)</div>
+      </div>
+      <div class="truco block"><span class="lbl">El truco</span>
+        <p>Para ubicar <span class="eq">√n</span> en la recta usas <b>Pitágoras</b>: buscas dos catetos cuyos cuadrados sumen <b>n</b>, y la hipotenusa te da la raíz. Con el compás la bajas al eje.</p>
+        <div class="eqline">√2  →  catetos 1 y 1   (1 + 1 = 2)
+√5  →  catetos 2 y 1   (4 + 1 = 5)
+√13 →  catetos 3 y 2   (9 + 4 = 13)</div>
+        <p>Y hay un atajo: una vez tienes <span class="eq">√2</span> dibujado, con cateto <span class="eq">√2</span> y cateto 1 te sale <span class="eq">√3</span>. Así encadenas la espiral: √2, √3, √4, √5…</p>
+      </div>
+      <div class="ojo block"><span class="lbl">Donde se cae todo el mundo</span>
+        <ul>
+          <li>Creer que racional + irracional puede dar racional. <b>Nunca</b>: <span class="eq">3 + π ≈ 6,1415…</span> sigue siendo irracional.</li>
+          <li>Creer que irracional × irracional siempre es irracional. <b>Falso</b>: <span class="eq">√2 × √8 = 4</span>.</li>
+          <li>Ordenar de menor a mayor sin pasar a decimales. Pásalos todos a decimal primero y los acomodas sin pensar.</li>
+        </ul>
+      </div>
+      <div class="block"><span class="lbl">Hazlo tú</span>
+        <details class="ej"><summary><span>¿Qué catetos usas para ubicar √10?</span><span class="ver">Ver solución</span></summary>
+          <div class="ej-sol"><p><b>3 y 1</b>, porque <span class="eq">3² + 1² = 9 + 1 = 10</span>. La hipotenusa mide √10 ≈ 3,16.</p></div></details>
+        <details class="ej"><summary><span>Ordena de menor a mayor: √5 · 12/5 · −4 · √15 · −10/3</span><span class="ver">Ver solución</span></summary>
+          <div class="ej-sol"><p>A decimales: √5 ≈ 2,24 · 12/5 = 2,4 · −4 · √15 ≈ 3,87 · −10/3 ≈ −3,33</p><div class="eqline">−4  <  −10/3  <  √5  <  12/5  <  √15</div></div></details>
+        <details class="ej"><summary><span>Un cuadrado de lados 2 cm y 3 cm. ¿Cuánto mide la diagonal?</span><span class="ver">Ver solución</span></summary>
+          <div class="ej-sol"><div class="eqline">h² = 2² + 3² = 4 + 9 = 13
+h  = √13 ≈ 3,61 cm</div><p style="margin-top:8px">Es irracional: no hay fracción que lo dé exacto.</p></div></details>
+      </div>
+      <button class="btn btn-done" data-done="4">Marcar como hecha ✓</button>
+    </div>
+  </details>
+
+  <!-- 5 -->
+  <details class="ses" data-s="5">
+    <summary><span class="num">5</span><span><span class="s-tit">Las reglas del juego</span><span class="s-sub">3 y 10 sep · 25 min</span></span><span class="chev">›</span></summary>
+    <div class="s-body">
+      <div class="block"><span class="lbl">En una frase</span>
+        <p>Cinco propiedades, para suma y para multiplicación. Son las que te preguntan «¿cómo se llama esto?», y ahí se ganan puntos regalados.</p>
+        <div class="eqline">CLAUSURATIVA  real + real = real
+CONMUTATIVA   a + b = b + a        |  a × b = b × a
+ASOCIATIVA    (a+b)+c = a+(b+c)    |  (a×b)×c = a×(b×c)
+MODULATIVA    a + 0 = a            |  a × 1 = a
+INVERSO       a + (−a) = 0         |  a × 1/a = 1</div>
+      </div>
+      <div class="truco block"><span class="lbl">El truco</span>
+        <p>Para no confundirlas: <b>conmutativa</b> = cambio el <b>orden</b>. <b>Asociativa</b> = cambio los <b>paréntesis</b>, dejando el orden igual. Si lo que se movió fueron los números, es conmutativa; si se movieron los paréntesis, es asociativa.</p>
+      </div>
+      <div class="ojo block"><span class="lbl">Donde se cae todo el mundo</span>
+        <ul>
+          <li>La conmutativa <b>no aplica</b> en la resta ni en la división: <span class="eq">2,5 − 3,2 = −0,7</span> pero <span class="eq">3,2 − 2,5 = 0,7</span>. Distintos.</li>
+          <li>La clausurativa de la división tiene letra chica: solo vale <b>si el divisor no es cero</b>.</li>
+          <li>El módulo de la suma es <b>0</b>; el de la multiplicación es <b>1</b>. Se cambian todo el tiempo.</li>
+        </ul>
+      </div>
+      <div class="block"><span class="lbl">Hazlo tú</span>
+        <details class="ej"><summary><span>¿Qué propiedad es? (2,5 + 3,2) + 0,1 = 2,5 + (3,2 + 0,1)</span><span class="ver">Ver solución</span></summary>
+          <div class="ej-sol"><p><b>Asociativa</b> de la suma. Los números quedaron en el mismo orden; lo que se movió fue el paréntesis. Las dos dan 5,8.</p></div></details>
+        <details class="ej"><summary><span>¿Cuál es el inverso multiplicativo de −5? ¿Y el aditivo?</span><span class="ver">Ver solución</span></summary>
+          <div class="ej-sol"><p>Multiplicativo: <span class="eq">−1/5</span>, porque <span class="eq">−5 × (−1/5) = 1</span>.<br>Aditivo (el opuesto): <span class="eq">+5</span>, porque <span class="eq">−5 + 5 = 0</span>.</p></div></details>
+        <details class="ej"><summary><span>¿En cuál de las dos falla la conmutativa: resta o multiplicación?</span><span class="ver">Ver solución</span></summary>
+          <div class="ej-sol"><p>En la <b>resta</b> (y en la división). La multiplicación sí es conmutativa: <span class="eq">−7 × 8 = −8 × 7 = −56</span>.</p></div></details>
+      </div>
+      <button class="btn btn-done" data-done="5">Marcar como hecha ✓</button>
+    </div>
+  </details>
+
+  <!-- 6 -->
+  <details class="ses" data-s="6">
+    <summary><span class="num">6</span><span><span class="s-tit">Potencias: ¿sumo o multiplico los exponentes?</span><span class="s-sub">24 sep · 35 min</span></span><span class="chev">›</span></summary>
+    <div class="s-body">
+      <div class="block"><span class="lbl">En una frase</span>
+        <p>Cinco reglas. Todas dependen de una sola cosa: <b>si la base es la misma</b>.</p>
+        <div class="eqline">a⁰ = 1                       (a ≠ 0)
+aᵐ × aⁿ = aᵐ⁺ⁿ               misma base → SUMO
+aᵐ ÷ aⁿ = aᵐ⁻ⁿ               misma base → RESTO
+(aᵐ)ⁿ = aᵐˣⁿ                 potencia de potencia → MULTIPLICO
+aⁿ + 2aⁿ = 3aⁿ               sumar potencias iguales → sumo COEFICIENTES</div>
+      </div>
+      <div class="truco block"><span class="lbl">El truco</span>
+        <p>La pregunta que decide todo: <b>¿están multiplicadas o está una elevada a la otra?</b></p>
+        <div class="eqline">3² × 3⁴  → multiplicadas → SUMO  → 3⁶
+(3²)⁴    → una elevada  → MULTIPLICO → 3⁸</div>
+        <p>Y la quinta regla es distinta a las otras cuatro: <span class="eq">2π² + 8π² = 10π²</span>. Ahí <b>no</b> tocas el exponente, sumas los números de adelante — como cuando sumas 2 manzanas + 8 manzanas.</p>
+      </div>
+      <div class="ojo block"><span class="lbl">Donde se cae todo el mundo</span>
+        <ul>
+          <li><span class="eq">a⁰ = 1</span> siempre, aunque la base sea rarísima: <span class="eq">(√2)⁰ = 1</span>, <span class="eq">π⁰ = 1</span>. Pero ojo: <span class="eq">−3⁰ = −1</span>, porque el menos está por fuera.</li>
+          <li>Sumar exponentes cuando las bases son distintas. <span class="eq">2³ × 5³</span> <b>no</b> es 10⁶. Si las bases no coinciden, esa regla no se puede usar.</li>
+          <li>Al dividir, el orden importa: es <span class="eq">aᵐ⁻ⁿ</span>, arriba menos abajo, no al revés.</li>
+        </ul>
+      </div>
+      <div class="block"><span class="lbl">Hazlo tú</span>
+        <details class="ej"><summary><span>(3² × 3⁴)⁵ × 3³</span><span class="ver">Ver solución</span></summary>
+          <div class="ej-sol"><div class="eqline">(3²⁺⁴)⁵ × 3³      misma base dentro → sumo
+(3⁶)⁵   × 3³      potencia de potencia → multiplico
+3³⁰     × 3³      misma base → sumo
+            3³³</div></div></details>
+        <details class="ej"><summary><span>(3³ · 3 · 3² · 3⁵) ÷ (3³ · 3²)</span><span class="ver">Ver solución</span></summary>
+          <div class="ej-sol"><div class="eqline">Arriba: 3 + 1 + 2 + 5 = 11  →  3¹¹
+Abajo:  3 + 2         = 5   →  3⁵
+3¹¹ ÷ 3⁵ = 3¹¹⁻⁵ = 3⁶ = 729</div></div></details>
+        <details class="ej"><summary><span>−3e³ + 5e³</span><span class="ver">Ver solución</span></summary>
+          <div class="ej-sol"><p><span class="eq">2e³</span>. El exponente no se toca: solo sumas −3 + 5 = 2. Es la regla de las potencias iguales.</p></div></details>
+      </div>
+      <button class="btn btn-done" data-done="6">Marcar como hecha ✓</button>
+    </div>
+  </details>
+
+  <!-- 7 -->
+  <details class="ses" data-s="7">
+    <summary><span class="num">7</span><span><span class="s-tit">Raíces: la operación de vuelta</span><span class="s-sub">16 y 29 sep · 40 min</span></span><span class="chev">›</span></summary>
+    <div class="s-body">
+      <div class="block"><span class="lbl">En una frase</span>
+        <p>La radicación deshace la potenciación. Y su propiedad más útil es que <b>toda raíz es una potencia de exponente fraccionario</b>: con eso resuelves casi todo.</p>
+        <div class="eqline">ⁿ√(a·b) = ⁿ√a · ⁿ√b           producto (mismo índice)
+ⁿ√(a/b) = ⁿ√a ÷ ⁿ√b           cociente (mismo índice)
+ⁿ√(aᵐ)  = a^(m/n)             raíz → potencia  ⭐
+ⁿ√(ᵐ√a) = a^(1/(m·n))         raíz de raíz: índices se MULTIPLICAN
+k√a + j√a = (k+j)√a           solo si la raíz es IDÉNTICA</div>
+      </div>
+      <div class="truco block"><span class="lbl">El truco</span>
+        <p>Para sumar o restar raíces tienen que ser <b>gemelas</b>: mismo índice y mismo número adentro. <span class="eq">√3</span> y <span class="eq">∛3</span> no se suman. <span class="eq">√2</span> y <span class="eq">√3</span> tampoco. Se tratan como letras distintas en álgebra.</p>
+        <p style="margin-top:8px">Y antes de decir «no se pueden sumar», <b>simplifica</b>: a veces son gemelas disfrazadas.</p>
+        <div class="eqline">2√20 + √125 + √45
+20 = 4·5   125 = 25·5   45 = 9·5
+2·2√5 + 5√5 + 3√5
+ 4√5  + 5√5 + 3√5  =  12√5   ← ¡sí eran gemelas!</div>
+      </div>
+      <div class="ojo block"><span class="lbl">Donde se cae todo el mundo</span>
+        <ul>
+          <li>La propiedad del producto <b>solo</b> vale si el índice es el mismo. <span class="eq">√2 × ∛2</span> no se junta así.</li>
+          <li>Índice par con número negativo: <span class="eq">√(−81)</span> <b>no existe</b> en los reales. Con índice impar sí: <span class="eq">∛(−27) = −3</span>.</li>
+          <li>Al multiplicar binomios con raíces, hay que repartir los cuatro productos. Y recuerda: <span class="eq">√7 × √7 = 7</span>, la raíz desaparece.</li>
+        </ul>
+      </div>
+      <div class="block"><span class="lbl">Hazlo tú</span>
+        <details class="ej"><summary><span>3√5 + 8√5 − 12√5</span><span class="ver">Ver solución</span></summary>
+          <div class="ej-sol"><p>Las tres son gemelas, así que solo sumas los coeficientes: <span class="eq">3 + 8 − 12 = −1</span>.</p><div class="eqline">= −1√5  =  −√5</div><p style="margin-top:8px">Cuidado: no es −7√5. Haz la cuenta de los coeficientes aparte, en el margen.</p></div></details>
+        <details class="ej"><summary><span>(2 + √7)(3 − √7)</span><span class="ver">Ver solución</span></summary>
+          <div class="ej-sol"><div class="eqline">2·3  +  2·(−√7)  +  √7·3  +  √7·(−√7)
+ 6   −    2√7    +   3√7   −      7
+        (6 − 7)  +  (−2 + 3)√7
+             −1  +  √7</div></div></details>
+        <details class="ej"><summary><span>⁵√(√(5²⁰)) &nbsp;y&nbsp; √50 ÷ √2</span><span class="ver">Ver solución</span></summary>
+          <div class="ej-sol"><div class="eqline">⁵√(√(5²⁰))  índices se multiplican: 5·2 = 10
+= 5^(20/10) = 5² = 25
+
+√50 ÷ √2 = √(50÷2) = √25 = 5</div></div></details>
+      </div>
+      <button class="btn btn-done" data-done="7">Marcar como hecha ✓</button>
+    </div>
+  </details>
+
+  <!-- 8 -->
+  <details class="ses" data-s="8">
+    <summary><span class="num">8</span><span><span class="s-tit">Logaritmos: la pregunta al revés</span><span class="s-sub">6 y 13 oct · 30 min</span></span><span class="chev">›</span></summary>
+    <div class="s-body">
+      <div class="block"><span class="lbl">En una frase</span>
+        <p>Un logaritmo pregunta: <b>¿a qué exponente elevo la base para llegar a este número?</b> Nada más.</p>
+        <div class="eqline">log₅ 25 = 2    porque  5² = 25
+log₁₀ 1000 = 3 porque  10³ = 1000
+log₅ 125 = 3   porque  5³ = 125</div>
+      </div>
+      <div class="truco block"><span class="lbl">El truco</span>
+        <p>Las cuatro propiedades son las de las potencias, <b>una escalera más abajo</b>. Donde las potencias multiplican, los logaritmos suman:</p>
+        <div class="eqline">POTENCIAS            LOGARITMOS
+aᵐ × aⁿ (sumo exp.)  log(a·b) = log a + log b
+aᵐ ÷ aⁿ (resto exp.) log(a/b) = log a − log b
+(aᵐ)ⁿ   (multiplico) log(aˣ)  = x · log a
+                     log(1/b) = −log b</div>
+        <p>Si se te olvida una, reconstrúyela desde la potencia que le corresponde.</p>
+      </div>
+      <div class="ojo block"><span class="lbl">Donde se cae todo el mundo</span>
+        <ul>
+          <li><span class="eq">log(a + b)</span> <b>no</b> es <span class="eq">log a + log b</span>. La propiedad es del <b>producto</b>, no de la suma. Es el error más castigado del tema.</li>
+          <li>La base tiene que ser la misma para poder juntar dos logaritmos.</li>
+          <li>El exponente baja a multiplicar <b>todo</b> el logaritmo: <span class="eq">log₃ 81⁴ = 4 · log₃ 81 = 4 · 4 = 16</span>.</li>
+        </ul>
+      </div>
+      <div class="block"><span class="lbl">Hazlo tú</span>
+        <details class="ej"><summary><span>log₃(27 × 243)</span><span class="ver">Ver solución</span></summary>
+          <div class="ej-sol"><div class="eqline">= log₃27 + log₃243
+  27 = 3³ → 3     243 = 3⁵ → 5
+= 3 + 5 = 8</div></div></details>
+        <details class="ej"><summary><span>log₅(5/125)</span><span class="ver">Ver solución</span></summary>
+          <div class="ej-sol"><div class="eqline">= log₅5 − log₅125
+= 1 − 3 = −2</div><p style="margin-top:8px">Comprobación: 5/125 = 1/25 = 5⁻², y el exponente es −2 ✓</p></div></details>
+        <details class="ej"><summary><span>log₂(64/32)</span><span class="ver">Ver solución</span></summary>
+          <div class="ej-sol"><div class="eqline">= log₂64 − log₂32 = 6 − 5 = 1</div><p style="margin-top:8px">O directo: 64/32 = 2, y log₂2 = 1 ✓ Las dos rutas dan lo mismo — esa es tu comprobación gratis.</p></div></details>
+      </div>
+      <button class="btn btn-done" data-done="8">Marcar como hecha ✓</button>
+    </div>
+  </details>
+
+  <!-- 9 -->
+  <details class="ses" data-s="9">
+    <summary><span class="num">9</span><span><span class="s-tit">Ecuaciones: la balanza</span><span class="s-sub">15 oct · 40 min</span></span><span class="chev">›</span></summary>
+    <div class="s-body">
+      <div class="block"><span class="lbl">En una frase</span>
+        <p>Una ecuación es una balanza en equilibrio. Lo que le hagas a un lado, se lo haces al otro. Y el objetivo siempre es el mismo: dejar la letra sola.</p>
+        <div class="eqline">El orden de siempre:
+1. Quito paréntesis (repartiendo)
+2. Letras a la izquierda, números a la derecha
+3. Junto términos semejantes
+4. Divido por el número que acompaña a la letra
+5. COMPRUEBO reemplazando  ⭐</div>
+      </div>
+      <div class="truco block"><span class="lbl">El truco</span>
+        <p>Si hay fracciones, <b>multiplica toda la ecuación por el m.c.m. de los denominadores</b> y desaparecen de una. Es mucho más rápido que ir sumando fracción por fracción — y te quita de encima tu punto flojo número 1.</p>
+        <div class="eqline">x/2 + 3/4 = 5/6          m.c.m.(2,4,6) = 12
+×12:  6x + 9 = 10
+      6x = 1
+      x = 1/6</div>
+      </div>
+      <div class="ojo block"><span class="lbl">Donde se cae todo el mundo</span>
+        <ul>
+          <li>Al pasar un número al otro lado cambia de signo. Al pasar uno que <b>multiplica</b>, pasa dividiendo. No son lo mismo.</li>
+          <li>Repartir mal el paréntesis: <span class="eq">6(3n + 4) = 18n + 24</span>, el 6 entra a los <b>dos</b>.</li>
+          <li>Entregar sin comprobar. Veinte segundos. Ya sabes por qué.</li>
+        </ul>
+      </div>
+      <div class="block"><span class="lbl">Hazlo tú</span>
+        <details class="ej"><summary><span>6(3n + 4) = 2(n − 11)</span><span class="ver">Ver solución</span></summary>
+          <div class="ej-sol"><div class="eqline">18n + 24 = 2n − 22
+18n − 2n = −22 − 24
+     16n = −46
+       n = −46/16 = −23/8 = −2,875</div><p style="margin-top:8px">Comprobación: 6(3·(−2,875)+4) = 6(−4,625) = −27,75 · 2(−2,875−11) = 2(−13,875) = −27,75 ✓</p></div></details>
+        <details class="ej"><summary><span>0,4x + 0,2 = 0,2x − 0,4</span><span class="ver">Ver solución</span></summary>
+          <div class="ej-sol"><div class="eqline">0,4x − 0,2x = −0,4 − 0,2
+      0,2x  = −0,6
+         x  = −0,6 ÷ 0,2 = −3</div><p style="margin-top:8px">Comprobación: 0,4(−3)+0,2 = −1 · 0,2(−3)−0,4 = −1 ✓</p></div></details>
+        <details class="ej"><summary><span>Una compañía cobra $310 por minuto más $6.300 de cuota fija. La factura de Natalia fue $62.100. ¿Cuántos minutos habló?</span><span class="ver">Ver solución</span></summary>
+          <div class="ej-sol"><div class="eqline">310m + 6.300 = 62.100
+310m = 62.100 − 6.300
+310m = 55.800
+   m = 55.800 ÷ 310 = 180 minutos</div><p style="margin-top:8px"><b>Comprueba siempre:</b> 310 × 180 = 55.800, más 6.300 = 62.100 ✓ Con 160 te habría dado 55.900 — por eso 160 no era.</p></div></details>
+      </div>
+      <button class="btn btn-done" data-done="9">Marcar como hecha ✓</button>
+    </div>
+  </details>
+
+  <!-- 10 -->
+  <details class="ses" data-s="10">
+    <summary><span class="num">10</span><span><span class="s-tit">Inecuaciones: la regla que todos olvidan</span><span class="s-sub">20 y 28 oct · 40 min</span></span><span class="chev">›</span></summary>
+    <div class="s-body">
+      <div class="block"><span class="lbl">En una frase</span>
+        <p>Se resuelven <b>exactamente igual</b> que una ecuación, con una sola diferencia: si multiplicas o divides por un <b>negativo</b>, el signo se voltea.</p>
+        <div class="eqline">(−∞, a)   ────────○        a NO entra
+(a, ∞)         ○────────   a NO entra
+(−∞, a]   ────────●        a SÍ entra
+[a, ∞)         ●────────   a SÍ entra
+[a, b]         ●────────●  los dos entran
+(a, b)         ○────────○  ninguno entra</div>
+      </div>
+      <div class="truco block"><span class="lbl">El truco</span>
+        <p><b>Paréntesis = bolita vacía = el número no entra.</b> <b>Corchete = bolita llena = sí entra.</b> El infinito <b>siempre</b> lleva paréntesis: nunca se puede llegar a él.</p>
+        <p style="margin-top:8px">Y para el signo, la única pregunta válida es: <b>¿el número por el que divido es negativo?</b></p>
+        <div class="eqline">−2x ≥ 8      divido entre −2 (negativo) → VOLTEO
+  x ≤ −4     → (−∞, −4]
+
+9,6z ≥ −5,3  divido entre 9,6 (positivo) → NO toco nada
+   z ≥ −0,55 → [−0,55 , ∞)</div>
+      </div>
+      <div class="ojo block"><span class="lbl">Donde se cae todo el mundo</span>
+        <ul>
+          <li><b>Tu error marcado en rojo:</b> voltear el signo porque al otro lado hay un número negativo. No. Solo importa el número que <b>divide</b>.</li>
+          <li>Escribir el intervalo al revés. El menor va siempre a la izquierda: <span class="eq">(−0,125 , ∞)</span>, nunca <span class="eq">(∞ , −0,125)</span>.</li>
+          <li>Confundir <span class="eq">&lt;</span> con <span class="eq">≤</span> al dibujar. Si la inecuación trae la rayita, la bolita va llena.</li>
+        </ul>
+      </div>
+      <div class="block"><span class="lbl">Hazlo tú</span>
+        <details class="ej"><summary><span>3x ≥ 5x + 8</span><span class="ver">Ver solución</span></summary>
+          <div class="ej-sol"><div class="eqline">3x − 5x ≥ 8
+   −2x  ≥ 8        divido entre −2 → VOLTEO
+     x  ≤ −4
+Intervalo: (−∞, −4]      ────────●
+                                −4</div></div></details>
+        <details class="ej"><summary><span>(−4/7)n − 1/14 &lt; 0 &nbsp;(el que te marcaron)</span><span class="ver">Ver solución</span></summary>
+          <div class="ej-sol"><div class="eqline">−4/7 n < 1/14
+divido entre −4/7 (NEGATIVO) → VOLTEO
+     n > (1/14) × (−7/4)
+     n > −7/56 = −1/8 = −0,125
+Intervalo: (−0,125 , ∞)       ○────────
+                            −0,125</div><p style="margin-top:8px">El negativo era el <b>−4/7</b> que divide. Por eso sí se voltea, y por eso el intervalo abre hacia la derecha.</p></div></details>
+        <details class="ej"><summary><span>x − (7x − 3) &lt; 7 − 4x − 5</span><span class="ver">Ver solución</span></summary>
+          <div class="ej-sol"><div class="eqline">x − 7x + 3 < 2 − 4x       ojo al signo del paréntesis
+  −6x + 3  < 2 − 4x
+  −6x + 4x < 2 − 3
+      −2x  < −1           divido entre −2 → VOLTEO
+        x  > 1/2 = 0,5
+Intervalo: (0,5 , ∞)</div></div></details>
+      </div>
+      <button class="btn btn-done" data-done="10">Marcar como hecha ✓</button>
+    </div>
+  </details>
+
+  <!-- CHULETA -->
+  <div class="card">
+    <h2>📌 Chuleta de bolsillo</h2>
+    <p class="lead" style="font-size:.95rem">Lo mínimo que tienes que saber de memoria el día del parcial.</p>
+    <div class="chu">
+      <div><h4>Potencias</h4><code>a⁰ = 1
+aᵐ·aⁿ = aᵐ⁺ⁿ
+aᵐ÷aⁿ = aᵐ⁻ⁿ
+(aᵐ)ⁿ = aᵐˣⁿ</code></div>
+      <div><h4>Raíces</h4><code>ⁿ√(a·b) = ⁿ√a·ⁿ√b
+ⁿ√(aᵐ) = a^(m/n)
+k√a + j√a = (k+j)√a
+√(−n) no existe</code></div>
+      <div><h4>Logaritmos</h4><code>log(a·b) = log a + log b
+log(a/b) = log a − log b
+log(aˣ) = x·log a
+log(1/b) = −log b</code></div>
+      <div><h4>Intervalos</h4><code>( ) → ○ no entra
+[ ] → ● sí entra
+∞ → siempre (
+menor a la izquierda</code></div>
+      <div><h4>Decimales</h4><code>solo 2 y 5 → finito
+ni 2 ni 5 → puro
+mezclado → mixto</code></div>
+      <div><h4>La regla de oro</h4><code>Divido por negativo
+→ volteo el signo
+Divido por positivo
+→ no toco nada</code></div>
+    </div>
+  </div>
+
+  <!-- CTA -->
+  <div class="cta">
+    <h2>¿Lista para la prueba?</h2>
+    <p>Quince preguntas, cuarenta minutos y reloj corriendo. Se califica solo y al final te dice <b>qué sesión repasar</b> por cada una que falles. Puedes repetirlo: las preguntas cambian cada vez.</p>
+    <a class="btn" href="parcial-matematicas.html">Presentar el simulador →</a>
+  </div>
+
+  <footer>Hecho con las fotos de tu cuaderno · 19 de noviembre de 2026</footer>
+</div>
+
+<script>
+(function(){
+  "use strict";
+  var KEY="emi-mat-v1";
+  function load(){ try{ return JSON.parse(localStorage.getItem(KEY)||"{}"); }catch(e){ return {}; } }
+  function save(o){ try{ localStorage.setItem(KEY,JSON.stringify(o)); }catch(e){} }
+  var st=load();
+  if(!st.done) st.done={};
+
+  /* ---- progreso ---- */
+  var bar=document.getElementById("pBar"), num=document.getElementById("pNum"), msg=document.getElementById("pMsg");
+  var msgs=["Arranca por la 1. Están en orden por algo: cada una usa lo de la anterior.",
+            "Primera lista. Lo difícil era empezar.",
+            "Dos. Ya tienes la base de todo el año.",
+            "Tres. Vas con ritmo.",
+            "Cuatro. Mitad del camino asomando.",
+            "Cinco de diez. Vas justo por la mitad. 💪",
+            "Seis. Lo que queda es lo que más cae en parcial.",
+            "Siete. Ya puedes hacer el simulador de una vez y ver cómo vas.",
+            "Ocho. Quedan dos y son las dos de ecuaciones.",
+            "Nueve. La última es la de la regla del signo. Esa vale doble.",
+            "Diez de diez. Haz el simulador. 🎉"];
+  function paint(){
+    var n=0,i;
+    for(i=1;i<=10;i++) if(st.done[i]) n++;
+    bar.style.width=(n*10)+"%"; num.textContent=n; msg.textContent=msgs[n];
+    for(i=1;i<=10;i++){
+      var el=document.querySelector('.ses[data-s="'+i+'"]');
+      if(!el) continue;
+      var b=el.querySelector("[data-done]");
+      if(st.done[i]){ el.classList.add("done"); b.textContent="Hecha ✓ (toca para desmarcar)"; }
+      else { el.classList.remove("done"); b.textContent="Marcar como hecha ✓"; }
+    }
+  }
+  Array.prototype.forEach.call(document.querySelectorAll("[data-done]"),function(b){
+    b.addEventListener("click",function(){
+      var k=b.getAttribute("data-done");
+      if(st.done[k]) delete st.done[k]; else st.done[k]=1;
+      save(st); paint();
+    });
+  });
+  paint();
+
+  /* ---- contador ---- */
+  var inp=document.getElementById("fecha"), big=document.getElementById("cdBig"), sub=document.getElementById("cdSub");
+  function hoy(){ var d=new Date(); return new Date(d.getFullYear(),d.getMonth(),d.getDate()); }
+  function pintaFecha(){
+    if(!inp.value){ big.textContent="Pon la fecha y te reparto las sesiones";
+      sub.textContent="Se guarda sola en este dispositivo."; return; }
+    var p=inp.value.split("-");
+    var f=new Date(+p[0],+p[1]-1,+p[2]);
+    var dias=Math.round((f-hoy())/86400000);
+    var falta=0; for(var i=1;i<=10;i++) if(!st.done[i]) falta++;
+    if(dias<0){ big.textContent="Esa fecha ya pasó"; sub.textContent="¿Será la del próximo parcial? Cámbiala arriba."; return; }
+    if(dias===0){ big.textContent="¡Es hoy! 🍀"; sub.textContent="Dale una pasada a la chuleta de bolsillo y al punto flojo 2. Nada más."; return; }
+    big.textContent = dias===1 ? "Falta 1 día" : "Faltan "+dias+" días";
+    if(falta===0){ sub.textContent="Ya hiciste las diez sesiones. Ahora repite el simulador hasta que te dé más de 4,0 dos veces seguidas."; return; }
+    var pd=Math.ceil(falta/dias);
+    sub.textContent = pd<=1
+      ? "Te quedan "+falta+" sesiones. Con una al día llegas sobrada."
+      : "Te quedan "+falta+" sesiones en "+dias+" días → "+pd+" por día. Súmale un simulador el día antes.";
+  }
+  if(st.fecha){ inp.value=st.fecha; }
+  inp.addEventListener("change",function(){ st.fecha=inp.value; save(st); pintaFecha(); });
+  var _paint=paint;
+  paint=function(){ _paint(); pintaFecha(); };
+  pintaFecha();
+})();
+</script>
+</body>
+</html>

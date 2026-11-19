@@ -66,6 +66,23 @@ a{color:var(--violet)}
 .bar-row{display:flex;justify-content:space-between;align-items:baseline;gap:10px;font-size:.92rem;color:var(--soft)}
 .bar-row b{color:var(--ink);font-size:1.05rem}
 
+/* ---------- calendario ---------- */
+.hide{display:none!important}
+.cal{display:flex;flex-direction:column;gap:9px}
+.dia{display:grid;grid-template-columns:72px 1fr;gap:13px;align-items:start;
+  border:1px solid var(--line);border-radius:14px;padding:12px 14px}
+.dia.hoy{border-color:var(--violet);background:var(--violet-soft)}
+.dia.dia-parcial{border:0;background:linear-gradient(135deg,var(--pink),var(--violet));color:#fff}
+.dia.dia-parcial .d-num,.dia.dia-parcial .d-sub{color:#fff;opacity:.92}
+.d-when{display:flex;flex-direction:column;line-height:1.25}
+.d-dow{font-weight:700;font-size:.93rem;text-transform:capitalize}
+.d-num{font-size:.8rem;color:var(--soft)}
+.d-what{font-size:.96rem;line-height:1.45}
+.d-sub{font-size:.85rem;color:var(--soft);margin-top:3px}
+.pill{display:inline-block;font-size:.76rem;font-weight:700;background:var(--mango-soft);
+  color:var(--mango);border-radius:999px;padding:2px 9px;margin-top:5px}
+.dia.dia-parcial .pill{background:rgba(255,255,255,.25);color:#fff}
+
 /* ---------- línea de tiempo ---------- */
 .tl{display:flex;flex-direction:column;gap:0;position:relative}
 .tl-item{display:grid;grid-template-columns:62px 1fr;gap:14px;padding:11px 0;align-items:start;
@@ -164,6 +181,14 @@ footer{text-align:center;color:var(--soft);font-size:.86rem;padding-top:8px}
     <input type="date" id="fecha">
     <div class="cd-big" id="cdBig">Pon la fecha y te reparto las sesiones</div>
     <div class="cd-sub" id="cdSub">Se guarda sola en este dispositivo.</div>
+  </div>
+
+  <!-- CALENDARIO -->
+  <div class="card hide" id="calCard">
+    <h2>📆 Tu calendario</h2>
+    <p class="lead" style="font-size:.95rem" id="calIntro"></p>
+    <div class="cal" id="cal"></div>
+    <p class="lead" style="font-size:.9rem">Se reparte solo. Si marcas sesiones como hechas, el resto se vuelve a acomodar en los días que queden.</p>
   </div>
 
   <!-- PROGRESO -->
@@ -716,26 +741,106 @@ Divido por positivo
   });
   paint();
 
-  /* ---- contador ---- */
+  /* ---- contador y calendario ---- */
   var inp=document.getElementById("fecha"), big=document.getElementById("cdBig"), sub=document.getElementById("cdSub");
+  var calCard=document.getElementById("calCard"), cal=document.getElementById("cal"), calIntro=document.getElementById("calIntro");
+  var DOW=["domingo","lunes","martes","miércoles","jueves","viernes","sábado"];
+  var MES=["ene","feb","mar","abr","may","jun","jul","ago","sep","oct","nov","dic"];
+  var TIT={1:"Conjuntos numéricos",2:"Expresión decimal",3:"Operaciones combinadas",
+           4:"Irracionales y la recta",5:"Propiedades de los reales",6:"Potenciación",
+           7:"Radicación",8:"Logaritmación",9:"Ecuaciones",10:"Inecuaciones e intervalos"};
+  var POR_DEFECTO="2026-11-24";
+
   function hoy(){ var d=new Date(); return new Date(d.getFullYear(),d.getMonth(),d.getDate()); }
+  function dmy(d){ return d.getDate()+" "+MES[d.getMonth()]; }
+
+  /* reparte n cosas en d días: uniforme, y los sobrantes a los PRIMEROS días */
+  function repartir(n,d){
+    var base=Math.floor(n/d), resto=n%d, a=[], i;
+    for(i=0;i<d;i++) a.push(base+(i<resto?1:0));
+    return a;
+  }
+
   function pintaFecha(){
-    if(!inp.value){ big.textContent="Pon la fecha y te reparto las sesiones";
-      sub.textContent="Se guarda sola en este dispositivo."; return; }
+    if(!inp.value){
+      big.textContent="Pon la fecha y te reparto las sesiones";
+      sub.textContent="Se guarda sola en este dispositivo.";
+      calCard.classList.add("hide"); return;
+    }
     var p=inp.value.split("-");
     var f=new Date(+p[0],+p[1]-1,+p[2]);
-    var dias=Math.round((f-hoy())/86400000);
-    var falta=0; for(var i=1;i<=10;i++) if(!st.done[i]) falta++;
-    if(dias<0){ big.textContent="Esa fecha ya pasó"; sub.textContent="¿Será la del próximo parcial? Cámbiala arriba."; return; }
-    if(dias===0){ big.textContent="¡Es hoy! 🍀"; sub.textContent="Dale una pasada a la chuleta de bolsillo y al punto flojo 2. Nada más."; return; }
+    var h=hoy();
+    var dias=Math.round((f-h)/86400000);
+    var pend=[], i;
+    for(i=1;i<=10;i++) if(!st.done[i]) pend.push(i);
+
+    if(dias<0){ big.textContent="Esa fecha ya pasó";
+      sub.textContent="¿Será la del próximo parcial? Cámbiala arriba.";
+      calCard.classList.add("hide"); return; }
+
+    if(dias===0){ big.textContent="¡Es hoy! 🍀";
+      sub.textContent="Una pasada a la chuleta de bolsillo y al punto flojo 2, la regla del signo. Nada más: a esta hora repasar de más confunde.";
+      calCard.classList.add("hide"); return; }
+
     big.textContent = dias===1 ? "Falta 1 día" : "Faltan "+dias+" días";
-    if(falta===0){ sub.textContent="Ya hiciste las diez sesiones. Ahora repite el simulador hasta que te dé más de 4,0 dos veces seguidas."; return; }
-    var pd=Math.ceil(falta/dias);
-    sub.textContent = pd<=1
-      ? "Te quedan "+falta+" sesiones. Con una al día llegas sobrada."
-      : "Te quedan "+falta+" sesiones en "+dias+" días → "+pd+" por día. Súmale un simulador el día antes.";
+    sub.textContent = pend.length===0
+      ? "Ya hiciste las diez sesiones. Ahora repite el simulador hasta sacarte más de 4,0 dos veces seguidas."
+      : "Te quedan "+pend.length+(pend.length===1?" sesión":" sesiones")+". Abajo te las repartí día por día.";
+
+    /* ---- calendario ---- */
+    cal.innerHTML="";
+    calCard.classList.remove("hide");
+    var cuota=repartir(pend.length,dias), k=0, filas=[];
+    for(i=0;i<dias;i++){
+      var d=new Date(h.getFullYear(),h.getMonth(),h.getDate()+i);
+      var mias=cuota[i]>0 ? pend.slice(k,k+cuota[i]) : [];
+      k+=cuota[i];
+      filas.push({d:d, ses:mias, ultimo:(i===dias-1), penultimo:(i===dias-2 && dias>=3)});
+    }
+    if(pend.length===0) calIntro.textContent="Ya no quedan sesiones: estos días son para repetir el simulador.";
+    else if(dias===1) calIntro.textContent="Queda un solo día, así que va todo junto. Empieza por la 10, que es la que más cae.";
+    else calIntro.textContent="Así quedan repartidas las "+pend.length+" que te faltan. Hoy cuenta: "+
+         (cuota[0]===1?"es 1":"son "+cuota[0])+".";
+
+    /* "Sesión 5" · "Sesiones 5 y 6" · "Sesiones 5, 6 y 7" · "Sesiones 1 a 10" si son muchas seguidas */
+    function listaSes(a){
+      if(a.length===1) return "Sesión "+a[0];
+      var seguidas = a[a.length-1]-a[0] === a.length-1;
+      if(a.length>=4 && seguidas) return "Sesiones "+a[0]+" a "+a[a.length-1];
+      return "Sesiones "+a.slice(0,-1).join(", ")+" y "+a[a.length-1];
+    }
+    function listaTemas(a){
+      if(a.length<=3) return a.map(function(n){ return TIT[n]; }).join(" · ");
+      return "de "+TIT[a[0]]+" a "+TIT[a[a.length-1]];
+    }
+
+    filas.forEach(function(r,idx){
+      var el=document.createElement("div");
+      el.className="dia"+(idx===0?" hoy":"");
+      var qué="";
+      if(r.ses.length===0) qué="<b>Día libre.</b> Repasa lo que menos te quedó o haz el simulador otra vez.";
+      else qué="<b>"+listaSes(r.ses)+"</b><div class='d-sub'>"+listaTemas(r.ses)+"</div>";
+      var sim="";
+      if(r.ses.length===0) sim="";
+      else if(r.ultimo) sim="<span class='pill'>+ simulador, el definitivo</span>";
+      else if(r.penultimo) sim="<span class='pill'>+ primer simulador</span>";
+      el.innerHTML="<div class='d-when'><span class='d-dow'>"+(idx===0?"hoy":DOW[r.d.getDay()])+
+        "</span><span class='d-num'>"+dmy(r.d)+"</span></div><div class='d-what'>"+qué+sim+"</div>";
+      cal.appendChild(el);
+    });
+    var pa=document.createElement("div");
+    pa.className="dia dia-parcial";
+    pa.innerHTML="<div class='d-when'><span class='d-dow'>"+DOW[f.getDay()]+
+      "</span><span class='d-num'>"+dmy(f)+"</span></div><div class='d-what'><b>🍀 El parcial</b>"+
+      "<div class='d-sub'>En la mañana, solo la chuleta de bolsillo y la regla del signo. Nada nuevo.</div></div>";
+    cal.appendChild(pa);
   }
+
   if(st.fecha){ inp.value=st.fecha; }
+  else {
+    var pd=POR_DEFECTO.split("-");
+    if(new Date(+pd[0],+pd[1]-1,+pd[2]) >= hoy()){ inp.value=POR_DEFECTO; st.fecha=POR_DEFECTO; save(st); }
+  }
   inp.addEventListener("change",function(){ st.fecha=inp.value; save(st); pintaFecha(); });
   var _paint=paint;
   paint=function(){ _paint(); pintaFecha(); };

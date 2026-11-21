@@ -1,0 +1,781 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Recuperación de Matemáticas · Plan</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Lexend:wght@400;500;600;700&family=Gochi+Hand&display=swap">
+<style>
+:root{
+  --paper:#F7F4FB;--sheet:#fff;--ink:#2A2140;--soft:#6B6283;--line:#E4DDF0;
+  --violet:#7B3FE4;--pink:#E8418A;--teal:#0F7C80;--mango:#E07A00;--lima:#4E8C1E;--rojo:#D32F4A;
+  --violet-soft:#F2EBFF;--pink-soft:#FFEDF5;--teal-soft:#E3F6F6;--mango-soft:#FFF2DE;--lima-soft:#EEF8E2;--rojo-soft:#FFEBEE;
+  --on:#fff;
+  --display:"Bricolage Grotesque","Avenir Next",system-ui,sans-serif;
+  --body:"Lexend","Segoe UI",system-ui,sans-serif;
+  --hand:"Gochi Hand",cursive;
+  --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --paper:#16121F;--sheet:#211B2E;--ink:#F1ECFA;--soft:#B3A9C9;--line:#3A3150;
+  --violet:#A98BFF;--pink:#FF6FAE;--teal:#4FC9C9;--mango:#FFB454;--lima:#A8D96A;--rojo:#FF7585;
+  --violet-soft:#2C2342;--pink-soft:#36203A;--teal-soft:#15323A;--mango-soft:#3A2E1B;--lima-soft:#243318;--rojo-soft:#3A1E26;
+  --on:#16121F;color-scheme:dark;
+}}
+:root[data-theme="dark"]{
+  --paper:#16121F;--sheet:#211B2E;--ink:#F1ECFA;--soft:#B3A9C9;--line:#3A3150;
+  --violet:#A98BFF;--pink:#FF6FAE;--teal:#4FC9C9;--mango:#FFB454;--lima:#A8D96A;--rojo:#FF7585;
+  --violet-soft:#2C2342;--pink-soft:#36203A;--teal-soft:#15323A;--mango-soft:#3A2E1B;--lima-soft:#243318;--rojo-soft:#3A1E26;
+  --on:#16121F;color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--body);line-height:1.55;
+  padding:26px max(16px,env(safe-area-inset-right,0px)) 60px max(16px,env(safe-area-inset-left,0px));
+  -webkit-text-size-adjust:100%}
+.wrap{max-width:760px;margin:0 auto;display:flex;flex-direction:column;gap:26px}
+h1{font-family:var(--display);font-size:clamp(2rem,7.5vw,3rem);margin:0;line-height:1.04;letter-spacing:-.02em}
+h2{font-family:var(--display);font-size:clamp(1.3rem,4.5vw,1.7rem);margin:0;line-height:1.15}
+h3{font-family:var(--display);font-size:1.08rem;margin:0}
+h4{margin:0;font-family:var(--display);font-size:.98rem}
+p{margin:0}
+a{color:var(--violet)}
+.hand{font-family:var(--hand);font-size:1.35rem;color:var(--pink);line-height:1}
+.lead{font-size:1.05rem;color:var(--soft)}
+.top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.back{text-decoration:none;font-weight:600;font-size:.92rem;color:var(--soft);
+  border:1px solid var(--line);border-radius:999px;padding:7px 14px;background:var(--sheet)}
+.card{background:var(--sheet);border:1px solid var(--line);border-radius:20px;padding:20px;
+  display:flex;flex-direction:column;gap:14px}
+
+/* notas de los dos exámenes */
+.exams{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:430px){.exams{grid-template-columns:1fr}}
+.ex{border:1px solid var(--line);border-radius:16px;padding:15px 16px;display:flex;flex-direction:column;gap:3px;
+  background:var(--rojo-soft);border-left:5px solid var(--rojo)}
+.ex .enom{font-size:.82rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--soft)}
+.ex .enota{font-family:var(--display);font-size:2.3rem;line-height:1;color:var(--rojo)}
+.ex .edet{font-size:.86rem;color:var(--soft)}
+
+/* contador */
+.countdown{background:linear-gradient(135deg,var(--violet),var(--pink));color:#fff;border:0;
+  border-radius:22px;padding:22px;display:flex;flex-direction:column;gap:12px}
+.countdown label{font-size:.9rem;opacity:.9;font-weight:600}
+.countdown input[type=date]{font-family:var(--body);font-size:1rem;padding:10px 12px;border-radius:12px;
+  border:0;background:rgba(255,255,255,.95);color:#2A2140;width:100%;max-width:260px}
+.cd-big{font-family:var(--display);font-size:clamp(1.6rem,6vw,2.3rem);line-height:1.1}
+.cd-sub{font-size:.95rem;opacity:.92}
+
+/* mapa de puntos */
+.mapa{display:flex;flex-direction:column;gap:11px}
+.mp{display:grid;grid-template-columns:1fr auto;gap:4px 12px;align-items:baseline}
+.mp .mnom{font-size:.95rem;font-weight:600}
+.mp .mpts{font-family:var(--mono);font-size:.9rem;color:var(--rojo);font-weight:700;white-space:nowrap}
+.mp .mbar{grid-column:1/-1;height:10px;background:var(--line);border-radius:999px;overflow:hidden}
+.mp .mbar i{display:block;height:100%;border-radius:999px;background:linear-gradient(90deg,var(--pink),var(--rojo))}
+.mp .mdet{grid-column:1/-1;font-size:.84rem;color:var(--soft)}
+
+/* progreso */
+.bar{height:14px;background:var(--line);border-radius:999px;overflow:hidden}
+.bar i{display:block;height:100%;width:0;border-radius:999px;
+  background:linear-gradient(90deg,var(--teal),var(--lima));transition:width .4s ease}
+.bar-row{display:flex;justify-content:space-between;align-items:baseline;gap:10px;font-size:.92rem;color:var(--soft)}
+.bar-row b{color:var(--ink);font-size:1.05rem}
+
+/* calendario */
+.hide{display:none!important}
+.cal{display:flex;flex-direction:column;gap:9px}
+.dia{display:grid;grid-template-columns:72px 1fr;gap:13px;align-items:start;
+  border:1px solid var(--line);border-radius:14px;padding:12px 14px}
+.dia.hoy{border-color:var(--violet);background:var(--violet-soft)}
+.dia.dia-parcial{border:0;background:linear-gradient(135deg,var(--pink),var(--violet));color:#fff}
+.dia.dia-parcial .d-num,.dia.dia-parcial .d-sub{color:#fff;opacity:.92}
+.d-when{display:flex;flex-direction:column;line-height:1.25}
+.d-dow{font-weight:700;font-size:.93rem;text-transform:capitalize}
+.d-num{font-size:.8rem;color:var(--soft)}
+.d-what{font-size:.96rem;line-height:1.45}
+.d-sub{font-size:.85rem;color:var(--soft);margin-top:3px}
+
+/* sesiones */
+.ses{background:var(--sheet);border:1px solid var(--line);border-radius:18px;overflow:hidden}
+.ses[open]{border-color:var(--violet)}
+.ses summary{list-style:none;cursor:pointer;padding:16px 18px;display:grid;
+  grid-template-columns:auto 1fr auto;gap:13px;align-items:center}
+.ses summary::-webkit-details-marker{display:none}
+.num{width:34px;height:34px;flex:none;border-radius:11px;background:var(--violet-soft);color:var(--violet);
+  font-family:var(--display);font-size:1.02rem;display:grid;place-items:center}
+.ses[open] .num{background:var(--violet);color:var(--on)}
+.ses.done .num{background:var(--lima);color:#fff}
+.s-tit{font-family:var(--display);font-size:1.08rem;line-height:1.2}
+.s-sub{font-size:.86rem;color:var(--soft);margin-top:2px}
+.s-val{font-family:var(--mono);font-size:.82rem;font-weight:700;color:var(--pink);white-space:nowrap}
+.s-body{padding:4px 18px 18px;display:flex;flex-direction:column;gap:15px;border-top:1px solid var(--line)}
+.block{display:flex;flex-direction:column;gap:7px}
+.block > .lbl{font-size:.76rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--soft)}
+.truco{background:var(--teal-soft);border-radius:13px;padding:13px 15px}
+.truco .lbl{color:var(--teal)}
+.ojo{background:var(--mango-soft);border-radius:13px;padding:13px 15px}
+.ojo .lbl{color:var(--mango)}
+.ojo ul,.truco ul{margin:4px 0 0;padding-left:19px}
+.ojo li,.truco li{margin-bottom:5px}
+.ojo li:last-child,.truco li:last-child{margin-bottom:0}
+.tuyo{background:var(--rojo-soft);border-left:5px solid var(--rojo);border-radius:13px;padding:13px 15px}
+.tuyo .lbl{color:var(--rojo)}
+.eq{font-family:var(--mono);font-size:.97rem;background:var(--violet-soft);color:var(--ink);
+  padding:3px 7px;border-radius:7px;display:inline-block}
+.eqline{font-family:var(--mono);font-size:.93rem;background:var(--violet-soft);border-radius:11px;
+  padding:11px 13px;overflow-x:auto;white-space:pre;line-height:1.75}
+.ej{border:1px solid var(--line);border-radius:13px;padding:0;overflow:hidden}
+.ej > summary{list-style:none;cursor:pointer;padding:12px 15px;font-family:var(--mono);font-size:.93rem;
+  display:flex;justify-content:space-between;gap:12px;align-items:center}
+.ej > summary::-webkit-details-marker{display:none}
+.ej .ver{font-family:var(--body);font-size:.8rem;font-weight:600;color:var(--violet);white-space:nowrap}
+.ej[open] .ver{color:var(--soft)}
+.ej-sol{padding:0 15px 14px;border-top:1px solid var(--line);padding-top:12px;display:flex;flex-direction:column;gap:8px}
+.btn{display:inline-block;text-decoration:none;font-family:var(--body);font-weight:600;font-size:.98rem;
+  border-radius:13px;padding:13px 20px;border:0;cursor:pointer;text-align:center}
+.btn-p{background:var(--violet);color:var(--on)}
+.btn-done{background:var(--lima-soft);border:2px solid var(--lima);color:var(--lima);width:100%}
+.ses.done .btn-done{background:var(--lima);color:#fff;border-color:var(--lima)}
+.chu{display:grid;grid-template-columns:repeat(auto-fit,minmax(215px,1fr));gap:12px}
+.chu div{background:var(--violet-soft);border-radius:13px;padding:13px 15px}
+.chu h4{margin:0 0 6px}
+.chu code{font-family:var(--mono);font-size:.86rem;display:block;line-height:1.85}
+.flojo{background:var(--pink-soft);border:1px solid var(--line);border-left:5px solid var(--pink);
+  border-radius:14px;padding:15px 17px;display:flex;flex-direction:column;gap:7px}
+.flojo h3{color:var(--pink)}
+.flojo .evid{font-size:.9rem;color:var(--soft)}
+.check{display:flex;flex-direction:column;gap:9px}
+.check label{display:grid;grid-template-columns:auto 1fr;gap:11px;align-items:start;
+  border:1px solid var(--line);border-radius:13px;padding:12px 14px;cursor:pointer;font-size:.95rem}
+.check input{width:20px;height:20px;margin:1px 0 0;accent-color:var(--lima)}
+.check label:has(input:checked){background:var(--lima-soft);border-color:var(--lima)}
+.cta{background:linear-gradient(135deg,var(--teal),var(--lima));color:#fff;border-radius:22px;
+  padding:24px;display:flex;flex-direction:column;gap:13px;align-items:flex-start}
+.cta h2{color:#fff}
+.cta .btn{background:#fff;color:var(--teal)}
+footer{text-align:center;color:var(--soft);font-size:.86rem;padding-top:8px}
+@media(max-width:430px){.ses summary{grid-template-columns:auto 1fr}.s-val{display:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="top">
+    <span class="hand">Para Emilia 💜</span>
+    <a class="back" href="index.html">← Todas las materias</a>
+  </div>
+
+  <header style="display:flex;flex-direction:column;gap:10px">
+    <h1>Recuperación<br>de Matemáticas</h1>
+    <p class="lead">Solo lo que entra: <b>el parcial y el final del primer periodo</b>. Nada del cuaderno que no esté en esas dos hojas. Cinco sesiones y un simulador.</p>
+  </header>
+
+  <!-- LAS DOS NOTAS -->
+  <div class="card">
+    <h2>📄 Lo que entra son estas dos hojas</h2>
+    <div class="exams">
+      <div class="ex">
+        <span class="enom">Parcial · 14 sep</span>
+        <span class="enota">2,66</span>
+        <span class="edet">14 puntos · perdiste <b>2,34</b></span>
+      </div>
+      <div class="ex">
+        <span class="enom">Final · primer periodo</span>
+        <span class="enota">2,16</span>
+        <span class="edet">15 puntos · perdiste <b>2,84</b></span>
+      </div>
+    </div>
+    <p class="lead" style="font-size:.95rem">Entre las dos sumaste <b>4,82 de 10</b>. Faltaron <b>5,18 puntos</b>. Acá están todos, uno por uno, y no están repartidos parejo: hay seis temas que valen más de la mitad.</p>
+  </div>
+
+  <!-- CONTADOR -->
+  <div class="countdown">
+    <label for="fecha">📅 ¿Qué día es la recuperación?</label>
+    <input type="date" id="fecha">
+    <div class="cd-big" id="cdBig">Pon la fecha y te reparto las sesiones</div>
+    <div class="cd-sub" id="cdSub">Se guarda sola en este dispositivo.</div>
+  </div>
+
+  <!-- CALENDARIO -->
+  <div class="card hide" id="calCard">
+    <h2>📆 Tu calendario</h2>
+    <p class="lead" style="font-size:.95rem" id="calIntro"></p>
+    <div class="cal" id="cal"></div>
+  </div>
+
+  <!-- MAPA DE PUNTOS -->
+  <div class="card">
+    <h2>🎯 Dónde se fueron los 5,18 puntos</h2>
+    <p class="lead" style="font-size:.95rem">Esto no es regaño: es el mapa. Si recuperas solo las tres primeras barras, ya pasas.</p>
+    <div class="mapa">
+      <div class="mp"><span class="mnom">Jerarquía, fracciones y signos</span><span class="mpts">−1,00</span>
+        <span class="mbar"><i style="width:100%"></i></span>
+        <span class="mdet">El punto 2 del parcial, completo en cero. Vale un punto entero él solo.</span></div>
+      <div class="mp"><span class="mnom">Radicales: simplificar y operar</span><span class="mpts">−0,70</span>
+        <span class="mbar"><i style="width:70%"></i></span>
+        <span class="mdet">El punto 1 del final: seis ejercicios, los seis en blanco.</span></div>
+      <div class="mp"><span class="mnom">Razonamiento y proposiciones</span><span class="mpts">−0,62</span>
+        <span class="mbar"><i style="width:62%"></i></span>
+        <span class="mdet">Inductivo contra deductivo, y recíproca / inversa / contrarrecíproca.</span></div>
+      <div class="mp"><span class="mnom">Propiedades de potencias y raíces</span><span class="mpts">−0,52</span>
+        <span class="mbar"><i style="width:52%"></i></span>
+        <span class="mdet">De 0,65 posibles sacaste 0,13. Logaritmos incluidos.</span></div>
+      <div class="mp"><span class="mnom">Ecuaciones de primer grado</span><span class="mpts">−0,40</span>
+        <span class="mbar"><i style="width:40%"></i></span>
+        <span class="mdet">Las tres del punto 7 del final.</span></div>
+      <div class="mp"><span class="mnom">Inecuaciones</span><span class="mpts">−0,40</span>
+        <span class="mbar"><i style="width:40%"></i></span>
+        <span class="mdet">Una empezada y abandonada, la otra en blanco.</span></div>
+      <div class="mp"><span class="mnom">Perímetros con x (polígonos)</span><span class="mpts">−0,40</span>
+        <span class="mbar"><i style="width:40%"></i></span>
+        <span class="mdet">Ibas bien en el triángulo y te caíste en el último paso.</span></div>
+      <div class="mp"><span class="mnom">Geometría con fórmulas</span><span class="mpts">−0,40</span>
+        <span class="mbar"><i style="width:40%"></i></span>
+        <span class="mdet">Círculo y esfera. Los dos por aritmética, no por fórmula.</span></div>
+      <div class="mp"><span class="mnom">Pitágoras en la recta numérica</span><span class="mpts">−0,25</span>
+        <span class="mbar"><i style="width:25%"></i></span>
+        <span class="mdet">Dibujaste cuatro triángulos; dos quedaron mal.</span></div>
+      <div class="mp"><span class="mnom">Leer bien el problema</span><span class="mpts">−0,25</span>
+        <span class="mbar"><i style="width:25%"></i></span>
+        <span class="mdet">«Se reproduce tres veces» lo resolviste sumando 3 en vez de multiplicar.</span></div>
+      <div class="mp"><span class="mnom">Estadística</span><span class="mpts">−0,17</span>
+        <span class="mbar"><i style="width:17%"></i></span>
+        <span class="mdet">Casi perfecta. 0,15 de esto lo perdiste marcando dos opciones en el punto 14.</span></div>
+      <div class="mp"><span class="mnom">Clasificar decimales</span><span class="mpts">−0,08</span>
+        <span class="mbar"><i style="width:8%"></i></span>
+        <span class="mdet">Dos casillas de la tabla del punto 3.</span></div>
+    </div>
+  </div>
+
+  <!-- PROGRESO -->
+  <div class="card">
+    <div class="bar-row"><span>Tu avance</span><span><b id="pNum">0</b> de 5 sesiones</span></div>
+    <div class="bar"><i id="pBar"></i></div>
+    <p class="lead" id="pMsg" style="font-size:.95rem">Arranca por la 1. Están ordenadas por puntos, no por el orden del examen.</p>
+  </div>
+
+  <h2 style="margin-top:4px">📚 Las cinco sesiones</h2>
+
+  <!-- ====================== SESIÓN 1 ====================== -->
+  <details class="ses" id="s1">
+    <summary><span class="num">1</span>
+      <span><span class="s-tit">Fracciones, signos y jerarquía</span>
+      <span class="s-sub">El punto más caro de los dos exámenes · 35 min</span></span>
+      <span class="s-val">1,28 pts</span></summary>
+    <div class="s-body">
+
+      <div class="block"><span class="lbl">El orden, sin excepción</span>
+        <div class="eqline">1. Lo de adentro de ( ) luego [ ] luego { }
+2. Potencias y raíces
+3. Multiplicar y dividir  (de izquierda a derecha)
+4. Sumar y restar          (de izquierda a derecha)</div>
+      </div>
+
+      <div class="tuyo"><span class="lbl">Lo que te pasó de verdad</span>
+        <p style="margin-top:6px">En <span class="eq">−29 + {5 − [15 + 7×(3−6) + (−3−5)]}</span> escribiste <b>«primero la multiplicación»</b> al lado… y después sumaste <span class="eq">15 + 7 = 22</span> y lo multiplicaste por 3.</p>
+        <p style="margin-top:6px"><b>Sabías la regla y no la aplicaste.</b> Y además <span class="eq">(3−6)</span> es <b>−3</b>, no 3: el paréntesis trae el signo pegado.</p>
+      </div>
+
+      <div class="block"><span class="lbl">Bien hecho, paso a paso</span>
+        <div class="eqline">−29 + {5 − [15 + 7×(3−6) + (−3−5)]}
+  (3−6) = −3        (−3−5) = −8
+−29 + {5 − [15 + 7×(−3) + (−8)]}
+  7×(−3) = −21
+−29 + {5 − [15 − 21 − 8]}
+−29 + {5 − (−14)}
+−29 + 19  =  −10</div>
+      </div>
+
+      <div class="truco"><span class="lbl">Sumar fracciones sin fallar</span>
+        <ul>
+          <li>El denominador común es el <b>m.c.m.</b>, no el más grande ni el primero que veas.</li>
+          <li><span class="eq">−1/2 + 2/3</span> → m.c.m.(2,3) = <b>6</b> → <span class="eq">−3/6 + 4/6 = 1/6</span></li>
+          <li>Dividir fracciones = multiplicar por la de abajo <b>volteada</b>: <span class="eq">1/3 ÷ (−3/2) = 1/3 × (−2/3) = −2/9</span></li>
+        </ul>
+      </div>
+
+      <div class="tuyo"><span class="lbl">Acá se te fue 1,00</span>
+        <p style="margin-top:6px">Pusiste <span class="eq">−1/2 + 2/3 = 8/6</span>. Es <b>1/6</b>. Con ese 8/6 todo lo de abajo se cayó, aunque el resto del procedimiento estaba bien armado.</p>
+      </div>
+
+      <div class="block"><span class="lbl">Ejercicios</span>
+        <details class="ej"><summary><span>{3/4 × [1/3 ÷ (−3/2)]} ÷ (−1/2 + 2/3)</span><span class="ver">Ver</span></summary>
+          <div class="ej-sol"><div class="eqline">1/3 ÷ (−3/2) = −2/9
+3/4 × (−2/9) = −6/36 = −1/6
+−1/2 + 2/3 = 1/6
+(−1/6) ÷ (1/6) = −1</div><p><b>Respuesta: −1</b></p></div></details>
+        <details class="ej"><summary><span>−5/6 + 3/4 − 7/8</span><span class="ver">Ver</span></summary>
+          <div class="ej-sol"><div class="eqline">m.c.m.(6,4,8) = 24
+−20/24 + 18/24 − 21/24 = −23/24</div><p><b>Respuesta: −23/24</b></p></div></details>
+        <details class="ej"><summary><span>Una especie se reproduce tres veces cada día. Día 1: 1 individuo. ¿El día 6?</span><span class="ver">Ver</span></summary>
+          <div class="ej-sol"><div class="eqline">1 → 3 → 9 → 27 → 81 → 243</div>
+          <p><b>243.</b> En el final pusiste 1, 3, 9, 12, 15, 18: arrancaste multiplicando y a la mitad te pasaste a sumar. «Tres veces» siempre es <b>×3</b>.</p></div></details>
+      </div>
+
+      <div class="ojo"><span class="lbl">Decimales, para cerrar</span>
+        <ul>
+          <li><b>Exacto:</b> se acaba. <span class="eq">−9,33</span> → exacto.</li>
+          <li><b>Periódico puro:</b> repite desde la coma. <span class="eq">−8/23 = −0,3478…</span> → puro.</li>
+          <li><b>Periódico mixto:</b> hay cifras sueltas y después el que repite.</li>
+          <li>Truco: si el denominador solo tiene 2 y 5 como factores, es <b>exacto</b>. Si no, es periódico.</li>
+        </ul>
+      </div>
+
+      <button class="btn btn-done" data-s="1">Marcar sesión 1 como hecha</button>
+    </div>
+  </details>
+
+  <!-- ====================== SESIÓN 2 ====================== -->
+  <details class="ses" id="s2">
+    <summary><span class="num">2</span>
+      <span><span class="s-tit">Radicales, potencias y logaritmos</span>
+      <span class="s-sub">Seis ejercicios en blanco. Es una sola técnica · 40 min</span></span>
+      <span class="s-val">1,22 pts</span></summary>
+    <div class="s-body">
+
+      <div class="tuyo"><span class="lbl">La verdad del punto 1 del final</span>
+        <p style="margin-top:6px">Seis casillas, seis signos de interrogación. <b>No fallaste: no lo intentaste.</b> Y los seis salen con la misma técnica. Esta sesión es la que más nota te devuelve por minuto.</p>
+      </div>
+
+      <div class="truco"><span class="lbl">Sacar factores del radical</span>
+        <p style="margin-top:6px">Descompón el número y saca los que están <b>de a dos</b>:</p>
+        <div class="eqline">√18 = √(9·2) = 3√2
+√50 = √(25·2) = 5√2
+√12 = √(4·3)  = 2√3
+√48 = √(16·3) = 4√3
+√27 = √(9·3)  = 3√3
+√75 = √(25·3) = 5√3</div>
+        <p style="margin-top:6px"><b>Apréndete esas seis.</b> Son las que salieron en tu examen.</p>
+      </div>
+
+      <div class="block"><span class="lbl">Reglas</span>
+        <div class="eqline">Sumar/restar: solo si el radical es IGUAL
+   9√2 − 11√2 + 10√2 = 8√2
+Multiplicar: √a · √b = √(a·b)
+Dividir:     √a ÷ √b = √(a÷b)
+Raíz como potencia: ⁿ√(aᵐ) = a^(m/n)</div>
+      </div>
+
+      <div class="block"><span class="lbl">Los seis del examen, resueltos</span>
+        <details class="ej"><summary><span>4√2/5 + √2/5</span><span class="ver">Ver</span></summary>
+          <div class="ej-sol"><div class="eqline">(4√2 + √2)/5 = 5√2/5 = √2</div><p><b>√2</b></p></div></details>
+        <details class="ej"><summary><span>4√5 − 0,5 − 24√5 + 0,375 − 6,1</span><span class="ver">Ver</span></summary>
+          <div class="ej-sol"><div class="eqline">Radicales: 4√5 − 24√5 = −20√5
+Números:  −0,5 + 0,375 − 6,1 = −6,225</div>
+          <p><b>−20√5 − 6,225.</b> Alcanzaste a escribir −28√5: es <b>−20</b>, porque 4 − 24 = −20.</p></div></details>
+        <details class="ej"><summary><span>3√18 − 11√2 + 2√50</span><span class="ver">Ver</span></summary>
+          <div class="ej-sol"><div class="eqline">3·(3√2) = 9√2
+2·(5√2) = 10√2
+9√2 − 11√2 + 10√2 = 8√2</div><p><b>8√2</b></p></div></details>
+        <details class="ej"><summary><span>20√10 ÷ (−5√2)</span><span class="ver">Ver</span></summary>
+          <div class="ej-sol"><div class="eqline">20 ÷ (−5) = −4
+√10 ÷ √2 = √5</div><p><b>−4√5</b></p></div></details>
+        <details class="ej"><summary><span>4√12 − (3/2)√48 + (2/3)√27 + (3/5)√75</span><span class="ver">Ver</span></summary>
+          <div class="ej-sol"><div class="eqline">4·(2√3)       =  8√3
+(3/2)·(4√3)   =  6√3   (va restando)
+(2/3)·(3√3)   =  2√3
+(3/5)·(5√3)   =  3√3
+8 − 6 + 2 + 3 = 7</div><p><b>7√3</b></p></div></details>
+        <details class="ej"><summary><span>2√3 × 5·∛27</span><span class="ver">Ver</span></summary>
+          <div class="ej-sol"><div class="eqline">∛27 = 3  →  5·3 = 15
+2√3 × 15 = 30√3</div><p><b>30√3</b></p></div></details>
+      </div>
+
+      <div class="truco"><span class="lbl">Potencias</span>
+        <div class="eqline">aᵐ · aⁿ = a^(m+n)      aᵐ ÷ aⁿ = a^(m−n)
+(aᵐ)ⁿ  = a^(m·n)       a⁰ = 1
+a^(−n) = 1/aⁿ          (a·b)ⁿ = aⁿ·bⁿ</div>
+        <details class="ej" style="margin-top:8px"><summary><span>∛(8a⁶)</span><span class="ver">Ver</span></summary>
+          <div class="ej-sol"><div class="eqline">∛8 = 2
+a⁶ con índice 3 → a^(6/3) = a²</div><p><b>2a².</b> Dejaste «2 × a». Faltaba dividir 6 entre 3.</p></div></details>
+        <details class="ej"><summary><span>√(16x³ / 9y⁵)</span><span class="ver">Ver</span></summary>
+          <div class="ej-sol"><div class="eqline">√16 = 4   √9 = 3
+x³ → x^(3/2)    y⁵ → y^(5/2)</div><p><b>4x^(3/2) / 3y^(5/2).</b> Este lo tenías bien.</p></div></details>
+      </div>
+
+      <div class="truco"><span class="lbl">Logaritmos: la pregunta es «¿a qué potencia?»</span>
+        <p style="margin-top:6px"><span class="eq">log_b(x) = n</span> quiere decir <span class="eq">bⁿ = x</span>. Nada más.</p>
+        <details class="ej" style="margin-top:8px"><summary><span>log₃(27 × 243)</span><span class="ver">Ver</span></summary>
+          <div class="ej-sol"><div class="eqline">27 = 3³      243 = 3⁵
+27 × 243 = 3⁸
+log₃(3⁸) = 8</div>
+          <p><b>8.</b> Pusiste 33: separaste en log₃27 + log₃243 (bien) pero después sumaste <b>27 + 6</b> en vez de <b>3 + 5</b>.</p></div></details>
+        <details class="ej"><summary><span>log<sub>2/5</sub>(16/625)</span><span class="ver">Ver</span></summary>
+          <div class="ej-sol"><div class="eqline">(2/5)¹ = 2/5      (2/5)² = 4/25
+(2/5)³ = 8/125    (2/5)⁴ = 16/625 ✓</div><p><b>4</b></p></div></details>
+      </div>
+
+      <button class="btn btn-done" data-s="2">Marcar sesión 2 como hecha</button>
+    </div>
+  </details>
+
+  <!-- ====================== SESIÓN 3 ====================== -->
+  <details class="ses" id="s3">
+    <summary><span class="num">3</span>
+      <span><span class="s-tit">Ecuaciones, inecuaciones y perímetros con x</span>
+      <span class="s-sub">Tres puntos del final, los tres en cero · 40 min</span></span>
+      <span class="s-val">1,25 pts</span></summary>
+    <div class="s-body">
+
+      <div class="truco"><span class="lbl">Ecuaciones: siempre los mismos cuatro pasos</span>
+        <ul>
+          <li>Quitar paréntesis (multiplicar <b>todo</b> lo de adentro).</li>
+          <li>Las <b>x</b> a un lado, los números al otro. Lo que cruza el igual, cambia de signo.</li>
+          <li>Juntar y dividir.</li>
+          <li><b>Comprobar reemplazando.</b> Esto no es opcional.</li>
+        </ul>
+      </div>
+
+      <div class="block"><span class="lbl">Las tres del punto 7</span>
+        <details class="ej"><summary><span>½x + ¾ = 3/6</span><span class="ver">Ver</span></summary>
+          <div class="ej-sol"><div class="eqline">3/6 = 1/2
+x/2 = 1/2 − 3/4 = 2/4 − 3/4 = −1/4
+x = −1/4 × 2 = −1/2</div>
+          <p><b>x = −1/2.</b> Comprobación: ½(−½) + ¾ = −¼ + ¾ = ½ ✓</p></div></details>
+        <details class="ej"><summary><span>6(3n + 4) = 2(n − 11)</span><span class="ver">Ver</span></summary>
+          <div class="ej-sol"><div class="eqline">18n + 24 = 2n − 22
+18n − 2n = −22 − 24
+16n = −46
+n = −23/8 = −2,875</div>
+          <p><b>n = −23/8.</b> Escribiste <span class="eq">8n + 24</span>: a 6×3n le faltó el 6. Multiplica el de afuera por <b>cada</b> término.</p></div></details>
+        <details class="ej"><summary><span>2,5(4x − 1,2) = −5</span><span class="ver">Ver</span></summary>
+          <div class="ej-sol"><div class="eqline">10x − 3 = −5
+10x = −5 + 3 = −2
+x = −0,2</div>
+          <p><b>x = −0,2.</b> En el tuyo multiplicaste por −3 al final en vez de <b>dividir</b>. El número que acompaña a la x siempre <b>divide</b>.</p></div></details>
+      </div>
+
+      <div class="tuyo"><span class="lbl">🔴 Inecuaciones: la regla del signo</span>
+        <p style="margin-top:6px">La profe te la marcó en <b>rojo dos veces en la misma hoja</b> del cuaderno y escribió «Regla» al lado. En el final dejaste las dos en blanco.</p>
+        <p style="margin-top:8px"><b>Dice esto y solo esto:</b> el signo <span class="eq">&lt;</span> se voltea a <span class="eq">&gt;</span> cuando <b>multiplicas o divides por un número negativo</b>.</p>
+        <p style="margin-top:8px">No se voltea porque «hay un negativo por ahí». No se voltea al sumar ni al restar. <b>Solo</b> al multiplicar o dividir por negativo.</p>
+      </div>
+
+      <div class="block"><span class="lbl">Las dos del punto 8</span>
+        <details class="ej"><summary><span>5x − 1 &lt; 7x + 9</span><span class="ver">Ver</span></summary>
+          <div class="ej-sol"><div class="eqline">5x − 7x < 9 + 1
+−2x < 10
+x > −5      ← divides por −2: SE VOLTEA</div>
+          <p><b>x &gt; −5.</b> En la recta: bolita <b>abierta</b> en −5 y pintas hacia la derecha.</p></div></details>
+        <details class="ej"><summary><span>x − (7x − 3) &lt; 7 − 4x − 5</span><span class="ver">Ver</span></summary>
+          <div class="ej-sol"><div class="eqline">x − 7x + 3 < 2 − 4x     ← el menos reparte
+−6x + 3 < 2 − 4x
+−6x + 4x < 2 − 3
+−2x < −1
+x > 1/2     ← SE VOLTEA</div>
+          <p><b>x &gt; 1/2.</b> Bolita abierta en 0,5 y pintas a la derecha.</p></div></details>
+      </div>
+
+      <div class="truco"><span class="lbl">Perímetros con x</span>
+        <p style="margin-top:6px">Sumas los lados, lo igualas al perímetro que te dan, y despejas. Después <b>reemplazas</b> para saber cuánto mide cada lado.</p>
+        <details class="ej" style="margin-top:8px"><summary><span>Triángulo de lados x+3, 2x−1, 3x+1 y perímetro 8x−2</span><span class="ver">Ver</span></summary>
+          <div class="ej-sol"><div class="eqline">(x+3)+(2x−1)+(3x+1) = 8x − 2
+6x + 3 = 8x − 2
+3 + 2 = 8x − 6x
+5 = 2x   →   x = 2,5</div>
+          <p>Lados: <b>5,5 · 4 · 8,5</b>. Perímetro 18 = 8(2,5) − 2 ✓</p>
+          <p style="margin-top:6px">En el examen llegaste a <span class="eq">6x − 8x = −3 − 2</span>, que es correcto, y lo tachaste. <b>Estabas a un paso.</b></p></div></details>
+        <details class="ej"><summary><span>Rectángulo de 2y+3 por y−2, con perímetro 5y+6</span><span class="ver">Ver</span></summary>
+          <div class="ej-sol"><div class="eqline">2(2y+3) + 2(y−2) = 5y + 6
+4y + 6 + 2y − 4 = 5y + 6
+6y + 2 = 5y + 6
+y = 4</div><p>Lados: <b>11 y 2</b>. Perímetro 26 = 5(4) + 6 ✓</p></div></details>
+      </div>
+
+      <div class="truco"><span class="lbl">Problemas: pasarlos a ecuación</span>
+        <details class="ej" style="margin-top:8px"><summary><span>310 por minuto + 6.300 fijos. La factura fue 62.100. ¿Minutos?</span><span class="ver">Ver</span></summary>
+          <div class="ej-sol"><div class="eqline">310t + 6.300 = 62.100
+310t = 55.800
+t = 180 minutos</div>
+          <p><b>180.</b> Este te quedó bien en el final. En el Taller N5 del cuaderno habías puesto 160 y la factura no daba: <b>ya lo arreglaste.</b></p></div></details>
+        <details class="ej"><summary><span>Triángulo isósceles con 88,5 m de alambre; los lados iguales miden 28,25 m</span><span class="ver">Ver</span></summary>
+          <div class="ej-sol"><div class="eqline">2 × 28,25 = 56,50
+88,50 − 56,50 = 32</div><p><b>32 m</b> ✓ también lo tenías bien.</p></div></details>
+      </div>
+
+      <button class="btn btn-done" data-s="3">Marcar sesión 3 como hecha</button>
+    </div>
+  </details>
+
+  <!-- ====================== SESIÓN 4 ====================== -->
+  <details class="ses" id="s4">
+    <summary><span class="num">4</span>
+      <span><span class="s-tit">Fórmulas de geometría y Pitágoras</span>
+      <span class="s-sub">Las fórmulas las sabías. La calculadora mental falló · 25 min</span></span>
+      <span class="s-val">0,65 pts</span></summary>
+    <div class="s-body">
+
+      <div class="chu">
+        <div><h4>Círculo</h4><code>P = 2·π·r
+A = π·r²</code></div>
+        <div><h4>Esfera</h4><code>V = (4/3)·π·r³</code></div>
+        <div><h4>Cilindro</h4><code>V = π·r²·h</code></div>
+        <div><h4>Pitágoras</h4><code>h² = a² + b²</code></div>
+      </div>
+
+      <div class="tuyo"><span class="lbl">Los dos errores, y ninguno fue de fórmula</span>
+        <p style="margin-top:6px"><b>Círculo (r = 25):</b> pusiste la fórmula bien, escribiste 6,28 × 25 bien… y respondiste <b>162</b>. Es <b>157</b>. Perdiste 0,25 en una multiplicación.</p>
+        <p style="margin-top:8px"><b>Esfera (r = 15):</b> la fórmula bien, el 3.375 bien. Pero <span class="eq">4/3 × 3,14</span> lo redondeaste corto y te dio 14.128,65 en vez de <b>14.130</b>.</p>
+      </div>
+
+      <div class="ojo"><span class="lbl">La regla que te arregla las dos</span>
+        <ul>
+          <li><span class="eq">4/3 = 1,333…</span> <b>no es 1,3.</b> Si truncas, el resultado se corre.</li>
+          <li>Mejor todavía: <b>no dividas primero</b>. Haz <span class="eq">4 × 3,14 × 3.375 = 42.390</span> y <b>al final</b> divide entre 3 → <b>14.130</b>. Exacto, sin decimales raros.</li>
+          <li>Después de cada multiplicación larga, <b>vuélvela a hacer al revés</b>. Cinco segundos.</li>
+        </ul>
+      </div>
+
+      <div class="block"><span class="lbl">Ejercicios</span>
+        <details class="ej"><summary><span>Perímetro de un círculo de radio 25 m (π = 3,14)</span><span class="ver">Ver</span></summary>
+          <div class="ej-sol"><div class="eqline">P = 2 × 3,14 × 25
+  = 6,28 × 25
+  = 157 m</div></div></details>
+        <details class="ej"><summary><span>Volumen de una esfera de radio 15 cm</span><span class="ver">Ver</span></summary>
+          <div class="ej-sol"><div class="eqline">r³ = 15³ = 3.375
+4 × 3,14 × 3.375 = 42.390
+42.390 ÷ 3 = 14.130 cm³</div></div></details>
+        <details class="ej"><summary><span>Dos cilindros de 10 cm de alto, radios 3,5 y 8. ¿Diferencia de volúmenes?</span><span class="ver">Ver</span></summary>
+          <div class="ej-sol"><div class="eqline">V₁ = 3,14 × 12,25 × 10 =   384,65
+V₂ = 3,14 × 64    × 10 = 2.009,60
+Diferencia = 1.624,95 cm³</div><p>Este te quedó bien ✓</p></div></details>
+        <details class="ej"><summary><span>Bandera de 5 m × 2 m. ¿Cuánto mide la franja diagonal?</span><span class="ver">Ver</span></summary>
+          <div class="ej-sol"><div class="eqline">h² = 5² + 2² = 25 + 4 = 29
+h = √29 ≈ 5,39 m</div><p>Bien resuelto en el parcial ✓</p></div></details>
+        <details class="ej"><summary><span>Terreno cuadrado de 250.000 cm². ¿Perímetro?</span><span class="ver">Ver</span></summary>
+          <div class="ej-sol"><div class="eqline">lado = √250.000 = 500 cm
+P = 500 × 4 = 2.000 cm</div></div></details>
+      </div>
+
+      <div class="truco"><span class="lbl">Raíces en la recta numérica</span>
+        <p style="margin-top:6px">Partes el número en <b>dos sumandos</b> que sean cuadrados fáciles, y esos son los catetos:</p>
+        <div class="eqline">√6  →  6 = 5 + 1  →  catetos √5 y 1
+√7  →  7 = 6 + 1  →  catetos √6 y 1
+√5  →  5 = 4 + 1  →  catetos  2  y 1
+√29 →  29 = 25+4  →  catetos  5  y 2</div>
+        <p style="margin-top:6px">Se van <b>encadenando</b>: construyes √5, y sobre esa hipotenusa levantas 1 y te da √6. Para <b>−√7</b> es el mismo triángulo, pero hacia la izquierda del cero.</p>
+      </div>
+
+      <button class="btn btn-done" data-s="4">Marcar sesión 4 como hecha</button>
+    </div>
+  </details>
+
+  <!-- ====================== SESIÓN 5 ====================== -->
+  <details class="ses" id="s5">
+    <summary><span class="num">5</span>
+      <span><span class="s-tit">Razonamiento, proposiciones y estadística</span>
+      <span class="s-sub">Puntos fáciles que se fueron por detalles · 30 min</span></span>
+      <span class="s-val">0,78 pts</span></summary>
+    <div class="s-body">
+
+      <div class="truco"><span class="lbl">Inductivo vs. deductivo, en una línea</span>
+        <div class="eqline">INDUCTIVO:  de varios casos  →  saco una regla
+DEDUCTIVO:  de una regla    →  aplico a un caso</div>
+        <ul style="margin-top:8px">
+          <li>«Veo 4, 8, 12, 16, 20… entonces sigue 24» → vio <b>casos</b> → <b>inductivo</b>.</li>
+          <li>«Todo divisible entre 6 lo es entre 3; 42 es divisible entre 6, entonces lo es entre 3» → parte de la <b>regla</b> → <b>deductivo</b>.</li>
+        </ul>
+        <p style="margin-top:8px">Pregúntate siempre: <b>¿de dónde arrancó?</b> Si arrancó de ejemplos, inductivo. Si arrancó de una ley que ya existía, deductivo.</p>
+      </div>
+
+      <div class="tuyo"><span class="lbl">Los puntos 10 y 11 del parcial</span>
+        <p style="margin-top:6px">Los dos en cero, 0,40 juntos. Y los dos eran de escoger entre inductivo y deductivo. <b>Es la única regla que hay que saber en todo el tema.</b></p>
+      </div>
+
+      <div class="truco"><span class="lbl">Recíproca, inversa, contrarrecíproca</span>
+        <p style="margin-top:6px">Partimos de <span class="eq">Si A entonces B</span>:</p>
+        <div class="eqline">RECÍPROCA        Si B entonces A        (volteo)
+INVERSA          Si no A entonces no B  (niego)
+CONTRARRECÍPROCA Si no B entonces no A  (volteo y niego)</div>
+        <p style="margin-top:8px"><b>Ejemplo:</b> «Si un ángulo es recto, entonces mide 90°»</p>
+        <div class="eqline">Recíproca:        Si mide 90°, es recto
+Inversa:          Si no es recto, no mide 90°
+Contrarrecíproca: Si no mide 90°, no es recto</div>
+        <p style="margin-top:8px">Truco: la <b>contrarrecíproca siempre vale lo mismo</b> que la original. La recíproca y la inversa, no necesariamente.</p>
+      </div>
+
+      <div class="block"><span class="lbl">Ejercicios</span>
+        <details class="ej"><summary><span>«Si un número es divisible entre 4, entonces es par». Inversa y recíproca.</span><span class="ver">Ver</span></summary>
+          <div class="ej-sol"><div class="eqline">Inversa:   Si no es divisible entre 4, no es par
+Recíproca: Si es par, es divisible entre 4</div><p>Este lo acertaste en el parcial ✓</p></div></details>
+        <details class="ej"><summary><span>«Si un polígono tiene 8 lados, entonces es un octágono». Contrarrecíproca.</span><span class="ver">Ver</span></summary>
+          <div class="ej-sol"><p><b>Si no es un octágono, entonces no tiene 8 lados.</b></p></div></details>
+      </div>
+
+      <div class="truco"><span class="lbl">Tabla de frecuencias: qué es cada columna</span>
+        <div class="eqline">fa  frecuencia absoluta   cuántos hay en ese intervalo
+Fa  acumulada            fa de ese + todos los de arriba
+fr  relativa             fa ÷ total
+Fr  relativa acumulada   Fa ÷ total
+%   porcentaje           fr × 100
+Mi  marca de clase       (extremo1 + extremo2) ÷ 2</div>
+        <p style="margin-top:8px">Con fa = 20, 5, 55, 25, 15 (total 120): la Fa va <b>20 · 25 · 80 · 105 · 120</b>. La última Fa <b>siempre</b> es el total: eso te sirve de comprobación.</p>
+      </div>
+
+      <div class="tuyo"><span class="lbl">🔴 El punto 14: perdiste 0,15 sin equivocarte</span>
+        <p style="margin-top:6px">Comparando 1,20–1,40 (5 estudiantes) con 1,40–1,60 (55), escribiste la justificación correcta: <span class="eq">55 − 5 = 50</span>. <b>Era la d.</b></p>
+        <p style="margin-top:8px">Pero rodeaste <b>la a y la d</b>. Y el enunciado dice «única respuesta». <b>No perdiste el punto por matemática: lo perdiste por marcar dos.</b> Si dudas, elige una y sigue.</p>
+      </div>
+
+      <button class="btn btn-done" data-s="5">Marcar sesión 5 como hecha</button>
+    </div>
+  </details>
+
+  <!-- ERRORES -->
+  <div class="card">
+    <h2>⚠️ Los cuatro que te cuestan la nota</h2>
+    <p class="lead" style="font-size:.95rem">No son temas: son costumbres. Aparecen en los dos exámenes y en el cuaderno.</p>
+
+    <div class="flojo">
+      <h3>1 · Dejar en blanco</h3>
+      <p>En el final dejaste <b>1,90 puntos sin tocar</b>: el punto 1 completo, el 6, el 7 y el 8. Eso solo ya es la diferencia entre 2,16 y pasar.</p>
+      <p class="evid">Qué hacer: escribe <b>algo</b> en todos. El planteo bien hecho vale, aunque el número final salga mal.</p>
+    </div>
+
+    <div class="flojo">
+      <h3>2 · La regla del signo en inecuaciones</h3>
+      <p>La profe te la marcó en rojo <b>dos veces en la misma hoja</b>. Se voltea <b>solo</b> al multiplicar o dividir por un negativo.</p>
+      <p class="evid">Qué hacer: cuando despejes y te quede <span class="eq">−2x</span>, <b>para</b> y escribe «voltea» al margen antes de dividir.</p>
+    </div>
+
+    <div class="flojo">
+      <h3>3 · No comprobar reemplazando</h3>
+      <p>Las ecuaciones del punto 7 se comprueban en quince segundos. El punto 7 además <b>decía</b> «tienes la opción de realizar la prueba para verificar».</p>
+      <p class="evid">Qué hacer: metes tu resultado en la ecuación original. Si los dos lados no dan igual, está mala y lo sabes <b>antes</b> de entregar.</p>
+    </div>
+
+    <div class="flojo">
+      <h3>4 · Perder puntos por el formato, no por saber</h3>
+      <p>Una opción marcada dos veces (−0,15) y multiplicaciones mal hechas con la fórmula correcta (−0,40).</p>
+      <p class="evid">Qué hacer: una sola opción, todo con procedimiento, y cada cuenta larga se repite al revés.</p>
+    </div>
+  </div>
+
+  <!-- CHECKLIST -->
+  <div class="card">
+    <h2>✅ El día de la recuperación</h2>
+    <div class="check">
+      <label><input type="checkbox" data-c="1"><span>Cartuchera completa: lápiz, borrador, sacapuntas, <b>regla y transportador</b>.</span></label>
+      <label><input type="checkbox" data-c="2"><span><b>Sin calculadora.</b> En el parcial estaba prohibida.</span></label>
+      <label><input type="checkbox" data-c="3"><span>Leo el examen entero antes de arrancar y empiezo por lo que sé.</span></label>
+      <label><input type="checkbox" data-c="4"><span>Todos los puntos con <b>procedimiento</b>. Sin procedimiento no valen.</span></label>
+      <label><input type="checkbox" data-c="5"><span>En selección múltiple, <b>una sola opción</b> y justifico.</span></label>
+      <label><input type="checkbox" data-c="6"><span>Cada inecuación: miro si divido por negativo y <b>volteo</b>.</span></label>
+      <label><input type="checkbox" data-c="7"><span>Cada ecuación: <b>reemplazo</b> para comprobar.</span></label>
+      <label><input type="checkbox" data-c="8"><span>Ningún punto en blanco. Aunque sea el planteo.</span></label>
+      <label><input type="checkbox" data-c="9"><span>Me sobran 10 minutos para repasar las cuentas largas.</span></label>
+    </div>
+  </div>
+
+  <!-- CTA -->
+  <div class="cta">
+    <h2>Cuando acabes las cinco</h2>
+    <p>El simulador tiene <b>20 preguntas sacadas de esos dos exámenes</b>, con los números cambiados. Reloj de 45 minutos y nota de 1,0 a 5,0. Al final te dice qué sesión volver a mirar.</p>
+    <a class="btn" href="simulador-recuperacion.html">Hacer el simulador →</a>
+  </div>
+
+  <footer>Hecho con las fotos que mandaste · Verificado punto por punto contra tus dos exámenes 💜</footer>
+</div>
+
+<script>
+(function(){
+var LS={}; try{LS=window.localStorage}catch(e){LS=null}
+function get(k){try{return LS?LS.getItem(k):null}catch(e){return null}}
+function set(k,v){try{if(LS)LS.setItem(k,v)}catch(e){}}
+var $=function(id){return document.getElementById(id)};
+
+/* ---- sesiones hechas ---- */
+var hechas={};
+try{hechas=JSON.parse(get("recup_ses")||"{}")}catch(e){hechas={}}
+var SES=[
+ {n:1,t:"Fracciones, signos y jerarquía"},
+ {n:2,t:"Radicales, potencias y logaritmos"},
+ {n:3,t:"Ecuaciones, inecuaciones y perímetros"},
+ {n:4,t:"Geometría y Pitágoras"},
+ {n:5,t:"Razonamiento y estadística"}
+];
+function pintaProgreso(){
+  var k=0,i;
+  for(i=1;i<=5;i++){
+    var el=$("s"+i), btn=el.querySelector(".btn-done");
+    if(hechas[i]){el.classList.add("done");btn.textContent="Hecha ✓";k++;}
+    else{el.classList.remove("done");btn.textContent="Marcar sesión "+i+" como hecha";}
+  }
+  $("pNum").textContent=k;
+  $("pBar").style.width=(k/5*100)+"%";
+  $("pMsg").textContent = k===0 ? "Arranca por la 1. Están ordenadas por puntos, no por el orden del examen."
+    : k===5 ? "Las cinco listas. Ahora el simulador, y si sacas más de 4,0 estás lista. 🎉"
+    : "Vas "+k+" de 5. Te quedan "+(5-k)+".";
+  pintaCal();
+}
+for(var i=1;i<=5;i++){(function(n){
+  $("s"+n).querySelector(".btn-done").addEventListener("click",function(ev){
+    ev.preventDefault();
+    hechas[n]=!hechas[n];
+    set("recup_ses",JSON.stringify(hechas));
+    pintaProgreso();
+  });
+})(i)}
+
+/* ---- checklist ---- */
+var chk={};
+try{chk=JSON.parse(get("recup_chk")||"{}")}catch(e){chk={}}
+Array.prototype.forEach.call(document.querySelectorAll('[data-c]'),function(b){
+  var k=b.getAttribute("data-c");
+  b.checked=!!chk[k];
+  b.addEventListener("change",function(){chk[k]=b.checked;set("recup_chk",JSON.stringify(chk))});
+});
+
+/* ---- fecha y calendario ---- */
+var DOW=["domingo","lunes","martes","miércoles","jueves","viernes","sábado"];
+var MES=["ene","feb","mar","abr","may","jun","jul","ago","sep","oct","nov","dic"];
+function hoy0(){var d=new Date();d.setHours(0,0,0,0);return d}
+function parseF(v){var p=v.split("-");return new Date(+p[0],+p[1]-1,+p[2])}
+function dstr(d){return DOW[d.getDay()]}
+function nstr(d){return d.getDate()+" "+MES[d.getMonth()]}
+
+var fIn=$("fecha");
+var guard=get("recup_fecha");
+if(guard){fIn.value=guard}
+fIn.addEventListener("change",function(){set("recup_fecha",fIn.value);pintaCal()});
+
+function pintaCal(){
+  var v=fIn.value;
+  if(!v){$("cdBig").textContent="Pon la fecha y te reparto las sesiones";$("cdSub").textContent="Se guarda sola en este dispositivo.";$("calCard").classList.add("hide");return}
+  var ex=parseF(v), h=hoy0();
+  var dias=Math.round((ex-h)/86400000);
+  var pend=[];for(var i=1;i<=5;i++){if(!hechas[i])pend.push(SES[i-1])}
+  if(dias<0){$("cdBig").textContent="Esa fecha ya pasó";$("cdSub").textContent="¿Cómo te fue? Cuéntale a tu papá.";$("calCard").classList.add("hide");return}
+  $("cdBig").textContent = dias===0?"¡Es hoy! 💪":dias===1?"Falta 1 día":"Faltan "+dias+" días";
+  $("cdSub").textContent = pend.length===0?"Ya hiciste las cinco sesiones. Repite el simulador.":
+    "Te quedan "+pend.length+(pend.length>1?" sesiones":" sesión")+" y "+(dias||1)+" día"+(dias===1?"":"s")+".";
+  $("calCard").classList.remove("hide");
+  $("calIntro").textContent = pend.length===0
+    ? "Todo hecho. Estos días son para repetir el simulador hasta que la nota no baje de 4,0."
+    : "Se reparte solo. Si marcas una sesión como hecha, el resto se vuelve a acomodar.";
+
+  var hueco=Math.max(dias,1), cont=$("cal"); cont.innerHTML="";
+  var porDia=pend.length?Math.ceil(pend.length/hueco):0, idx=0;
+  for(var d=0; d<=dias; d++){
+    var f=new Date(h.getTime()+d*86400000);
+    var box=document.createElement("div"); box.className="dia";
+    if(d===0)box.classList.add("hoy");
+    if(d===dias)box.classList.add("dia-parcial");
+    var toca=[];
+    if(d<dias){for(var q=0;q<porDia&&idx<pend.length;q++){toca.push(pend[idx++])}}
+    var what = d===dias ? "<b>RECUPERACIÓN</b>"
+      : toca.length ? toca.map(function(s){return "Sesión "+s.n+" · "+s.t}).join("<br>")
+      : (idx>=pend.length ? "Simulador + repasar lo que falle" : "Libre");
+    var sub = d===dias ? "Cartuchera, regla, sin calculadora, nada en blanco."
+      : toca.length ? (toca.length>1?"Dos seguidas, con descanso en la mitad":"~35 minutos") : "";
+    box.innerHTML='<div class="d-when"><span class="d-dow">'+(d===0?"hoy":dstr(f))+'</span><span class="d-num">'+nstr(f)+'</span></div>'+
+                  '<div><div class="d-what">'+what+'</div>'+(sub?'<div class="d-sub">'+sub+'</div>':'')+'</div>';
+    cont.appendChild(box);
+  }
+}
+pintaProgreso();
+})();
+</script>
+</body>
+</html>

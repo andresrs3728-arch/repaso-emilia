@@ -1,0 +1,492 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Recuperación de Matemáticas · Simulador</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Lexend:wght@400;500;600;700&family=Gochi+Hand&display=swap">
+<style>
+:root{
+  --paper:#F7F4FB;--sheet:#fff;--ink:#2A2140;--soft:#6B6283;--line:#E4DDF0;
+  --violet:#7B3FE4;--pink:#E8418A;--teal:#0F7C80;--mango:#E07A00;--lima:#4E8C1E;--rojo:#D32F4A;
+  --violet-soft:#F2EBFF;--teal-soft:#E3F6F6;--lima-soft:#EEF8E2;--rojo-soft:#FFEBEE;--mango-soft:#FFF2DE;
+  --on:#fff;
+  --display:"Bricolage Grotesque","Avenir Next",system-ui,sans-serif;
+  --body:"Lexend","Segoe UI",system-ui,sans-serif;
+  --hand:"Gochi Hand",cursive;
+  --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --paper:#16121F;--sheet:#211B2E;--ink:#F1ECFA;--soft:#B3A9C9;--line:#3A3150;
+  --violet:#A98BFF;--pink:#FF6FAE;--teal:#4FC9C9;--mango:#FFB454;--lima:#A8D96A;--rojo:#FF7585;
+  --violet-soft:#2C2342;--teal-soft:#15323A;--lima-soft:#243318;--rojo-soft:#3A1E26;--mango-soft:#3A2E1B;
+  --on:#16121F;color-scheme:dark;
+}}
+:root[data-theme="dark"]{
+  --paper:#16121F;--sheet:#211B2E;--ink:#F1ECFA;--soft:#B3A9C9;--line:#3A3150;
+  --violet:#A98BFF;--pink:#FF6FAE;--teal:#4FC9C9;--mango:#FFB454;--lima:#A8D96A;--rojo:#FF7585;
+  --violet-soft:#2C2342;--teal-soft:#15323A;--lima-soft:#243318;--rojo-soft:#3A1E26;--mango-soft:#3A2E1B;
+  --on:#16121F;color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--body);line-height:1.55;
+  padding:26px max(16px,env(safe-area-inset-right,0px)) 60px max(16px,env(safe-area-inset-left,0px));
+  -webkit-text-size-adjust:100%}
+.wrap{max-width:720px;margin:0 auto;display:flex;flex-direction:column;gap:22px}
+h1{font-family:var(--display);font-size:clamp(2rem,7.5vw,2.9rem);margin:0;line-height:1.04;letter-spacing:-.02em}
+h2{font-family:var(--display);font-size:clamp(1.25rem,4.5vw,1.6rem);margin:0}
+p{margin:0}
+.hand{font-family:var(--hand);font-size:1.35rem;color:var(--pink);line-height:1}
+.lead{color:var(--soft)}
+.top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.back{text-decoration:none;font-weight:600;font-size:.92rem;color:var(--soft);
+  border:1px solid var(--line);border-radius:999px;padding:7px 14px;background:var(--sheet)}
+.card{background:var(--sheet);border:1px solid var(--line);border-radius:20px;padding:22px;
+  display:flex;flex-direction:column;gap:15px}
+.rules{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:11px}
+.rules li{display:grid;grid-template-columns:46px 1fr;gap:13px;align-items:baseline}
+.rules b{font-family:var(--display);font-size:1.45rem;color:var(--violet);line-height:1}
+.rules span{font-size:.96rem}
+.btn{display:inline-block;text-decoration:none;font-family:var(--body);font-weight:600;font-size:1rem;
+  border-radius:14px;padding:14px 22px;border:0;cursor:pointer;text-align:center}
+.btn-p{background:var(--violet);color:var(--on)}
+.btn-g{background:transparent;border:2px solid var(--teal);color:var(--teal)}
+.btn:disabled{opacity:.4;cursor:default}
+.hide{display:none!important}
+
+/* barra examen */
+.hud{position:sticky;top:0;z-index:5;background:var(--paper);padding:8px 0 10px;
+  display:flex;flex-direction:column;gap:8px}
+.hud-row{display:flex;justify-content:space-between;align-items:center;gap:12px;font-size:.92rem}
+.reloj{font-family:var(--mono);font-weight:700;font-size:1.05rem;background:var(--violet-soft);
+  color:var(--violet);padding:5px 12px;border-radius:999px}
+.reloj.poco{background:var(--rojo-soft);color:var(--rojo)}
+.pbar{height:7px;background:var(--line);border-radius:999px;overflow:hidden}
+.pbar i{display:block;height:100%;width:0;background:var(--violet);border-radius:999px;transition:width .25s}
+
+/* pregunta */
+.qnum{font-size:.8rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--soft)}
+.qtxt{font-family:var(--display);font-size:1.2rem;line-height:1.35}
+.qtxt .m{font-family:var(--mono);font-size:1.02rem;background:var(--violet-soft);padding:2px 6px;border-radius:6px}
+.ops{display:flex;flex-direction:column;gap:10px}
+.op{display:grid;grid-template-columns:30px 1fr;gap:12px;align-items:start;text-align:left;
+  background:var(--sheet);border:2px solid var(--line);border-radius:14px;padding:14px 15px;
+  cursor:pointer;font-family:var(--body);font-size:1rem;color:var(--ink);line-height:1.45}
+.op .let{font-family:var(--display);color:var(--soft)}
+.op.sel{border-color:var(--violet);background:var(--violet-soft)}
+.op.sel .let{color:var(--violet)}
+.op .m{font-family:var(--mono);font-size:.97rem}
+.nav{display:flex;gap:11px}
+.nav .btn{flex:1}
+
+/* nota */
+.nota{text-align:center;padding:30px 22px;border-radius:22px;color:#fff;display:flex;
+  flex-direction:column;gap:7px;align-items:center}
+.nota.ok{background:linear-gradient(135deg,var(--teal),var(--lima))}
+.nota.no{background:linear-gradient(135deg,#E8418A,#D32F4A)}
+.nota .n{font-family:var(--display);font-size:4rem;line-height:1}
+.nota .d{font-size:1.05rem;opacity:.95}
+
+/* revisión */
+.rev{display:flex;flex-direction:column;gap:13px}
+.ri{border:1px solid var(--line);border-left:5px solid var(--lima);border-radius:14px;padding:14px 16px;
+  display:flex;flex-direction:column;gap:7px;background:var(--sheet)}
+.ri.mal{border-left-color:var(--rojo);background:var(--rojo-soft)}
+.ri .rq{font-weight:600;font-size:.98rem}
+.ri .rl{font-size:.9rem}
+.ri .rl b{color:var(--lima)}
+.ri.mal .rl .tu{color:var(--rojo);font-weight:700}
+.ri .rexp{font-size:.9rem;color:var(--soft);border-top:1px dashed var(--line);padding-top:7px}
+.ri .m{font-family:var(--mono);font-size:.92rem}
+.repasa{background:var(--mango-soft);border-radius:16px;padding:18px 20px;display:flex;flex-direction:column;gap:9px}
+.repasa h2{color:var(--mango)}
+.repasa ul{margin:0;padding-left:20px}
+.repasa li{margin-bottom:6px}
+footer{text-align:center;color:var(--soft);font-size:.86rem;padding-top:8px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- ============ PORTADA ============ -->
+  <div id="portada">
+    <div class="top" style="margin-bottom:22px">
+      <span class="hand">Para Emilia 💜</span>
+      <a class="back" href="plan-recuperacion.html">← El plan</a>
+    </div>
+
+    <header style="display:flex;flex-direction:column;gap:10px;margin-bottom:22px">
+      <h1>Simulador de la recuperación</h1>
+      <p class="lead">Las mismas preguntas de tu parcial y tu final, con los números cambiados. Si pasas acá, pasas allá.</p>
+    </header>
+
+    <div class="card">
+      <ul class="rules">
+        <li><b>20</b><span>preguntas, repartidas por los temas donde <b>de verdad</b> perdiste puntos. Cambian cada vez que repites.</span></li>
+        <li><b>45</b><span>minutos de reloj. Cuando se acaba, se califica solo con lo que lleves.</span></li>
+        <li><b>1 a 5</b><span>nota de verdad. Se aprueba con <b>3,0</b>.</span></li>
+        <li><b>✍️</b><span>Ten lápiz y papel. <b>Sin calculadora</b>, igual que en el examen.</span></li>
+      </ul>
+      <button class="btn btn-p" id="empezar">Empezar los 45 minutos</button>
+      <p class="lead" style="font-size:.88rem;text-align:center">Al final te explica cada respuesta y te dice qué sesión repasar.</p>
+    </div>
+  </div>
+
+  <!-- ============ EXAMEN ============ -->
+  <div id="examen" class="hide">
+    <div class="hud">
+      <div class="hud-row">
+        <span id="prog">Pregunta 1 de 20</span>
+        <span class="reloj" id="reloj">45:00</span>
+      </div>
+      <div class="pbar"><i id="pb"></i></div>
+    </div>
+    <div class="card" style="margin-top:14px">
+      <span class="qnum" id="qnum">Pregunta 1</span>
+      <div class="qtxt" id="qtxt"></div>
+      <div class="ops" id="ops"></div>
+    </div>
+    <div class="nav" style="margin-top:16px">
+      <button class="btn btn-g" id="prev">← Anterior</button>
+      <button class="btn btn-p" id="next">Siguiente →</button>
+    </div>
+    <p class="lead" style="font-size:.88rem;text-align:center;margin-top:12px" id="faltan"></p>
+  </div>
+
+  <!-- ============ RESULTADO ============ -->
+  <div id="result" class="hide">
+    <div class="nota" id="notaBox">
+      <span class="d" id="notaTxt">Tu nota</span>
+      <span class="n" id="notaNum">0,0</span>
+      <span class="d" id="notaSub"></span>
+    </div>
+    <div class="repasa" id="repasaBox" style="margin-top:20px"></div>
+    <h2 style="margin-top:24px">Respuesta por respuesta</h2>
+    <div class="rev" id="rev" style="margin-top:14px"></div>
+    <div style="display:flex;gap:11px;flex-wrap:wrap;margin-top:22px">
+      <button class="btn btn-p" id="otra" style="flex:1">Repetir con otras preguntas</button>
+      <a class="btn btn-g" href="plan-recuperacion.html" style="flex:1">Volver al plan</a>
+    </div>
+  </div>
+
+  <footer>Sacado de tu parcial del 14 de septiembre y de tu final del primer periodo 💜</footer>
+</div>
+
+<script>
+(function(){
+"use strict";
+
+var TEMAS={
+ s1:"Sesión 1 · Fracciones, signos y jerarquía",
+ s2:"Sesión 2 · Radicales, potencias y logaritmos",
+ s3:"Sesión 3 · Ecuaciones, inecuaciones y perímetros",
+ s4:"Sesión 4 · Geometría y Pitágoras",
+ s5:"Sesión 5 · Razonamiento y estadística"
+};
+/* cuántas preguntas por tema, en proporción a los puntos que perdió */
+var CUPO={s1:4,s2:5,s3:5,s4:3,s5:3};
+
+var B=[
+/* ---------- s1 ---------- */
+{t:"s1",q:"¿Cuánto vale <span class='m'>−29 + {5 − [15 + 7×(3−6) + (−3−5)]}</span>?",
+ o:["−10","−82","48","−48"],r:0,
+ e:"(3−6)=−3 y (−3−5)=−8. Entonces 7×(−3)=−21 y el corchete queda 15−21−8=−14. Luego {5−(−14)}=19 y −29+19=−10. Si sumas 15+7 antes de multiplicar te da −82: ese fue tu error en el parcial."},
+{t:"s1",q:"<span class='m'>−1/2 + 2/3</span> es igual a:",
+ o:["8/6","1/6","1/5","7/6"],r:1,
+ e:"m.c.m.(2,3)=6 → −3/6 + 4/6 = 1/6. En el examen pusiste 8/6 y con eso se cayó el punto entero, que valía 1,0."},
+{t:"s1",q:"Resuelve <span class='m'>{3/4 × [1/3 ÷ (−3/2)]} ÷ (−1/2 + 2/3)</span>",
+ o:["−1/8","1","−1","−1/36"],r:2,
+ e:"1/3 ÷ (−3/2) = −2/9. Luego 3/4 × (−2/9) = −1/6. Y (−1/6) ÷ (1/6) = −1. Si usas 8/6 abajo te da −1/8."},
+{t:"s1",q:"<span class='m'>−5/6 + 3/4 − 7/8</span> es igual a:",
+ o:["−23/24","−9/18","23/24","−23/8"],r:0,
+ e:"m.c.m.(6,4,8)=24 → −20/24 + 18/24 − 21/24 = −23/24. Nunca sumes numeradores con numeradores y denominadores con denominadores."},
+{t:"s1",q:"Una especie se reproduce <b>tres veces</b> cada día. El día 1 hay 1 individuo, el día 2 hay 3 y el día 3 hay 9. ¿Cuántos habrá el día 6?",
+ o:["18","81","243","729"],r:2,
+ e:"Se multiplica por 3 cada día: 1, 3, 9, 27, 81, 243. En el final pusiste 18 porque arrancaste multiplicando y después te pasaste a sumar 3."},
+{t:"s1",q:"El decimal <span class='m'>−9,33</span> se clasifica como:",
+ o:["periódico puro","exacto","periódico mixto","irracional"],r:1,
+ e:"Se acaba, no repite nada, así que es exacto. En el examen lo marcaste como puro."},
+{t:"s1",q:"La fracción <span class='m'>−8/23</span> da un decimal:",
+ o:["exacto","entero","periódico mixto","periódico puro"],r:3,
+ e:"23 no se factoriza solo con 2 y 5, así que no puede ser exacto; y como no hay cifras sueltas antes del periodo, es puro: −0,3478…"},
+{t:"s1",q:"En <span class='m'>15 + 7 × (3 − 6)</span>, ¿qué se resuelve de primero?",
+ o:["15 + 7","el paréntesis (3 − 6)","7 × 3","nada, va de izquierda a derecha"],r:1,
+ e:"El paréntesis siempre primero. Después la multiplicación y de última la suma: 15 + 7×(−3) = 15 − 21 = −6."},
+{t:"s1",q:"<span class='m'>1/3 ÷ (−3/2)</span> es igual a:",
+ o:["−2/9","−1/2","−9/2","2/9"],r:0,
+ e:"Dividir es multiplicar por la de abajo volteada: 1/3 × (−2/3) = −2/9."},
+{t:"s1",q:"El m.c.m. de <b>6, 4 y 8</b> es:",
+ o:["48","12","24","16"],r:2,
+ e:"24 es el menor número que 6, 4 y 8 dividen exacto. 48 también sirve, pero no es el menor: con el m.c.m. los números quedan más pequeños y te equivocas menos."},
+
+/* ---------- s2 ---------- */
+{t:"s2",q:"<span class='m'>3√18 − 11√2 + 2√50</span> es igual a:",
+ o:["−6√2","8√2","14√2","8√70"],r:1,
+ e:"√18=3√2 y √50=5√2. Entonces 9√2 − 11√2 + 10√2 = 8√2. Si no simplificas primero te da −6√2."},
+{t:"s2",q:"<span class='m'>4√2/5 + √2/5</span> es igual a:",
+ o:["5√2/10","2√2","√2","4√2/25"],r:2,
+ e:"Mismo denominador: (4√2 + √2)/5 = 5√2/5 = √2."},
+{t:"s2",q:"<span class='m'>20√10 ÷ (−5√2)</span> es igual a:",
+ o:["−4√5","4√5","−4√8","−4√20"],r:0,
+ e:"20÷(−5) = −4 y √10÷√2 = √(10/2) = √5. Al dividir raíces se dividen los radicandos, no se restan."},
+{t:"s2",q:"<span class='m'>4√12 − (3/2)√48 + (2/3)√27 + (3/5)√75</span> es igual a:",
+ o:["19√3","7√162","7√3","−3√3"],r:2,
+ e:"√12=2√3, √48=4√3, √27=3√3, √75=5√3. Queda 8√3 − 6√3 + 2√3 + 3√3 = 7√3. Ojo con el signo menos del segundo."},
+{t:"s2",q:"<span class='m'>2√3 × 5·∛27</span> es igual a:",
+ o:["30√27","30√3","15√3","10√81"],r:1,
+ e:"∛27 = 3, entonces 5×3 = 15, y 2√3 × 15 = 30√3. El 15 multiplica al número de afuera, no entra al radical."},
+{t:"s2",q:"<span class='m'>4√5 − 0,5 − 24√5 + 0,375 − 6,1</span> es igual a:",
+ o:["−20√5 − 5,975","−28√5 − 6,225","−20√5 + 6,225","−20√5 − 6,225"],r:3,
+ e:"Separas: los radicales 4√5 − 24√5 = −20√5, y los números −0,5 + 0,375 − 6,1 = −6,225. En el examen escribiste −28√5: 4 − 24 es −20."},
+{t:"s2",q:"<span class='m'>√48</span> simplificado es:",
+ o:["4√3","3√4","2√12","16√3"],r:0,
+ e:"48 = 16 × 3 y √16 = 4, entonces √48 = 4√3. Saca siempre el cuadrado perfecto más grande que puedas."},
+{t:"s2",q:"<span class='m'>√50</span> simplificado es:",
+ o:["25√2","2√25","5√2","5√10"],r:2,
+ e:"50 = 25 × 2 y √25 = 5, entonces √50 = 5√2."},
+{t:"s2",q:"<span class='m'>∛(8a⁶)</span> es igual a:",
+ o:["2a³","2a²","8a²","2a⁶"],r:1,
+ e:"∛8 = 2 y a⁶ con índice 3 es a^(6/3) = a². El exponente se divide entre el índice. En el examen dejaste 2×a."},
+{t:"s2",q:"<span class='m'>√(16x³ / 9y⁵)</span> es igual a:",
+ o:["4x³/3y⁵","4x^(2/3)/3y^(2/5)","4x^(3/2)/3y^(5/2)","8x^1,5/4,5y^2,5"],r:2,
+ e:"√16=4 y √9=3. Los exponentes se dividen entre el índice 2: x^(3/2) y y^(5/2). Este lo tenías bien en el examen."},
+{t:"s2",q:"<span class='m'>log₃(27 × 243)</span> es igual a:",
+ o:["8","33","15","3⁸"],r:0,
+ e:"27 = 3³ y 243 = 3⁵, así que 27×243 = 3⁸ y el log es 8. En el examen pusiste 33: sumaste 27 + 6 en vez de los exponentes 3 + 5."},
+{t:"s2",q:"<span class='m'>log(base 2/5) de 16/625</span> es igual a:",
+ o:["2/5","5","4","16/625"],r:2,
+ e:"La pregunta es: ¿a qué potencia elevo 2/5 para llegar a 16/625? Como 2⁴=16 y 5⁴=625, la respuesta es 4."},
+{t:"s2",q:"<span class='m'>a⁵ · a³</span> es igual a:",
+ o:["a¹⁵","a⁸","2a⁸","a²"],r:1,
+ e:"Misma base multiplicando: los exponentes se SUMAN, 5+3 = 8."},
+
+/* ---------- s3 ---------- */
+{t:"s3",q:"Resuelve <span class='m'>½x + ¾ = 3/6</span>",
+ o:["x = −1/2","x = 10/3","x = 1/2","x = −1/4"],r:0,
+ e:"3/6 = 1/2. Entonces x/2 = 1/2 − 3/4 = −1/4, y x = −1/2. Comprueba: ½(−½) + ¾ = −¼ + ¾ = ½ ✓"},
+{t:"s3",q:"Resuelve <span class='m'>6(3n + 4) = 2(n − 11)</span>",
+ o:["n = 2,1","n = 23/8","n = −23/8","n = −1/8"],r:2,
+ e:"18n + 24 = 2n − 22 → 16n = −46 → n = −23/8. En el examen escribiste 8n + 24: al multiplicar 6 por 3n se te perdió el 6."},
+{t:"s3",q:"Resuelve <span class='m'>2,5(4x − 1,2) = −5</span>",
+ o:["x = −12,5","x = 0,2","x = −0,8","x = −0,2"],r:3,
+ e:"10x − 3 = −5 → 10x = −2 → x = −0,2. El número que acompaña a la x siempre DIVIDE al final; en el examen multiplicaste."},
+{t:"s3",q:"Resuelve <span class='m'>5x − 1 &lt; 7x + 9</span>",
+ o:["x &lt; −5","x &gt; −5","x &gt; 5","x &lt; 5"],r:1,
+ e:"−2x < 10. Al dividir entre −2 el signo SE VOLTEA: x > −5. Esta es la regla que la profe te marcó en rojo dos veces."},
+{t:"s3",q:"Resuelve <span class='m'>x − (7x − 3) &lt; 7 − 4x − 5</span>",
+ o:["x &gt; 1/2","x &lt; 1/2","x &gt; −1/2","x &lt; 2"],r:0,
+ e:"El menos reparte: x − 7x + 3 < 2 − 4x → −2x < −1 → x > 1/2 (se voltea al dividir entre −2)."},
+{t:"s3",q:"¿Cuándo se voltea el signo de una desigualdad?",
+ o:["Cuando aparece cualquier número negativo","Al sumar o restar un negativo","Al multiplicar o dividir por un negativo","Al pasar un término al otro lado"],r:2,
+ e:"Solo al multiplicar o dividir por un negativo. Que haya negativos sueltos en la inecuación no cambia nada."},
+{t:"s3",q:"Un triángulo tiene lados <span class='m'>x+3</span>, <span class='m'>2x−1</span> y <span class='m'>3x+1</span>, y su perímetro es <span class='m'>8x−2</span>. ¿Cuánto vale x?",
+ o:["5","2,5","−2,5","1,5"],r:1,
+ e:"6x + 3 = 8x − 2 → 5 = 2x → x = 2,5. En el examen llegaste a 6x − 8x = −3 − 2, que está bien, y lo tachaste."},
+{t:"s3",q:"Si en ese triángulo <span class='m'>x = 2,5</span>, ¿cuánto miden los lados?",
+ o:["5,5 · 4 · 8,5","3 · 5 · 10","2,5 · 4 · 7","5,5 · 4 · 7,5"],r:0,
+ e:"x+3 = 5,5 · 2x−1 = 4 · 3x+1 = 8,5. Suman 18, y 8(2,5)−2 = 18 ✓ Siempre reemplaza para comprobar."},
+{t:"s3",q:"Un rectángulo mide <span class='m'>2y+3</span> de alto por <span class='m'>y−2</span> de ancho, y su perímetro es <span class='m'>5y+6</span>. ¿Cuánto vale y?",
+ o:["2","10","4","8"],r:2,
+ e:"2(2y+3) + 2(y−2) = 6y + 2 = 5y + 6 → y = 4. En un rectángulo cada lado va DOS veces."},
+{t:"s3",q:"Una compañía cobra 310 por minuto más 6.300 de cuota fija. Si la factura fue de 62.100, ¿cuántos minutos habló?",
+ o:["155","180","200","160"],r:1,
+ e:"310t = 62.100 − 6.300 = 55.800 → t = 180. Comprueba: 310×180 + 6.300 = 62.100 ✓"},
+{t:"s3",q:"Lina cerca un triángulo isósceles con 88,5 m de alambre. Cada lado congruente mide 28,25 m. ¿Cuánto mide el tercero?",
+ o:["31,5 m","60,25 m","28,25 m","32 m"],r:3,
+ e:"2 × 28,25 = 56,50 y 88,50 − 56,50 = 32 m. Isósceles quiere decir dos lados iguales."},
+{t:"s3",q:"Resuelve <span class='m'>3x − 7 &gt; 5x + 3</span>",
+ o:["x &lt; −5","x &gt; −5","x &lt; 5","x &gt; 5"],r:0,
+ e:"−2x > 10. Al dividir entre −2 el signo se voltea: x < −5."},
+
+/* ---------- s4 ---------- */
+{t:"s4",q:"El perímetro de un círculo de radio 25 m, con <span class='m'>P = 2πr</span> y π = 3,14, es:",
+ o:["162 m","78,5 m","157 m","1.962,5 m"],r:2,
+ e:"2 × 3,14 × 25 = 6,28 × 25 = 157 m. En el examen pusiste 162: la fórmula estaba bien, falló la multiplicación."},
+{t:"s4",q:"El volumen de una esfera de radio 15 cm, con <span class='m'>V = (4/3)πr³</span> y π = 3,14, es:",
+ o:["42.390 cm³","14.130 cm³","10.597,5 cm³","14.128,65 cm³"],r:1,
+ e:"Haz 4 × 3,14 × 3.375 = 42.390 y DESPUÉS divide entre 3 → 14.130. Si divides primero te queda 1,333… y al redondear pierdes precisión: así te dio 14.128,65."},
+{t:"s4",q:"<span class='m'>4/3</span> escrito en decimal es:",
+ o:["1,3","1,333…","0,75","1,34"],r:1,
+ e:"Es periódico: 1,333… Si lo truncas a 1,3 el resultado final se corre, que es justo lo que pasó con la esfera."},
+{t:"s4",q:"Dos cilindros tienen 10 cm de altura; uno de radio 3,5 cm y otro de 8 cm. Con <span class='m'>V = πr²h</span> y π = 3,14, la diferencia de volúmenes es:",
+ o:["141,3 cm³","2.394,25 cm³","162,495 cm³","1.624,95 cm³"],r:3,
+ e:"V₁ = 3,14×12,25×10 = 384,65 y V₂ = 3,14×64×10 = 2.009,60. La diferencia es 1.624,95 cm³. Este lo acertaste en el final."},
+{t:"s4",q:"Una bandera mide 5 m de largo por 2 m de ancho. ¿Cuánto mide la franja que la cruza en diagonal?",
+ o:["√29 m","7 m","√21 m","10 m"],r:0,
+ e:"Pitágoras: h² = 5² + 2² = 29, entonces h = √29 ≈ 5,39 m. Los lados nunca se suman directo."},
+{t:"s4",q:"Para ubicar <span class='m'>√6</span> en la recta numérica con Pitágoras, ¿qué catetos usas?",
+ o:["6 y 1","2 y 3","√5 y 1","3 y 3"],r:2,
+ e:"Necesitas que a² + b² = 6. Con √5 y 1: 5 + 1 = 6 ✓ Se construyen encadenados: primero √5, y sobre esa hipotenusa levantas 1."},
+{t:"s4",q:"El área de un terreno cuadrado es 250.000 cm². ¿Cuánto mide su perímetro?",
+ o:["500 cm","62.500 cm","1.000.000 cm","2.000 cm"],r:3,
+ e:"El lado es √250.000 = 500 cm, y el perímetro 500 × 4 = 2.000 cm."},
+
+/* ---------- s5 ---------- */
+{t:"s5",q:"Un estudiante ve la sucesión 4, 8, 12, 16, 20… y afirma que el siguiente será 24. ¿Qué tipo de razonamiento usó?",
+ o:["Deductivo, porque aplicó una fórmula conocida","Inductivo, porque identificó un patrón a partir de varios casos","Deductivo, porque comprobó que 24 es múltiplo de 4","Inductivo, porque utilizó una definición matemática"],r:1,
+ e:"Arrancó de varios casos para sacar una regla: eso es inductivo. En el parcial este punto quedó en cero."},
+{t:"s5",q:"«Todo número divisible entre 6 también lo es entre 3. Como 42 es divisible entre 6, es divisible entre 3.» ¿Qué razonamiento es?",
+ o:["Inductivo, porque observó varios múltiplos de 6","Inductivo, porque hizo una predicción","Deductivo, porque encontró un patrón numérico","Deductivo, porque aplicó una regla general a un caso particular"],r:3,
+ e:"Arrancó de una regla que ya existía y la aplicó a un caso: deductivo. Pregúntate siempre de dónde arrancó."},
+{t:"s5",q:"¿Cuál es la diferencia entre razonamiento inductivo y deductivo?",
+ o:["Inductivo va de casos a una regla; deductivo va de una regla a un caso","Inductivo va de una regla a un caso; deductivo va de casos a una regla","Los dos van de lo general a lo particular","El inductivo siempre da resultados correctos"],r:0,
+ e:"Inductivo: observo ejemplos y saco una conclusión. Deductivo: tengo una ley y la aplico."},
+{t:"s5",q:"De «Si un ángulo es recto, entonces mide 90°», ¿cuál es la <b>contrarrecíproca</b>?",
+ o:["Si mide 90°, entonces es recto","Si no es recto, entonces no mide 90°","Si no mide 90°, entonces no es recto","Si es recto, entonces no mide 90°"],r:2,
+ e:"Contrarrecíproca = volteo Y niego. «Si mide 90°, es recto» es la recíproca; «si no es recto, no mide 90°» es la inversa."},
+{t:"s5",q:"De «Si un polígono tiene 8 lados, entonces es un octágono», ¿cuál es la <b>recíproca</b>?",
+ o:["Si no tiene 8 lados, no es un octágono","Si es un octágono, entonces tiene 8 lados","Si no es un octágono, no tiene 8 lados","Si tiene 8 lados, no es un octágono"],r:1,
+ e:"La recíproca solo voltea: el «si» pasa a ser el «entonces». No niega nada."},
+{t:"s5",q:"De «Si un número es divisible entre 4, entonces es par», la <b>inversa</b> y la <b>recíproca</b> son:",
+ o:["Inversa: si es par, es divisible entre 4. Recíproca: si no es divisible entre 4, no es par","Inversa: si no es par, no es divisible entre 4. Recíproca: si es divisible entre 4, es par","Inversa: si no es divisible entre 4, no es par. Recíproca: si es par, es divisible entre 4","Inversa: si no es par, es divisible entre 4. Recíproca: si es par, no es divisible entre 4"],r:2,
+ e:"Inversa = niego las dos partes sin voltear. Recíproca = volteo sin negar. Este lo acertaste en el parcial."},
+{t:"s5",q:"En una tabla las frecuencias absolutas son 20, 5, 55, 25 y 15 (total 120). ¿Cuál es la frecuencia <b>acumulada</b> del tercer intervalo?",
+ o:["55","80","25","60"],r:1,
+ e:"La acumulada suma ese intervalo y todos los de arriba: 20 + 5 + 55 = 80. La última acumulada siempre tiene que dar el total."},
+{t:"s5",q:"¿Cuál es la <b>marca de clase</b> del intervalo 1,40 – 1,60?",
+ o:["1,40","1,50","0,20","3,00"],r:1,
+ e:"Es el punto medio: (1,40 + 1,60) ÷ 2 = 1,50."},
+{t:"s5",q:"¿Cómo se calcula la frecuencia <b>relativa</b> (fr)?",
+ o:["fa ÷ total","fa × total","total ÷ fa","Fa ÷ fa"],r:0,
+ e:"fr = fa ÷ total. Y si la multiplicas por 100 te da el porcentaje. Todas las fr juntas suman 1."},
+{t:"s5",q:"El intervalo 1,20–1,40 tiene 5 estudiantes y el 1,40–1,60 tiene 55. ¿Cuál afirmación es correcta?",
+ o:["El segundo contiene 5 veces más estudiantes que el primero","El primero contiene 11 veces más estudiantes que el segundo","Ambos tienen la misma cantidad","El segundo contiene 50 estudiantes más que el primero"],r:3,
+ e:"55 − 5 = 50. En el examen escribiste justo esa cuenta en la justificación, pero rodeaste DOS opciones y te anularon el punto. Una sola."},
+{t:"s5",q:"Con las frecuencias 20, 5, 55, 25, 15 (total 120), ¿qué se concluye sobre los estudiantes con estatura menor a 1,80 m?",
+ o:["Son exactamente 25 estudiantes","Son aproximadamente el 20 % de los estudiantes","Son 105 estudiantes, cerca del 85 % de la muestra","Son 120 estudiantes, el 100 % de la muestra"],r:2,
+ e:"La acumulada hasta 1,60–1,80 es 20+5+55+25 = 105, y 105 de 120 es 87,5 %."},
+{t:"s5",q:"En una pregunta de selección múltiple con <b>única respuesta</b>, dudas y marcas dos opciones. ¿Qué pasa?",
+ o:["Se anula el punto completo","Te dan la mitad del valor","Cuentan la primera que marcaste","Cuentan la que esté correcta"],r:0,
+ e:"Se anula. En el punto 14 del final perdiste 0,15 así, con la justificación correcta escrita al lado. Si dudas, elige una y sigue."},
+{t:"s5",q:"El examen dice: «Todo punto debe tener su respectivo procedimiento». Si escribes solo la respuesta correcta, sin cuentas:",
+ o:["Vale la mitad","El punto no es válido","Vale completo si está bien","Depende de la profe"],r:1,
+ e:"Lo dice el encabezado de los dos exámenes: punto sin procedimiento, punto que no cuenta. Escribe aunque sea el planteo."}
+];
+
+/* ---------- utilidades ---------- */
+function barajar(a){var i,j,t;for(i=a.length-1;i>0;i--){j=Math.floor(Math.random()*(i+1));t=a[i];a[i]=a[j];a[j]=t}return a}
+var $=function(id){return document.getElementById(id)};
+function mmss(s){var m=Math.floor(s/60),r=s%60;return m+":"+(r<10?"0":"")+r}
+
+function armar(){
+  var sel=[],k;
+  for(k in CUPO){
+    var pool=barajar(B.filter(function(x){return x.t===k}));
+    sel=sel.concat(pool.slice(0,CUPO[k]));
+  }
+  barajar(sel);
+  /* baraja también las opciones de cada pregunta */
+  return sel.map(function(p){
+    var idx=p.o.map(function(_,i){return i});
+    barajar(idx);
+    return {t:p.t,q:p.q,e:p.e,
+            o:idx.map(function(i){return p.o[i]}),
+            r:idx.indexOf(p.r),
+            sel:null};
+  });
+}
+
+var EX=[],cur=0,timer=null,left=45*60,TOTAL=20;
+
+function arrancar(){
+  EX=armar();cur=0;left=45*60;
+  $("portada").classList.add("hide");
+  $("result").classList.add("hide");
+  $("examen").classList.remove("hide");
+  pintar();
+  if(timer)clearInterval(timer);
+  timer=setInterval(function(){
+    left--;
+    $("reloj").textContent=mmss(left);
+    if(left<=300)$("reloj").classList.add("poco");
+    if(left<=0){clearInterval(timer);calificar(true)}
+  },1000);
+  $("reloj").textContent=mmss(left);
+  $("reloj").classList.remove("poco");
+  window.scrollTo(0,0);
+}
+
+function pintar(){
+  var p=EX[cur];
+  $("prog").textContent="Pregunta "+(cur+1)+" de "+TOTAL;
+  $("qnum").textContent="Pregunta "+(cur+1);
+  $("pb").style.width=((cur+1)/TOTAL*100)+"%";
+  $("qtxt").innerHTML=p.q;
+  var box=$("ops");box.innerHTML="";
+  var letras=["a","b","c","d"];
+  p.o.forEach(function(txt,i){
+    var b=document.createElement("button");
+    b.type="button";
+    b.className="op"+(p.sel===i?" sel":"");
+    b.innerHTML='<span class="let">'+letras[i]+'</span><span>'+txt+'</span>';
+    b.addEventListener("click",function(){p.sel=i;pintar()});
+    box.appendChild(b);
+  });
+  $("prev").disabled=(cur===0);
+  $("next").textContent=(cur===TOTAL-1)?"Terminar y calificar":"Siguiente →";
+  var f=EX.filter(function(x){return x.sel===null}).length;
+  $("faltan").textContent=f? "Te faltan "+f+" sin responder." : "Ya respondiste todas. Puedes devolverte a revisar.";
+}
+
+$("prev").addEventListener("click",function(){if(cur>0){cur--;pintar();window.scrollTo(0,0)}});
+$("next").addEventListener("click",function(){
+  if(cur<TOTAL-1){cur++;pintar();window.scrollTo(0,0)}
+  else{
+    var f=EX.filter(function(x){return x.sel===null}).length;
+    if(f && !window.confirm("Te faltan "+f+" sin responder. ¿Califico igual?"))return;
+    calificar(false);
+  }
+});
+$("empezar").addEventListener("click",arrancar);
+$("otra").addEventListener("click",arrancar);
+
+function calificar(porTiempo){
+  if(timer)clearInterval(timer);
+  var ok=0,fallos={};
+  EX.forEach(function(p){
+    if(p.sel===p.r)ok++;
+    else fallos[p.t]=(fallos[p.t]||0)+1;
+  });
+  var nota=1+(ok/TOTAL)*4, paso=nota>=3;
+  $("examen").classList.add("hide");
+  $("result").classList.remove("hide");
+  $("notaBox").className="nota "+(paso?"ok":"no");
+  $("notaNum").textContent=nota.toFixed(1).replace(".",",");
+  $("notaTxt").textContent=porTiempo?"Se acabó el tiempo. Tu nota:":"Tu nota:";
+  $("notaSub").textContent=ok+" de "+TOTAL+" buenas · "+
+    (paso?(nota>=4.5?"Así se presenta la recuperación 🎉":(nota>=4?"Muy bien. Ya estás por encima de lo que necesitas.":"Pasaste. Ahora a subirla.")):
+          "Te faltó. Mira abajo qué sesión repasar y repite.");
+
+  /* qué repasar */
+  var orden=Object.keys(fallos).sort(function(a,b){return fallos[b]-fallos[a]});
+  var rb=$("repasaBox");
+  if(!orden.length){
+    rb.innerHTML="<h2>20 de 20 🏆</h2><p>No hay nada que repasar. Repítelo mañana con otras preguntas para confirmar que no fue suerte.</p>";
+  }else{
+    rb.innerHTML="<h2>🔁 Qué repasar</h2><p>Por donde fallaste más:</p><ul>"+
+      orden.slice(0,3).map(function(t){
+        return "<li><b>"+TEMAS[t]+"</b> — "+fallos[t]+(fallos[t]===1?" pregunta":" preguntas")+"</li>";
+      }).join("")+"</ul>";
+  }
+
+  /* revisión */
+  var letras=["a","b","c","d"],rev=$("rev");rev.innerHTML="";
+  EX.forEach(function(p,i){
+    var bien=(p.sel===p.r);
+    var d=document.createElement("div");
+    d.className="ri"+(bien?"":" mal");
+    var tuya = p.sel===null ? "<span class='tu'>No respondiste</span>"
+      : bien ? "" : "Marcaste <span class='tu'>"+letras[p.sel]+") "+p.o[p.sel]+"</span>";
+    d.innerHTML='<div class="rq">'+(i+1)+". "+p.q+'</div>'+
+      '<div class="rl">'+(bien?"✅ ":"❌ ")+"Correcta: <b>"+letras[p.r]+") "+p.o[p.r]+"</b>"+
+      (tuya?" · "+tuya:"")+'</div>'+
+      '<div class="rexp">'+p.e+'</div>';
+    rev.appendChild(d);
+  });
+  window.scrollTo(0,0);
+}
+})();
+</script>
+</body>
+</html>
